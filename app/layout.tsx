@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import { ServiceWorker } from "@/components/ServiceWorker";
 
 const geist = Geist({
   variable: "--font-geist-sans",
@@ -43,21 +44,12 @@ export const metadata: Metadata = {
     title: "Cuarzo · Desarrollo Web & Diseño de Marca",
     description:
       "Desarrollo web y diseño de marca a medida para pequeños negocios. Soluciones digitales elegantes que hacen crecer tu negocio.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Cuarzo — Desarrollo Web & Diseño de Marca",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Cuarzo · Desarrollo Web & Diseño de Marca",
     description:
       "Desarrollo web y diseño de marca a medida para pequeños negocios. Soluciones digitales elegantes.",
-    images: ["/og-image.png"],
   },
   robots: {
     index: true,
@@ -82,7 +74,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${geist.variable} scroll-smooth`}>
-      <body className="min-h-full flex flex-col antialiased">{children}</body>
+      <body className="min-h-full flex flex-col antialiased">
+        <ServiceWorker />
+        {children}
+      </body>
     </html>
   );
 }

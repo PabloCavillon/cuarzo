@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/prisma/client";
+import { notifyNewLead } from "@/lib/notify";
 
 const schema = z.object({
   name: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
@@ -44,7 +45,6 @@ export async function registerLead(
 
   try {
     await prisma.lead.create({ data: parsed.data });
-    return { success: true };
   } catch (e: unknown) {
     if (
       e instanceof Prisma.PrismaClientKnownRequestError &&
@@ -54,4 +54,9 @@ export async function registerLead(
     }
     return { success: false, error: "Ocurrió un error. Intentá de nuevo." };
   }
+
+  // Fire-and-forget: failure here must not affect the user's success response
+  notifyNewLead(parsed.data).catch(() => {});
+
+  return { success: true };
 }
