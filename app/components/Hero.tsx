@@ -48,7 +48,7 @@ export default function Hero() {
       className="relative min-h-screen bg-navy-950 flex items-center overflow-hidden"
     >
       {/* background gradient — static */}
-      <div className="absolute inset-0 bg-linear-to-br from-navy-950 via-navy-900 to-navy-800" />
+      <div className="absolute inset-0 bg-linear-to-br from-navy-950 via-navy-950 to-navy-900" />
       {/* grid overlay — subtle drift on scroll */}
       <motion.div
         style={{
