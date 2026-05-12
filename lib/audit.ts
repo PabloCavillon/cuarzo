@@ -1,3 +1,4 @@
+import { Prisma } from "@/app/generated/prisma/client";
 import { prisma } from "./prisma";
 
 export async function audit(
@@ -11,7 +12,7 @@ export async function audit(
 ): Promise<void> {
   try {
     await prisma.auditLog.create({
-      data: { tenantId, userId, action, resource, resourceId, metadata, ip },
+      data: { tenantId, userId, action, resource, resourceId, metadata: metadata as Prisma.InputJsonValue, ip },
     });
   } catch {
     // Audit failures must never break business logic
