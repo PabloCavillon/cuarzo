@@ -2,49 +2,63 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { MeshTransmissionMaterial, OrbitControls } from "@react-three/drei";
+import { Environment, MeshTransmissionMaterial, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
-// Quartz crystal: hexagonal prism body + pointed tip, merged into one mesh
-// (one mesh = one transmission render pass = cheaper than two meshes)
 function Crystal() {
   const ref = useRef<THREE.Mesh>(null);
 
   const geo = useMemo(() => {
-    const body = new THREE.CylinderGeometry(0.38, 0.48, 2.6, 6, 1);
-    const tip  = new THREE.ConeGeometry(0.38, 1.05, 6);
-    tip.translate(0, 1.825, 0); // place base of cone at top of cylinder (y=1.3)
-    const merged = mergeGeometries([body, tip]);
+    // Real quartz proportions: wide hexagonal body, double-terminated
+    // (pointed at both ends — that's what quartz actually looks like)
+
+    // Main body: tapered, slightly wider at base
+    const body = new THREE.CylinderGeometry(0.52, 0.62, 1.6, 6, 1);
+    // body top at y=+0.8, bottom at y=-0.8
+
+    // Top pyramid (taller = more dramatic)
+    const top = new THREE.ConeGeometry(0.52, 0.78, 6);
+    top.translate(0, 1.19, 0);
+    // top base at y=0.8, apex at y=1.58
+
+    // Bottom pyramid (shorter — secondary termination)
+    const bot = new THREE.ConeGeometry(0.62, 0.48, 6);
+    bot.rotateX(Math.PI); // flip so apex points down
+    bot.translate(0, -1.04, 0);
+    // bot base at y=-0.8, apex at y=-1.28
+
+    const merged = mergeGeometries([body, top, bot]);
     merged.computeVertexNormals();
     return merged;
   }, []);
 
-  // Subtle idle bob when not interacted with
+  // Subtle float
   useFrame((state) => {
     if (!ref.current) return;
-    ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.06;
+    ref.current.position.y = Math.sin(state.clock.elapsedTime * 0.55) * 0.07;
   });
 
   return (
-    <mesh ref={ref} geometry={geo}>
+    // Slight tilt so you immediately see it's 3D, not a flat shape
+    <mesh ref={ref} geometry={geo} rotation={[0.18, 0.5, 0.06]} frustumCulled={false}>
       <MeshTransmissionMaterial
         backside
-        backsideThickness={0.25}
-        samples={4}          // keep low for perf — still looks great
-        resolution={256}     // FBO size; 256 is fast and sharp enough
-        transmission={0.97}
-        roughness={0.018}
-        thickness={2.0}
-        ior={1.52}           // real quartz IOR
-        chromaticAberration={0.055}
-        anisotropy={0.18}
-        distortion={0.07}
-        distortionScale={0.12}
+        backsideThickness={0.3}
+        samples={4}
+        resolution={256}
+        transmission={0.88}   // slight opacity so material itself is visible
+        roughness={0.04}      // tiny roughness = visible surface highlights
+        thickness={2.2}
+        ior={1.52}
+        chromaticAberration={0.07}
+        anisotropy={0.25}
+        distortion={0.05}
+        distortionScale={0.08}
         temporalDistortion={0}
-        color="#c2d8ff"
-        attenuationDistance={3.5}
-        attenuationColor="#e8f2ff"
+        color="#e8f4ff"       // near-white with faint blue — reads as clear glass
+        attenuationDistance={5}
+        attenuationColor="#ffffff"
       />
     </mesh>
   );
@@ -58,14 +72,14 @@ export default function CrystalScene() {
       dpr={[1, 1.5]}         // cap at 1.5× — retina-quality without 4× GPU cost
       style={{ background: "transparent" }}
     >
-      {/* Lights only — no HDR preset download */}
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[6, 10, 4]} intensity={5} />
-      <directionalLight position={[-5, 3, -3]} intensity={1.5} color="#3b6fcc" />
-      <pointLight position={[4, 5, 3]}  intensity={4} color="#6b9fe8" />
-      <pointLight position={[-5, -4, 5]} intensity={1.5} color="#ffffff" />
-      {/* Rim light from below for depth */}
-      <pointLight position={[0, -4, 2]} intensity={0.8} color="#1e4a8a" />
+      {/* Environment gives the crystal something bright to refract/reflect */}
+      <Environment preset="studio" environmentIntensity={1.2} />
+      <ambientLight intensity={0.6} />
+      <directionalLight position={[6, 10, 4]} intensity={6} />
+      <directionalLight position={[-5, 3, -3]} intensity={2} color="#3b6fcc" />
+      <pointLight position={[4, 5, 3]}  intensity={5} color="#6b9fe8" />
+      <pointLight position={[-4, -3, 5]} intensity={2} color="#ffffff" />
+      <pointLight position={[0, -4, 2]} intensity={1.2} color="#1e4a8a" />
 
       <Crystal />
 
