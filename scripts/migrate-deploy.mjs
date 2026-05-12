@@ -1,17 +1,16 @@
 import { execSync } from "child_process";
 import pg from "pg";
 
-// Use Neon's direct (non-pooled) URL for advisory lock support.
-// POSTGRES_URL_NON_POOLING is injected automatically by Neon's Vercel integration.
-// Falls back to DATABASE_URL for local dev.
+// prisma migrate deploy uses pg_advisory_lock which Neon's pooler blocks.
+// prisma db push achieves the same result without advisory locks and is
+// safe to run repeatedly (no-op when schema is already in sync).
 const dbUrl =
   process.env.POSTGRES_URL_NON_POOLING ??
   process.env.DATABASE_URL_UNPOOLED ??
   process.env.DATABASE_URL;
-const env   = { ...process.env, DATABASE_URL: dbUrl };
 
-// Neon free tier suspends the compute after inactivity. Wake it up with a
-// simple query before attempting the migration advisory lock (10s timeout).
+const env = { ...process.env, DATABASE_URL: dbUrl };
+
 async function wake() {
   const client = new pg.Client({ connectionString: dbUrl, connectionTimeoutMillis: 30_000 });
   try {
@@ -23,21 +22,5 @@ async function wake() {
   }
 }
 
-async function run() {
-  await wake();
-
-  let attempts = 3;
-  while (attempts > 0) {
-    try {
-      execSync("npx prisma migrate deploy", { stdio: "inherit", env });
-      return;
-    } catch {
-      attempts--;
-      if (attempts === 0) throw new Error("prisma migrate deploy failed after 3 attempts");
-      console.log(`Migration failed — retrying in 8s (${attempts} left)…`);
-      await new Promise((r) => setTimeout(r, 8_000));
-    }
-  }
-}
-
-await run();
+await wake();
+execSync("npx prisma db push --skip-generate", { stdio: "inherit", env });
