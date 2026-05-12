@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { CuarzoIsotype } from "./CuarzoLogo";
@@ -19,6 +19,24 @@ export default function Hero() {
   const bgY      = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
   const glowY    = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
   const crystalY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+
+  // 3D tilt
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(mouseY, [0, 1], [14, -14]), { stiffness: 200, damping: 28 });
+  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-20, 20]), { stiffness: 200, damping: 28 });
+  const glowDX  = useTransform(mouseX, [0, 1], ["-12px", "12px"]);
+  const glowDY  = useTransform(mouseY, [0, 1], ["-12px", "12px"]);
+
+  function onCrystalMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    const r = e.currentTarget.getBoundingClientRect();
+    mouseX.set((e.clientX - r.left) / r.width);
+    mouseY.set((e.clientY - r.top) / r.height);
+  }
+  function onCrystalMouseLeave() {
+    mouseX.set(0.5);
+    mouseY.set(0.5);
+  }
 
   const glassStats = [
     { value: "99.9%",  label: t.hero.stats.uptime },
@@ -135,9 +153,24 @@ export default function Hero() {
             transition={{ duration: 1, delay: 0.15 }}
             className="hidden lg:flex justify-center items-center"
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-navy-500/15 blur-3xl rounded-full scale-150 pointer-events-none" />
-              <CuarzoIsotype height={420} />
+            {/* perspective wrapper */}
+            <div
+              style={{ perspective: "900px" }}
+              onMouseMove={onCrystalMouseMove}
+              onMouseLeave={onCrystalMouseLeave}
+              className="cursor-grab active:cursor-grabbing"
+            >
+              <motion.div
+                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+                className="relative"
+              >
+                {/* dynamic glow that follows tilt */}
+                <motion.div
+                  style={{ x: glowDX, y: glowDY }}
+                  className="absolute inset-0 bg-navy-500/20 blur-3xl rounded-full scale-150 pointer-events-none"
+                />
+                <CuarzoIsotype height={420} />
+              </motion.div>
             </div>
           </motion.div>
         </div>

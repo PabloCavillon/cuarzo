@@ -63,6 +63,7 @@ export type T = {
     cta: string;
     ctaFree: string;
     popular: string;
+    disclaimer: string;
     plans: {
       name: string;
       price: string;
@@ -295,6 +296,7 @@ const es: T = {
     monthly: "/ mes",
     cta: "Empezar ahora",
     ctaFree: "Comenzar gratis",
+    disclaimer: "Precios en USD · Facturación mensual · Cancelá en cualquier momento",
     popular: "Más popular",
     plans: [
       {
@@ -622,6 +624,7 @@ const en: T = {
     monthly: "/ mo",
     cta: "Get started",
     ctaFree: "Start for free",
+    disclaimer: "Prices in USD · Monthly billing · Cancel anytime",
     popular: "Most popular",
     plans: [
       {
@@ -948,6 +951,7 @@ const pt: T = {
     monthly: "/ mês",
     cta: "Começar agora",
     ctaFree: "Começar grátis",
+    disclaimer: "Preços em USD · Cobrança mensal · Cancele quando quiser",
     popular: "Mais popular",
     plans: [
       {

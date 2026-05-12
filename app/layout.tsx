@@ -12,11 +12,27 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "CUARZO — Soluciones Digitales Inteligentes para Emprendedores",
-  description:
-    "Potenciamos PYMEs y startups argentinas con tecnología de vanguardia. Control de stock, turneras, facturación ARCA, e-commerce y más.",
+const META: Record<Locale, { title: string; description: string }> = {
+  es: {
+    title:       "CUARZO — Soluciones Digitales Inteligentes para Emprendedores",
+    description: "Potenciamos PYMEs y startups argentinas con tecnología de vanguardia. Control de stock, turneras, facturación ARCA, e-commerce y más.",
+  },
+  en: {
+    title:       "CUARZO — Intelligent Digital Solutions for Entrepreneurs",
+    description: "We empower SMEs and startups with enterprise-grade tools. Inventory, scheduling, e-invoicing and e-commerce — all in one ecosystem.",
+  },
+  pt: {
+    title:       "CUARZO — Soluções Digitais Inteligentes para Empreendedores",
+    description: "Potencializamos PMEs e startups com ferramentas de nível enterprise. Estoque, agendamento, faturamento e e-commerce — tudo em um ecossistema.",
+  },
 };
+
+export async function generateMetadata(): Promise<Metadata> {
+  const cookieStore = await cookies();
+  const raw = cookieStore.get("locale")?.value ?? "es";
+  const locale: Locale = locales.includes(raw as Locale) ? (raw as Locale) : "es";
+  return META[locale];
+}
 
 export default async function RootLayout({
   children,

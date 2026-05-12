@@ -138,7 +138,7 @@ export default function Pricing() {
           transition={{ delay: 0.4 }}
           className="text-center text-xs text-gray-300 mt-10"
         >
-          Precios en USD · Facturación mensual · Cancelá en cualquier momento
+          {t.pricing.disclaimer}
         </motion.p>
       </div>
     </section>
