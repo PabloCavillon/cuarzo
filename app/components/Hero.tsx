@@ -1,11 +1,23 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { CuarzoIsotype } from "./CuarzoLogo";
 import { useT } from "@/lib/i18n/provider";
+
+// Three.js bundle loads lazily after the hero text is painted.
+// SVG isotype is shown while it loads — zero layout shift.
+const CrystalScene = dynamic(() => import("./CrystalScene"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-120 flex items-center justify-center">
+      <CuarzoIsotype height={120} className="opacity-20 animate-pulse" />
+    </div>
+  ),
+});
 
 export default function Hero() {
   const t = useT();
@@ -16,27 +28,9 @@ export default function Hero() {
     offset: ["start start", "end start"],
   });
 
-  const bgY      = useTransform(scrollYProgress, [0, 1], ["0%", "40%"]);
-  const glowY    = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
-  const crystalY = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
-
-  // 3D tilt
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-  const rotateX = useSpring(useTransform(mouseY, [0, 1], [14, -14]), { stiffness: 200, damping: 28 });
-  const rotateY = useSpring(useTransform(mouseX, [0, 1], [-20, 20]), { stiffness: 200, damping: 28 });
-  const glowDX  = useTransform(mouseX, [0, 1], ["-12px", "12px"]);
-  const glowDY  = useTransform(mouseY, [0, 1], ["-12px", "12px"]);
-
-  function onCrystalMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    const r = e.currentTarget.getBoundingClientRect();
-    mouseX.set((e.clientX - r.left) / r.width);
-    mouseY.set((e.clientY - r.top) / r.height);
-  }
-  function onCrystalMouseLeave() {
-    mouseX.set(0.5);
-    mouseY.set(0.5);
-  }
+  const gridY    = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "8%"]),  { stiffness: 80, damping: 20 });
+  const glowY    = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "18%"]), { stiffness: 80, damping: 20 });
+  const crystalY = useSpring(useTransform(scrollYProgress, [0, 1], ["0%", "12%"]), { stiffness: 80, damping: 20 });
 
   const glassStats = [
     { value: "99.9%",  label: t.hero.stats.uptime },
@@ -50,19 +44,19 @@ export default function Hero() {
       id="inicio"
       className="relative min-h-screen bg-navy-950 flex items-center overflow-hidden"
     >
-      <motion.div
-        style={{ y: bgY }}
-        className="absolute inset-0 bg-linear-to-br from-navy-950 via-navy-900 to-navy-800"
-      />
+      {/* background gradient — static */}
+      <div className="absolute inset-0 bg-linear-to-br from-navy-950 via-navy-900 to-navy-800" />
+      {/* grid overlay — subtle drift on scroll */}
       <motion.div
         style={{
-          y: bgY,
+          y: gridY,
           backgroundImage:
             "linear-gradient(rgba(255,255,255,0.7) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.7) 1px, transparent 1px)",
           backgroundSize: "64px 64px",
         }}
         className="absolute inset-0 opacity-[0.035]"
       />
+      {/* ambient glow */}
       <motion.div
         style={{ y: glowY }}
         className="absolute top-1/2 right-1/4 -translate-y-1/2 w-120 h-120 bg-navy-600/20 rounded-full blur-3xl pointer-events-none"
@@ -70,6 +64,7 @@ export default function Hero() {
 
       <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 pt-28 sm:py-24 sm:pt-36 lg:py-32 lg:pt-44 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* — Left column: copy — */}
           <div>
             <motion.div
               initial={{ opacity: 0, y: 24 }}
@@ -146,32 +141,15 @@ export default function Hero() {
             </motion.div>
           </div>
 
+          {/* — Right column: 3D crystal — */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             style={{ y: crystalY }}
             transition={{ duration: 1, delay: 0.15 }}
-            className="hidden lg:flex justify-center items-center"
+            className="hidden lg:block h-120"
           >
-            {/* perspective wrapper */}
-            <div
-              style={{ perspective: "900px" }}
-              onMouseMove={onCrystalMouseMove}
-              onMouseLeave={onCrystalMouseLeave}
-              className="cursor-grab active:cursor-grabbing"
-            >
-              <motion.div
-                style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-                className="relative"
-              >
-                {/* dynamic glow that follows tilt */}
-                <motion.div
-                  style={{ x: glowDX, y: glowDY }}
-                  className="absolute inset-0 bg-navy-500/20 blur-3xl rounded-full scale-150 pointer-events-none"
-                />
-                <CuarzoIsotype height={420} />
-              </motion.div>
-            </div>
+            <CrystalScene />
           </motion.div>
         </div>
 
