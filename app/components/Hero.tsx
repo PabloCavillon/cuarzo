@@ -10,14 +10,17 @@ import { useT } from "@/lib/i18n/provider";
 
 // Three.js bundle loads lazily after the hero text is painted.
 // SVG isotype is shown while it loads — zero layout shift.
-const CrystalScene = dynamic(() => import("./CrystalScene"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-120 flex items-center justify-center">
-      <CuarzoIsotype height={120} className="opacity-20 animate-pulse" />
-    </div>
-  ),
-});
+const CrystalScene = dynamic(
+  () => import("./CrystalScene").catch(() => ({ default: () => null })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="h-120 flex items-center justify-center">
+        <CuarzoIsotype height={120} className="opacity-20 animate-pulse" />
+      </div>
+    ),
+  }
+);
 
 export default function Hero() {
   const t = useT();

@@ -2,7 +2,7 @@
 
 import { useRef, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, MeshTransmissionMaterial, OrbitControls } from "@react-three/drei";
+import { Environment, Lightformer, MeshTransmissionMaterial, OrbitControls } from "@react-three/drei";
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 
@@ -72,14 +72,17 @@ export default function CrystalScene() {
       dpr={[1, 1.5]}         // cap at 1.5× — retina-quality without 4× GPU cost
       style={{ background: "transparent" }}
     >
-      {/* Environment gives the crystal something bright to refract/reflect */}
-      <Environment preset="studio" environmentIntensity={1.2} />
-      <ambientLight intensity={0.6} />
-      <directionalLight position={[6, 10, 4]} intensity={6} />
-      <directionalLight position={[-5, 3, -3]} intensity={2} color="#3b6fcc" />
-      <pointLight position={[4, 5, 3]}  intensity={5} color="#6b9fe8" />
-      <pointLight position={[-4, -3, 5]} intensity={2} color="#ffffff" />
-      <pointLight position={[0, -4, 2]} intensity={1.2} color="#1e4a8a" />
+      {/* Synthetic environment — no external fetch, CSP-safe */}
+      <Environment resolution={256}>
+        <Lightformer position={[0,  8, -6]} scale={12} intensity={5}  color="#ffffff" />
+        <Lightformer position={[6,  4,  4]} scale={8}  intensity={4}  color="#c8deff" />
+        <Lightformer position={[-6, 2, -2]} scale={8}  intensity={3}  color="#3b6fcc" />
+        <Lightformer position={[0, -6,  4]} scale={6}  intensity={2}  color="#6b9fe8" />
+        <Lightformer position={[0,  2,  8]} scale={10} intensity={3}  color="#e8f4ff" />
+      </Environment>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[6, 10, 4]} intensity={4} />
+      <directionalLight position={[-5, 3, -3]} intensity={1.5} color="#3b6fcc" />
 
       <Crystal />
 
