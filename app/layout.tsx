@@ -5,6 +5,7 @@ import "./globals.css";
 import { Providers } from "./components/Providers";
 import type { Locale } from "@/lib/i18n";
 import { locales } from "@/lib/i18n";
+import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({
   variable: "--font-inter",
