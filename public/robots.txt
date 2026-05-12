@@ -1,0 +1,8 @@
+User-agent: *
+# Allow public pages
+Allow: /
+Allow: /turnera
+
+# Disallow API routes and internal booking lookup page
+Disallow: /api/
+Disallow: /turnera/mis-reservas
