@@ -1,9 +1,13 @@
 import { execSync } from "child_process";
 import pg from "pg";
 
-// Use direct (non-pooled) URL for advisory lock support on Neon.
+// Use Neon's direct (non-pooled) URL for advisory lock support.
+// POSTGRES_URL_NON_POOLING is injected automatically by Neon's Vercel integration.
 // Falls back to DATABASE_URL for local dev.
-const dbUrl = process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
+const dbUrl =
+  process.env.POSTGRES_URL_NON_POOLING ??
+  process.env.DATABASE_URL_UNPOOLED ??
+  process.env.DATABASE_URL;
 const env   = { ...process.env, DATABASE_URL: dbUrl };
 
 // Neon free tier suspends the compute after inactivity. Wake it up with a
