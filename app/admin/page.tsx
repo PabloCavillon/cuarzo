@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import {
   Calendar, Clock, CheckCircle2, Users, Package,
   Boxes, TrendingUp, TrendingDown, Wallet, FileText,
+  ListTodo, AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -106,6 +107,7 @@ export default async function AdminDashboard() {
     lowStockCount,
     cajaToday,
     recentInvoices,
+    todayTasks,
   ] = await Promise.all([
     // Bookings
     prisma.turneraBooking.count({ where: { tenantId: tid, date: today, status: "confirmed" } }),
@@ -141,6 +143,17 @@ export default async function AdminDashboard() {
       orderBy: { createdAt: "desc" },
       take: 4,
       select: { id: true, tipoComprobante: true, puntoVenta: true, numero: true, receptorNombre: true, amount: true, fecha: true },
+    }),
+    // Tasks due today or overdue, not done
+    prisma.task.findMany({
+      where: {
+        tenantId: tid,
+        status:   { in: ["pending", "in_progress"] },
+        dueDate:  { lte: new Date(new Date().setHours(23, 59, 59, 999)) },
+      },
+      orderBy: [{ dueDate: "asc" }, { priority: "desc" }],
+      take: 5,
+      select: { id: true, title: true, priority: true, dueDate: true, status: true, assignedTo: { select: { name: true } } },
     }),
   ]);
 
@@ -321,6 +334,44 @@ export default async function AdminDashboard() {
           )}
         </div>
       </div>
+
+      {/* Tasks due today / overdue */}
+      {todayTasks.length > 0 && (
+        <div className="bg-white/5 border border-white/8 rounded-2xl p-5">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <ListTodo className="w-4 h-4 text-white/40" />
+              <h3 className="text-sm font-semibold text-white">Tareas para hoy</h3>
+            </div>
+            <Link href="/admin/tasks" className="text-xs text-white/40 hover:text-white transition-colors">
+              Ver todas →
+            </Link>
+          </div>
+          <div className="space-y-1">
+            {todayTasks.map((t) => {
+              const overdue = t.dueDate && new Date(t.dueDate) < new Date(new Date().setHours(0,0,0,0));
+              return (
+                <Link
+                  key={t.id}
+                  href="/admin/tasks"
+                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-white/5 transition-colors group"
+                >
+                  {overdue
+                    ? <AlertTriangle className="w-3.5 h-3.5 text-red-400 shrink-0" />
+                    : <ListTodo className="w-3.5 h-3.5 text-white/25 shrink-0" />
+                  }
+                  <p className={`text-sm flex-1 truncate ${overdue ? "text-red-300" : "text-white/70"}`}>
+                    {t.title}
+                  </p>
+                  {t.assignedTo && (
+                    <span className="text-[10px] text-white/30 shrink-0">{t.assignedTo.name}</span>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
