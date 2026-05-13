@@ -3,6 +3,7 @@ import Link from "next/link";
 import { requireAuth, apiError } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { SettingsClient } from "./SettingsClient";
+import { MiTiendaWidget } from "./MiTiendaWidget";
 
 export default async function SettingsPage() {
   let user;
@@ -38,6 +39,8 @@ export default async function SettingsPage() {
         <h2 className="text-xl font-bold text-white">Configuración</h2>
         <p className="text-sm text-white/40 mt-0.5">Cuenta, módulos y equipo</p>
       </div>
+
+      <MiTiendaWidget slug={tenant.slug} />
 
       <SettingsClient
         tenant={{
