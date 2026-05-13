@@ -78,6 +78,14 @@ export type T = {
     cta: string;
     items: { icon: string; title: string; description: string; tags: string[] }[];
   };
+  whyCuarzo: {
+    eyebrow: string;
+    heading: string;
+    body1: string;
+    body2: string;
+    closing: string;
+    pillars: { value: string; label: string }[];
+  };
   auth: {
     login: {
       title: string; emailLabel: string; emailPlaceholder: string;
@@ -330,6 +338,21 @@ const es: T = {
         period: "USD / mes",
         features: ["Usuarios ilimitados", "Todo lo de Pro", "SLA 99.9%", "Onboarding dedicado", "API completa", "Factura en ARS o USD"],
       },
+    ],
+  },
+  whyCuarzo: {
+    eyebrow: "Por qué Cuarzo",
+    heading: "El nombre no es casualidad",
+    body1:
+      "El cuarzo está en cada dispositivo que usás: en el oscilador de tu celular, en los procesadores de tu computadora, en el reloj de tu mano. Es el mineral que sincroniza la tecnología moderna — invisible, preciso, indispensable. Sin él, no hay señal de tiempo, no hay cómputo, no hay nada.",
+    body2:
+      "Así pensamos nuestros servicios. El control de stock que evita quiebres, la turnera que nunca pierde un cliente, la facturación que no falla. No lo ves hasta que no está. Y cuando está, todo funciona. Tu negocio corre sobre una base que no tenés que pensar — igual que el cuarzo.",
+    closing: "La base invisible que sostiene tu negocio.",
+    pillars: [
+      { value: "Precisión", label: "Cada módulo diseñado sin margen de error" },
+      { value: "Resiliencia", label: "99.9% uptime · Nada se cae" },
+      { value: "Invisibilidad", label: "Funciona en segundo plano, sin fricción" },
+      { value: "Escala", label: "Desde una PyME hasta una cadena" },
     ],
   },
   customWork: {
@@ -697,6 +720,21 @@ const en: T = {
       },
     ],
   },
+  whyCuarzo: {
+    eyebrow: "Why Cuarzo",
+    heading: "The name is no coincidence",
+    body1:
+      "Quartz is in every device you use: in your phone's oscillator, in your computer's processors, in the watch on your wrist. It's the mineral that synchronizes modern technology — invisible, precise, indispensable. Without it, there's no timing signal, no computation, nothing.",
+    body2:
+      "That's how we think about our services. Stock control that prevents shortages, a scheduler that never misses a client, invoicing that never fails. You don't notice it until it's gone. And when it's there, everything works. Your business runs on a foundation you don't have to think about — just like quartz.",
+    closing: "The invisible foundation holding your business together.",
+    pillars: [
+      { value: "Precision", label: "Every module engineered with zero margin for error" },
+      { value: "Resilience", label: "99.9% uptime · Nothing goes down" },
+      { value: "Invisibility", label: "Works in the background, without friction" },
+      { value: "Scale", label: "From a small business to a full chain" },
+    ],
+  },
   customWork: {
     eyebrow: "Custom projects",
     heading: "Need something specific?",
@@ -1059,6 +1097,21 @@ const pt: T = {
         period: "USD / mês",
         features: ["Usuários ilimitados", "Tudo do Pro", "SLA 99,9%", "Onboarding dedicado", "API completa", "Fatura em ARS ou USD"],
       },
+    ],
+  },
+  whyCuarzo: {
+    eyebrow: "Por que Cuarzo",
+    heading: "O nome não é coincidência",
+    body1:
+      "O quartzo está em cada dispositivo que você usa: no oscilador do seu celular, nos processadores do seu computador, no relógio no seu pulso. É o mineral que sincroniza a tecnologia moderna — invisível, preciso, indispensável. Sem ele, não há sinal de tempo, não há computação, não há nada.",
+    body2:
+      "É assim que pensamos nossos serviços. O controle de estoque que evita rupturas, a agenda que nunca perde um cliente, o faturamento que não falha. Você não percebe até que não está. E quando está, tudo funciona. Seu negócio roda sobre uma base que você não precisa pensar — assim como o quartzo.",
+    closing: "A base invisível que sustenta o seu negócio.",
+    pillars: [
+      { value: "Precisão", label: "Cada módulo projetado sem margem de erro" },
+      { value: "Resiliência", label: "99,9% uptime · Nada cai" },
+      { value: "Invisibilidade", label: "Funciona em segundo plano, sem fricção" },
+      { value: "Escala", label: "De uma PME a uma rede de lojas" },
     ],
   },
   customWork: {
