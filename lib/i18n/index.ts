@@ -390,6 +390,13 @@ const es: T = {
           "Revisión de arquitectura, auditoría de código, definición de stack y acompañamiento técnico de tu equipo.",
         tags: ["Arquitectura", "Code review", "Mentoría"],
       },
+      {
+        icon: "🌐",
+        title: "Dominio & Mail corporativo",
+        description:
+          "Registramos y administramos tu dominio empresarial (.com, .com.ar y más) y configuramos tus cuentas @tuempresa.com. Como hicimos con projaska.com.",
+        tags: ["Dominio", "DNS", "Mail corporativo"],
+      },
     ],
   },
   auth: {
@@ -770,6 +777,13 @@ const en: T = {
           "Architecture review, code audits, stack definition and technical mentoring for your team.",
         tags: ["Architecture", "Code review", "Mentoring"],
       },
+      {
+        icon: "🌐",
+        title: "Domain & Corporate email",
+        description:
+          "We register and manage your business domain (.com and more) and set up your @yourbusiness.com email accounts. Like we did with projaska.com.",
+        tags: ["Domain", "DNS", "Corporate email"],
+      },
     ],
   },
   auth: {
@@ -1148,6 +1162,13 @@ const pt: T = {
         description:
           "Revisão de arquitetura, auditoria de código, definição de stack e mentoria técnica para sua equipe.",
         tags: ["Arquitetura", "Code review", "Mentoria"],
+      },
+      {
+        icon: "🌐",
+        title: "Domínio & E-mail corporativo",
+        description:
+          "Registramos e administramos seu domínio empresarial (.com e mais) e configuramos suas contas @suaempresa.com. Como fizemos com projaska.com.",
+        tags: ["Domínio", "DNS", "E-mail corporativo"],
       },
     ],
   },
