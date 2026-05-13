@@ -154,6 +154,7 @@ model Tenant {
   invitations        Invitation[]
   auditLogs          AuditLog[]
   tasks              Task[]
+  pushSubscriptions  PushSubscription[]
 
   @@map("tenants")
 }
@@ -206,9 +207,10 @@ model User {
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  tenant        Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  tasksCreated  Task[] @relation("TaskCreator")
-  tasksAssigned Task[] @relation("TaskAssignee")
+  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tasksCreated      Task[]             @relation("TaskCreator")
+  tasksAssigned     Task[]             @relation("TaskAssignee")
+  pushSubscriptions PushSubscription[]
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -721,4 +723,24 @@ model Task {
   @@index([tenantId, status])
   @@index([tenantId, dueDate])
   @@map("tasks")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PUSH SUBSCRIPTIONS — Web Push VAPID
+// ─────────────────────────────────────────────────────────────────────────────
+
+model PushSubscription {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  tenantId  String   @map("tenant_id")
+  endpoint  String   @unique
+  p256dh    String   @map("p256dh")
+  auth      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User   @relation(fields: [userId],   references: [id], onDelete: Cascade)
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("push_subscriptions")
 }

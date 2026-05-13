@@ -1,8 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import type { AuthUser } from "@/lib/session";
+import { NotificationToggle } from "./NotificationToggle";
 
 const BREADCRUMBS: Record<string, string> = {
   "/admin":                    "Dashboard",
@@ -36,6 +38,12 @@ export function TopBar({
 }) {
   const pathname = usePathname();
 
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {});
+    }
+  }, []);
+
   // Match exact path first, then prefix
   const crumb =
     BREADCRUMBS[pathname] ??
@@ -56,7 +64,8 @@ export function TopBar({
         <h1 className="text-sm font-semibold text-white">{crumb}</h1>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
+        <NotificationToggle />
         <div className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center text-xs font-bold text-white">
           {user.name.charAt(0).toUpperCase()}
         </div>

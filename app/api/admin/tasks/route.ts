@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth, apiError } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { sendPushToUser } from "@/lib/webpush";
 
 export async function GET(req: NextRequest) {
   let user;
@@ -96,6 +97,14 @@ export async function POST(req: NextRequest) {
       createdBy:  { select: { id: true, name: true } },
     },
   });
+
+  // Notify assignee if different from creator
+  if (assignedToId && assignedToId !== user.id) {
+    sendPushToUser(assignedToId, {
+      title: "Nueva tarea asignada",
+      body:  `${user.name} te asignó: ${title}`,
+    }).catch(() => {});
+  }
 
   return NextResponse.json({ task }, { status: 201 });
 }

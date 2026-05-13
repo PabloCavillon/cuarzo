@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAuth, apiError } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
+import { sendPushToUser } from "@/lib/webpush";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -73,6 +74,15 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
       createdBy:  { select: { id: true, name: true } },
     },
   });
+
+  // Notify new assignee when reassigned
+  const newAssignee = data.assignedToId as string | null | undefined;
+  if (newAssignee && newAssignee !== existing.assignedToId && newAssignee !== user.id) {
+    sendPushToUser(newAssignee, {
+      title: "Tarea asignada",
+      body:  `${user.name} te asignó: ${task.title}`,
+    }).catch(() => {});
+  }
 
   return NextResponse.json({ task });
 }
