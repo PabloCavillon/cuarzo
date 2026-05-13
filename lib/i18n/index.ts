@@ -71,6 +71,13 @@ export type T = {
       features: string[];
     }[];
   };
+  customWork: {
+    eyebrow: string;
+    heading: string;
+    description: string;
+    cta: string;
+    items: { icon: string; title: string; description: string; tags: string[] }[];
+  };
   auth: {
     login: {
       title: string; emailLabel: string; emailPlaceholder: string;
@@ -322,6 +329,43 @@ const es: T = {
         price: "149",
         period: "USD / mes",
         features: ["Usuarios ilimitados", "Todo lo de Pro", "SLA 99.9%", "Onboarding dedicado", "API completa", "Factura en ARS o USD"],
+      },
+    ],
+  },
+  customWork: {
+    eyebrow: "Trabajos a medida",
+    heading: "¿Necesitás algo específico?",
+    description:
+      "Además de la plataforma, trabajamos en proyectos puntuales. Si tenés una necesidad concreta, hablemos.",
+    cta: "Consultá sin compromiso",
+    items: [
+      {
+        icon: "📄",
+        title: "CV Profesional",
+        description:
+          "Diseño y redacción de curriculum vitae optimizado para ATS, con estructura clara y orientado a resultados.",
+        tags: ["Redacción", "Diseño", "ATS-friendly"],
+      },
+      {
+        icon: "💻",
+        title: "Software a medida",
+        description:
+          "Aplicaciones web, bots, automatizaciones y scripts adaptados exactamente a tu proceso de negocio.",
+        tags: ["Web app", "Bot", "Automatización"],
+      },
+      {
+        icon: "🔗",
+        title: "Integraciones API",
+        description:
+          "Conectamos tus sistemas existentes entre sí: ERP, e-commerce, CRM, herramientas internas y más.",
+        tags: ["API", "Webhook", "Sync"],
+      },
+      {
+        icon: "🧠",
+        title: "Consultoría técnica",
+        description:
+          "Revisión de arquitectura, auditoría de código, definición de stack y acompañamiento técnico de tu equipo.",
+        tags: ["Arquitectura", "Code review", "Mentoría"],
       },
     ],
   },
@@ -653,6 +697,43 @@ const en: T = {
       },
     ],
   },
+  customWork: {
+    eyebrow: "Custom projects",
+    heading: "Need something specific?",
+    description:
+      "Beyond the platform, we take on standalone projects. If you have a concrete need, let's talk.",
+    cta: "Get a free quote",
+    items: [
+      {
+        icon: "📄",
+        title: "Professional CV",
+        description:
+          "CV design and writing optimized for ATS systems, with a clear structure and results-oriented content.",
+        tags: ["Writing", "Design", "ATS-friendly"],
+      },
+      {
+        icon: "💻",
+        title: "Custom software",
+        description:
+          "Web apps, bots, automations and scripts tailored exactly to your business process.",
+        tags: ["Web app", "Bot", "Automation"],
+      },
+      {
+        icon: "🔗",
+        title: "API integrations",
+        description:
+          "We connect your existing systems together: ERP, e-commerce, CRM, internal tools and more.",
+        tags: ["API", "Webhook", "Sync"],
+      },
+      {
+        icon: "🧠",
+        title: "Technical consulting",
+        description:
+          "Architecture review, code audits, stack definition and technical mentoring for your team.",
+        tags: ["Architecture", "Code review", "Mentoring"],
+      },
+    ],
+  },
   auth: {
     login: {
       title: "Log in",
@@ -977,6 +1058,43 @@ const pt: T = {
         price: "149",
         period: "USD / mês",
         features: ["Usuários ilimitados", "Tudo do Pro", "SLA 99,9%", "Onboarding dedicado", "API completa", "Fatura em ARS ou USD"],
+      },
+    ],
+  },
+  customWork: {
+    eyebrow: "Projetos sob medida",
+    heading: "Precisa de algo específico?",
+    description:
+      "Além da plataforma, trabalhamos em projetos pontuais. Se tiver uma necessidade concreta, vamos conversar.",
+    cta: "Consulte sem compromisso",
+    items: [
+      {
+        icon: "📄",
+        title: "CV Profissional",
+        description:
+          "Design e redação de currículo otimizado para ATS, com estrutura clara e orientado a resultados.",
+        tags: ["Redação", "Design", "ATS-friendly"],
+      },
+      {
+        icon: "💻",
+        title: "Software sob medida",
+        description:
+          "Aplicativos web, bots, automações e scripts adaptados exatamente ao seu processo de negócio.",
+        tags: ["Web app", "Bot", "Automação"],
+      },
+      {
+        icon: "🔗",
+        title: "Integrações API",
+        description:
+          "Conectamos seus sistemas existentes entre si: ERP, e-commerce, CRM, ferramentas internas e mais.",
+        tags: ["API", "Webhook", "Sync"],
+      },
+      {
+        icon: "🧠",
+        title: "Consultoria técnica",
+        description:
+          "Revisão de arquitetura, auditoria de código, definição de stack e mentoria técnica para sua equipe.",
+        tags: ["Arquitetura", "Code review", "Mentoria"],
       },
     ],
   },
