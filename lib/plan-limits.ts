@@ -2,25 +2,38 @@ import { prisma } from "./prisma";
 
 export type PlanKey = "free" | "starter" | "pro" | "enterprise";
 
+export const FREE_MODULE_MAX = 2;
+
+export const FREE_MODULE_INFO: Record<string, { label: string; description: string; limitNote: string }> = {
+  turnera: { label: "Bookings",     description: "Turnera digital y agenda online",     limitNote: "50 reservas/mes · 5 servicios" },
+  catalog: { label: "Catálogo",     description: "Productos y tienda pública con QR",   limitNote: "10 productos activos"          },
+  stock:   { label: "Stock",        description: "Control de inventario y movimientos", limitNote: "10 ítems en stock"             },
+  caja:    { label: "Caja Digital", description: "Registro de ingresos y egresos",      limitNote: "Sin límite de movimientos"     },
+  orders:  { label: "Pedidos",      description: "Gestión de pedidos y ventas",         limitNote: "50 pedidos/mes"                },
+};
+
 export const PLAN_LIMITS: Record<PlanKey, {
   bookingsPerMonth: number;  // -1 = unlimited
   productsMax:      number;
   servicesMax:      number;
   teamMembers:      number;
+  modulesMax:       number;  // -1 = unlimited
   modules:          string[];
 }> = {
   free: {
     bookingsPerMonth: 50,
-    productsMax:      20,
+    productsMax:      10,
     servicesMax:      5,
     teamMembers:      2,
-    modules:          ["turnera"],
+    modulesMax:       FREE_MODULE_MAX,
+    modules:          Object.keys(FREE_MODULE_INFO),
   },
   starter: {
     bookingsPerMonth: 200,
     productsMax:      100,
     servicesMax:      20,
     teamMembers:      5,
+    modulesMax:       -1,
     modules:          ["turnera", "catalog", "caja"],
   },
   pro: {
@@ -28,6 +41,7 @@ export const PLAN_LIMITS: Record<PlanKey, {
     productsMax:      -1,
     servicesMax:      -1,
     teamMembers:      15,
+    modulesMax:       -1,
     modules:          ["turnera", "catalog", "stock", "orders", "payments", "caja"],
   },
   enterprise: {
@@ -35,6 +49,7 @@ export const PLAN_LIMITS: Record<PlanKey, {
     productsMax:      -1,
     servicesMax:      -1,
     teamMembers:      -1,
+    modulesMax:       -1,
     modules:          ["turnera", "catalog", "stock", "orders", "payments", "fiscal", "caja"],
   },
 };

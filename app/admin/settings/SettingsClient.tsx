@@ -4,11 +4,12 @@ import { useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import {
   Building2, Package, Users2, Crown, ShieldCheck, User,
-  Plus, X, Loader2, Mail, Clock,
+  Plus, X, Loader2, Mail, Clock, RefreshCw,
 } from "lucide-react";
 import {
   inviteMember, cancelInvitation, removeMember, updateMemberRole,
 } from "./team/actions";
+import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/plan-limits";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -141,6 +142,122 @@ function InviteModal({ onClose }: { onClose: () => void }) {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
+function ModuleSwapPanel({
+  plan,
+  activeModules,
+  canManage,
+}: {
+  plan:          string;
+  activeModules: string[];
+  canManage:     boolean;
+}) {
+  const router = useRouter();
+  const [selected,  setSelected]  = useState<string[]>(activeModules.filter((m) => m in FREE_MODULE_INFO));
+  const [saving,    setSaving]    = useState(false);
+  const [error,     setError]     = useState("");
+  const [success,   setSuccess]   = useState(false);
+
+  if (plan !== "free" || !canManage) return null;
+
+  function toggle(slug: string) {
+    setSuccess(false);
+    setSelected((prev) => {
+      if (prev.includes(slug)) return prev.filter((s) => s !== slug);
+      if (prev.length >= FREE_MODULE_MAX) return prev;
+      return [...prev, slug];
+    });
+  }
+
+  async function save() {
+    setSaving(true);
+    setError("");
+    setSuccess(false);
+    const res = await fetch("/api/admin/modules/swap", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ modules: selected }),
+    });
+    setSaving(false);
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError((data as { error?: string }).error ?? "Error al guardar.");
+      return;
+    }
+    setSuccess(true);
+    router.refresh();
+  }
+
+  return (
+    <div className="bg-white/5 border border-white/8 rounded-2xl p-5">
+      <div className="flex items-center gap-2 mb-1">
+        <RefreshCw className="w-4 h-4 text-white/40" />
+        <h3 className="text-sm font-semibold text-white">Cambiar módulos</h3>
+        <span className="ml-auto text-[10px] text-white/30 bg-white/5 px-2 py-0.5 rounded-full">
+          {selected.length}/{FREE_MODULE_MAX} activos
+        </span>
+      </div>
+      <p className="text-xs text-white/35 mb-4">
+        El plan gratuito permite hasta {FREE_MODULE_MAX} módulos. Para desbloquear más, actualizá tu plan.
+      </p>
+
+      {error && (
+        <p className="text-xs text-red-400 bg-red-500/10 border border-red-500/20 rounded-xl px-3 py-2 mb-3">
+          {error}
+        </p>
+      )}
+      {success && (
+        <p className="text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 rounded-xl px-3 py-2 mb-3">
+          Módulos actualizados correctamente.
+        </p>
+      )}
+
+      <div className="space-y-2 mb-4">
+        {Object.entries(FREE_MODULE_INFO).map(([slug, info]) => {
+          const active = selected.includes(slug);
+          const maxed  = !active && selected.length >= FREE_MODULE_MAX;
+          return (
+            <button
+              key={slug}
+              onClick={() => !maxed && toggle(slug)}
+              disabled={maxed}
+              className={`w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-xl border transition-all ${
+                active
+                  ? "bg-emerald-500/10 border-emerald-500/25 text-white"
+                  : maxed
+                    ? "bg-white/2 border-white/5 text-white/25 cursor-not-allowed"
+                    : "bg-white/3 border-white/8 text-white/60 hover:bg-white/8 hover:text-white hover:border-white/15"
+              }`}
+            >
+              <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                active ? "bg-emerald-400 border-emerald-400" : "border-white/20"
+              }`}>
+                {active && (
+                  <svg className="w-2 h-2 text-[#0a1628]" fill="none" viewBox="0 0 10 8">
+                    <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="text-xs font-semibold">{info.label}</span>
+                <span className="text-[10px] text-white/30 ml-2">{info.limitNote}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      <button
+        onClick={save}
+        disabled={saving}
+        className="w-full flex items-center justify-center gap-2 py-2.5 bg-white/10 hover:bg-white/15 text-white text-sm font-medium rounded-xl transition-colors disabled:opacity-50"
+      >
+        {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+        {saving ? "Guardando…" : "Guardar cambios"}
+      </button>
+    </div>
+  );
+}
+
 export function SettingsClient({
   tenant,
   modules,
@@ -245,6 +362,13 @@ export function SettingsClient({
             </div>
           )}
         </div>
+
+        {/* Module swap (free plan only) */}
+        <ModuleSwapPanel
+          plan={tenant.plan}
+          activeModules={modules.filter((m) => m.active).map((m) => m.module)}
+          canManage={canManage}
+        />
 
         {/* Team */}
         <div className="bg-white/5 border border-white/8 rounded-2xl overflow-hidden">

@@ -64,18 +64,15 @@ export async function POST(req: NextRequest) {
     const tenant = await tx.tenant.create({
       data: { name: businessName.trim(), slug, plan: "free" },
     });
-    const [user] = await Promise.all([
-      tx.user.create({
-        data: {
-          tenantId: tenant.id,
-          email:    normalizedEmail,
-          name:     name.trim(),
-          role:     "owner",
-          password: hashed,
-        },
-      }),
-      tx.tenantModule.create({ data: { tenantId: tenant.id, module: "turnera" } }),
-    ]);
+    const user = await tx.user.create({
+      data: {
+        tenantId: tenant.id,
+        email:    normalizedEmail,
+        name:     name.trim(),
+        role:     "owner",
+        password: hashed,
+      },
+    });
     createdUserId = user.id;
   });
 

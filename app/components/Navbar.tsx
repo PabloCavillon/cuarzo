@@ -98,6 +98,12 @@ export default function Navbar() {
             </div>
 
             <Link
+              href="/login"
+              className="inline-flex items-center text-white/70 hover:text-white text-sm font-medium px-4 py-2.5 rounded-full hover:bg-white/10 transition-colors"
+            >
+              {t.nav.login}
+            </Link>
+            <Link
               href="/register"
               className="inline-flex items-center bg-white text-navy-900 text-sm font-semibold px-5 py-2.5 rounded-full hover:bg-navy-50 transition-colors"
             >
@@ -149,9 +155,16 @@ export default function Navbar() {
             </div>
 
             <Link
+              href="/login"
+              onClick={() => setOpen(false)}
+              className="block border border-white/20 text-white/80 font-medium text-center px-5 py-3 rounded-full mt-4 text-sm hover:bg-white/10 transition-colors"
+            >
+              {t.nav.login}
+            </Link>
+            <Link
               href="/register"
               onClick={() => setOpen(false)}
-              className="block bg-white text-navy-900 font-semibold text-center px-5 py-3 rounded-full mt-4 text-sm"
+              className="block bg-white text-navy-900 font-semibold text-center px-5 py-3 rounded-full mt-2 text-sm"
             >
               {t.nav.start}
             </Link>

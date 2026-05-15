@@ -3,13 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Circle } from "lucide-react";
-
-const inputCls =
-  "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-white text-sm placeholder:text-white/30 focus:outline-none focus:border-[#4f8ef7]/50 focus:ring-1 focus:ring-[#4f8ef7]/30 transition";
+import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/plan-limits";
 
 type Step = 1 | 2 | 3;
 
-function StepDot({ n, current }: { n: Step; current: Step }) {
+const STEP_LABELS: Record<Step, string> = {
+  1: "Bienvenida",
+  2: "Módulos",
+  3: "Listo",
+};
+
+function StepDot({ n, current, isFree }: { n: Step; current: Step; isFree: boolean }) {
+  if (!isFree && n === 2) return null;
   const done   = current > n;
   const active = current === n;
   return (
@@ -18,48 +23,47 @@ function StepDot({ n, current }: { n: Step; current: Step }) {
         ? <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
         : <Circle className={`w-5 h-5 shrink-0 ${active ? "text-[#4f8ef7]" : "text-white/20"}`} />}
       <span className={`text-xs font-medium ${active ? "text-white" : done ? "text-white/60" : "text-white/25"}`}>
-        {n === 1 && "Bienvenida"}
-        {n === 2 && "Primer servicio"}
-        {n === 3 && "Listo"}
+        {STEP_LABELS[n]}
       </span>
     </div>
   );
 }
 
-export default function OnboardingClient() {
-  const router   = useRouter();
-  const [step,   setStep]   = useState<Step>(1);
-  const [saving, setSaving] = useState(false);
-  const [error,  setError]  = useState("");
+export default function OnboardingClient({ plan }: { plan: string }) {
+  const router  = useRouter();
+  const isFree  = plan === "free";
 
-  const [serviceName,     setServiceName]     = useState("");
-  const [serviceDuration, setServiceDuration] = useState("30");
-  const [servicePrice,    setServicePrice]    = useState("0");
+  const [step,    setStep]    = useState<Step>(1);
+  const [saving,  setSaving]  = useState(false);
+  const [error,   setError]   = useState("");
+  const [selected, setSelected] = useState<string[]>([]);
 
-  async function createService() {
-    if (!serviceName.trim()) { setError("El nombre del servicio es requerido."); return; }
-    setSaving(true);
-    setError("");
-    const fd = new FormData();
-    fd.set("name",        serviceName.trim());
-    fd.set("durationMin", serviceDuration);
-    fd.set("price",       servicePrice);
-
-    const res = await fetch("/api/admin/services", { method: "POST", body: fd });
-    setSaving(false);
-    if (res.ok) {
-      setStep(3);
-    } else {
-      const data = await res.json().catch(() => ({}));
-      setError((data as { error?: string }).error ?? "Error al crear el servicio.");
-    }
+  function toggleModule(slug: string) {
+    setSelected((prev) => {
+      if (prev.includes(slug)) return prev.filter((s) => s !== slug);
+      if (prev.length >= FREE_MODULE_MAX) return prev;
+      return [...prev, slug];
+    });
   }
 
   async function completeOnboarding() {
     setSaving(true);
-    await fetch("/api/admin/onboarding-complete", { method: "POST" });
+    setError("");
+    const res = await fetch("/api/admin/onboarding-complete", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ modules: selected }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError((data as { error?: string }).error ?? "Error al guardar.");
+      setSaving(false);
+      return;
+    }
     router.push("/admin");
   }
+
+  const totalSteps: Step[] = isFree ? [1, 2, 3] : [1, 3];
 
   return (
     <div className="min-h-screen bg-[#0a1628] flex items-center justify-center px-4 py-12">
@@ -72,29 +76,36 @@ export default function OnboardingClient() {
         </div>
 
         <div className="flex items-center gap-4 justify-center mb-8">
-          <StepDot n={1} current={step} />
+          <StepDot n={1} current={step} isFree={isFree} />
+          {isFree && (
+            <>
+              <div className="flex-1 h-px bg-white/10 max-w-12" />
+              <StepDot n={2} current={step} isFree={isFree} />
+            </>
+          )}
           <div className="flex-1 h-px bg-white/10 max-w-12" />
-          <StepDot n={2} current={step} />
-          <div className="flex-1 h-px bg-white/10 max-w-12" />
-          <StepDot n={3} current={step} />
+          <StepDot n={3} current={step} isFree={isFree} />
         </div>
 
         <div className="bg-white/5 border border-white/10 rounded-2xl p-8 space-y-6">
+          {/* Step 1: Welcome */}
           {step === 1 && (
             <div className="space-y-5">
               <div>
                 <h1 className="text-xl font-bold text-white">¡Bienvenido a Cuarzo! 🎉</h1>
                 <p className="text-sm text-white/50 mt-2 leading-relaxed">
-                  Tu workspace está listo. En los próximos pasos vamos a configurar lo básico
-                  para que puedas empezar a tomar turnos.
+                  Tu workspace está listo.{" "}
+                  {isFree
+                    ? "En el siguiente paso elegís los módulos que mejor se adaptan a tu negocio."
+                    : "Tu cuenta ya tiene todos los módulos de tu plan activos."}
                 </p>
               </div>
               <div className="bg-white/5 rounded-xl p-4 space-y-2">
                 {[
-                  "Turnera digital para que tus clientes reserven online",
                   "Panel de administración completo",
                   "Notificaciones por email automáticas",
-                  "Sin límite de tiempo en el plan gratuito",
+                  isFree ? "Plan gratuito sin límite de tiempo" : `Plan ${plan} con todos los módulos incluidos`,
+                  "Soporte técnico directo",
                 ].map((feat) => (
                   <div key={feat} className="flex items-start gap-2 text-sm text-white/60">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
@@ -103,20 +114,23 @@ export default function OnboardingClient() {
                 ))}
               </div>
               <button
-                onClick={() => setStep(2)}
+                onClick={() => isFree ? setStep(2) : setStep(3)}
                 className="w-full bg-[#4f8ef7] hover:bg-[#3a7ae0] text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition"
               >
-                Empezar configuración →
+                {isFree ? "Elegir módulos →" : "Ir al panel →"}
               </button>
             </div>
           )}
 
-          {step === 2 && (
+          {/* Step 2: Module picker (free only) */}
+          {step === 2 && isFree && (
             <div className="space-y-5">
               <div>
-                <h1 className="text-xl font-bold text-white">Creá tu primer servicio</h1>
+                <h1 className="text-xl font-bold text-white">Elegí tus módulos</h1>
                 <p className="text-sm text-white/50 mt-2 leading-relaxed">
-                  Los servicios son lo que van a reservar tus clientes. Podés agregar más desde el panel.
+                  Con el plan gratuito podés activar hasta{" "}
+                  <span className="text-white font-semibold">{FREE_MODULE_MAX} módulos</span>.
+                  Podés cambiarlos más adelante desde Configuración.
                 </p>
               </div>
 
@@ -126,73 +140,108 @@ export default function OnboardingClient() {
                 </p>
               )}
 
-              <div className="space-y-3">
-                <div className="flex flex-col gap-1">
-                  <label className="text-xs text-white/60 font-medium">Nombre del servicio</label>
-                  <input
-                    type="text" required maxLength={80}
-                    value={serviceName} onChange={(e) => setServiceName(e.target.value)}
-                    placeholder="Ej: Corte de cabello" className={inputCls}
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs text-white/60 font-medium">Duración (minutos)</label>
-                    <select
-                      value={serviceDuration} onChange={(e) => setServiceDuration(e.target.value)}
-                      className={inputCls}
+              <div className="space-y-2">
+                {Object.entries(FREE_MODULE_INFO).map(([slug, info]) => {
+                  const active = selected.includes(slug);
+                  const maxed  = !active && selected.length >= FREE_MODULE_MAX;
+                  return (
+                    <button
+                      key={slug}
+                      onClick={() => !maxed && toggleModule(slug)}
+                      disabled={maxed}
+                      className={`w-full text-left flex items-start gap-3 p-4 rounded-xl border transition-all ${
+                        active
+                          ? "bg-[#4f8ef7]/15 border-[#4f8ef7]/40"
+                          : maxed
+                            ? "bg-white/2 border-white/5 opacity-40 cursor-not-allowed"
+                            : "bg-white/4 border-white/10 hover:bg-white/8 hover:border-white/20"
+                      }`}
                     >
-                      {[15, 20, 30, 45, 60, 90, 120].map((m) => (
-                        <option key={m} value={m}>{m} min</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <label className="text-xs text-white/60 font-medium">Precio (ARS)</label>
-                    <input
-                      type="number" min="0" step="100"
-                      value={servicePrice} onChange={(e) => setServicePrice(e.target.value)}
-                      placeholder="0 = gratis" className={inputCls}
-                    />
-                  </div>
-                </div>
+                      <div className={`mt-0.5 w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-colors ${
+                        active ? "bg-[#4f8ef7] border-[#4f8ef7]" : "border-white/20"
+                      }`}>
+                        {active && (
+                          <svg className="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 10 8">
+                            <path d="M1 4l3 3 5-6" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-2">
+                          <p className="text-sm font-semibold text-white">{info.label}</p>
+                          <span className="text-[10px] text-white/30 font-mono shrink-0">{info.limitNote}</span>
+                        </div>
+                        <p className="text-xs text-white/45 mt-0.5">{info.description}</p>
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
 
-              <div className="flex gap-3">
-                <button
-                  onClick={() => setStep(3)}
-                  className="flex-1 text-white/40 hover:text-white border border-white/10 hover:border-white/20 rounded-lg px-4 py-2.5 text-sm transition"
-                >
-                  Saltar
-                </button>
-                <button
-                  onClick={createService}
-                  disabled={saving}
-                  className="flex-1 bg-[#4f8ef7] hover:bg-[#3a7ae0] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition"
-                >
-                  {saving ? "Creando…" : "Crear servicio →"}
-                </button>
+              <div className="flex items-center justify-between pt-1">
+                <span className="text-xs text-white/30">
+                  {selected.length}/{FREE_MODULE_MAX} seleccionados
+                </span>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => setStep(1)}
+                    className="text-white/40 hover:text-white border border-white/10 hover:border-white/20 rounded-lg px-4 py-2.5 text-sm transition"
+                  >
+                    Atrás
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (selected.length === 0) {
+                        setError("Elegí al menos un módulo para continuar.");
+                        return;
+                      }
+                      setError("");
+                      setStep(3);
+                    }}
+                    className="bg-[#4f8ef7] hover:bg-[#3a7ae0] text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition"
+                  >
+                    Continuar →
+                  </button>
+                </div>
               </div>
             </div>
           )}
 
+          {/* Step 3: Done */}
           {step === 3 && (
             <div className="space-y-6 text-center">
               <div className="text-6xl">🚀</div>
               <div>
                 <h1 className="text-xl font-bold text-white">¡Todo listo!</h1>
                 <p className="text-sm text-white/50 mt-2 leading-relaxed">
-                  Tu turnera ya está configurada. Compartí el enlace público con tus clientes
-                  para que puedan reservar.
+                  {selected.length > 0
+                    ? `Activamos: ${selected.map((s) => FREE_MODULE_INFO[s]?.label ?? s).join(" · ")}.`
+                    : "Tu workspace está configurado."}
+                  {" "}Podés ajustar todo desde la configuración.
                 </p>
               </div>
-              <button
-                onClick={completeOnboarding}
-                disabled={saving}
-                className="w-full bg-[#4f8ef7] hover:bg-[#3a7ae0] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition"
-              >
-                {saving ? "Ingresando…" : "Ir al panel →"}
-              </button>
+              {error && (
+                <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2">
+                  {error}
+                </p>
+              )}
+              <div className="flex gap-3">
+                {isFree && (
+                  <button
+                    onClick={() => { setError(""); setStep(2); }}
+                    className="flex-1 text-white/40 hover:text-white border border-white/10 hover:border-white/20 rounded-lg px-4 py-2.5 text-sm transition"
+                  >
+                    Atrás
+                  </button>
+                )}
+                <button
+                  onClick={completeOnboarding}
+                  disabled={saving}
+                  className="flex-1 bg-[#4f8ef7] hover:bg-[#3a7ae0] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition"
+                >
+                  {saving ? "Ingresando…" : "Ir al panel →"}
+                </button>
+              </div>
             </div>
           )}
         </div>

@@ -13,10 +13,10 @@ export default async function OnboardingPage() {
 
   const tenant = await prisma.tenant.findUnique({
     where:  { id: user.tenantId },
-    select: { onboarded: true },
+    select: { onboarded: true, plan: true },
   });
 
   if (tenant?.onboarded) redirect("/admin");
 
-  return <OnboardingClient />;
+  return <OnboardingClient plan={tenant?.plan ?? "free"} />;
 }
