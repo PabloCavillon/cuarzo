@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Circle } from "lucide-react";
-import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/plan-limits";
+import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/module-catalog";
 
 type Step = 1 | 2 | 3;
 

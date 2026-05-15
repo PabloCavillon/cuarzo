@@ -9,7 +9,7 @@ import {
 import {
   inviteMember, cancelInvitation, removeMember, updateMemberRole,
 } from "./team/actions";
-import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/plan-limits";
+import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/module-catalog";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

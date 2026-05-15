@@ -21,7 +21,11 @@ const prismaMock = vi.hoisted(() => ({
 
 vi.mock("@/auth",             () => ({ auth: authMock }));
 vi.mock("@/lib/prisma",       () => ({ prisma: prismaMock }));
-vi.mock("@/lib/plan-limits",  () => ({
+vi.mock("@/lib/plan-limits",    () => ({
+  FREE_MODULE_INFO: { turnera: {}, catalog: {} },
+  FREE_MODULE_MAX:  2,
+}));
+vi.mock("@/lib/module-catalog", () => ({
   FREE_MODULE_INFO: { turnera: {}, catalog: {} },
   FREE_MODULE_MAX:  2,
 }));
