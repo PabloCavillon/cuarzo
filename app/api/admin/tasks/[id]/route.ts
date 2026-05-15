@@ -54,6 +54,13 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
       data.dueDate = d;
     }
   }
+  if (body.recurrence !== undefined) {
+    if (!["none","daily","weekly","monthly","yearly"].includes(String(body.recurrence))) {
+      return NextResponse.json({ error: "Periodicidad inválida." }, { status: 400 });
+    }
+    data.recurrence = body.recurrence;
+    data.recurrenceConfig = body.recurrenceConfig ?? null;
+  }
   if (body.assignedToId !== undefined) {
     if (body.assignedToId === null) {
       data.assignedToId = null;

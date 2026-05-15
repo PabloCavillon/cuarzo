@@ -30,9 +30,12 @@ export async function GET(req: NextRequest) {
       ...(due === "week"  ? { dueDate: { gte: today, lt: week } } : {}),
       ...(due === "overdue" ? { dueDate: { lt: today }, status: { notIn: ["done", "cancelled"] as never[] } } : {}),
     },
-    include: {
+    select: {
+      id: true, title: true, description: true, status: true, priority: true,
+      dueDate: true, recurrence: true, recurrenceConfig: true,
       assignedTo: { select: { id: true, name: true } },
       createdBy:  { select: { id: true, name: true } },
+      createdAt: true,
     },
     orderBy: [
       { dueDate:  "asc"  },
@@ -56,17 +59,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "JSON inválido." }, { status: 400 });
   }
 
-  const title       = String(body.title       ?? "").trim();
-  const description = String(body.description ?? "").trim() || null;
-  const priority    = String(body.priority    ?? "medium");
+  const title        = String(body.title        ?? "").trim();
+  const description  = String(body.description  ?? "").trim() || null;
+  const priority     = String(body.priority     ?? "medium");
+  const recurrence   = String(body.recurrence   ?? "none");
   const assignedToId = body.assignedToId ? String(body.assignedToId) : null;
-  const dueDate     = body.dueDate ? new Date(String(body.dueDate)) : null;
+  const dueDate      = body.dueDate ? new Date(String(body.dueDate)) : null;
+  const recurrenceConfig = body.recurrenceConfig ?? null;
 
   if (!title || title.length < 2) {
     return NextResponse.json({ error: "El título es requerido." }, { status: 400 });
   }
   if (!["low","medium","high","urgent"].includes(priority)) {
     return NextResponse.json({ error: "Prioridad inválida." }, { status: 400 });
+  }
+  if (!["none","daily","weekly","monthly","yearly"].includes(recurrence)) {
+    return NextResponse.json({ error: "Periodicidad inválida." }, { status: 400 });
   }
   if (dueDate && isNaN(dueDate.getTime())) {
     return NextResponse.json({ error: "Fecha inválida." }, { status: 400 });
@@ -84,11 +92,13 @@ export async function POST(req: NextRequest) {
 
   const task = await prisma.task.create({
     data: {
-      tenantId:    user.tenantId,
-      createdById: user.id,
+      tenantId:        user.tenantId,
+      createdById:     user.id,
       title,
       description,
-      priority:    priority as never,
+      priority:        priority as never,
+      recurrence:      recurrence as never,
+      recurrenceConfig: recurrenceConfig as never,
       assignedToId,
       dueDate,
     },

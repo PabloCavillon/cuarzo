@@ -119,6 +119,14 @@ enum TaskPriority {
   urgent
 }
 
+enum TaskRecurrence {
+  none
+  daily
+  weekly
+  monthly
+  yearly
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // CORE — Tenants, Modules, Users
 // ─────────────────────────────────────────────────────────────────────────────
@@ -705,9 +713,11 @@ model Task {
   tenantId    String       @map("tenant_id")
   title       String
   description String?
-  status      TaskStatus   @default(pending)
-  priority    TaskPriority @default(medium)
-  dueDate     DateTime?    @map("due_date")
+  status           TaskStatus     @default(pending)
+  priority         TaskPriority   @default(medium)
+  dueDate          DateTime?      @map("due_date")
+  recurrence       TaskRecurrence @default(none)
+  recurrenceConfig Json?          @map("recurrence_config")
 
   assignedToId String? @map("assigned_to_id")
   createdById  String  @map("created_by_id")

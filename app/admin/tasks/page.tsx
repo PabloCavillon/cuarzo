@@ -40,15 +40,17 @@ export default async function TasksPage() {
 
       <TasksClient
         initialTasks={tasks.map((t) => ({
-          id:          t.id,
-          title:       t.title,
-          description: t.description,
-          status:      t.status,
-          priority:    t.priority,
-          dueDate:     t.dueDate?.toISOString() ?? null,
-          assignedTo:  t.assignedTo ? { id: t.assignedTo.id, name: t.assignedTo.name } : null,
-          createdBy:   { id: t.createdBy.id, name: t.createdBy.name },
-          createdAt:   t.createdAt.toISOString(),
+          id:               t.id,
+          title:            t.title,
+          description:      t.description,
+          status:           t.status,
+          priority:         t.priority,
+          dueDate:          t.dueDate?.toISOString() ?? null,
+          recurrence:       (t.recurrence ?? "none") as never,
+          recurrenceConfig: (t.recurrenceConfig ?? null) as never,
+          assignedTo:       t.assignedTo ? { id: t.assignedTo.id, name: t.assignedTo.name } : null,
+          createdBy:        { id: t.createdBy.id, name: t.createdBy.name },
+          createdAt:        t.createdAt.toISOString(),
         }))}
         teamMembers={teamMembers}
         currentUserId={user.id}
