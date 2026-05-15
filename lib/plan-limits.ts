@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
-export { FREE_MODULE_MAX, FREE_MODULE_INFO } from "./module-catalog";
+import { FREE_MODULE_MAX, FREE_MODULE_INFO } from "./module-catalog";
+export { FREE_MODULE_MAX, FREE_MODULE_INFO };
 
 export type PlanKey = "free" | "starter" | "pro" | "enterprise";
 
