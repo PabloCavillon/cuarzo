@@ -45,6 +45,14 @@ export default async function RootLayout({
 
   return (
     <html lang={htmlLang} data-scroll-behavior="smooth" className={`${inter.variable} h-full antialiased`}>
+      <head>
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="Cuarzo" />
+        <meta name="theme-color" content="#0a1628" />
+      </head>
       <body className="min-h-full flex flex-col">
         <Providers locale={locale}>{children}</Providers>
       </body>

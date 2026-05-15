@@ -4,6 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useT } from "@/lib/i18n/provider";
+import { Mail, Loader2, RotateCcw, CheckCircle2 } from "lucide-react";
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -29,6 +30,12 @@ export default function RegisterForm() {
   const [error,        setError]        = useState("");
   const [loading,      setLoading]      = useState(false);
 
+  // Email verification step
+  const [step,        setStep]       = useState<"form" | "verify">("form");
+  const [code,        setCode]       = useState("");
+  const [resending,   setResending]  = useState(false);
+  const [resent,      setResent]     = useState(false);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
@@ -37,32 +44,127 @@ export default function RegisterForm() {
     if (password.length < 8)  { setError(tr.errors.passwordShort);    return; }
 
     setLoading(true);
-    const res = await fetch("/api/auth/register", {
+    const res  = await fetch("/api/auth/register", {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
       body:    JSON.stringify({ businessName, name, email, password }),
     });
     const data = await res.json();
+    setLoading(false);
 
     if (!res.ok) {
-      setLoading(false);
       setError(data.error ?? tr.errors.generic);
       return;
     }
 
-    const redirectTo = (data.redirectTo as string) ?? "/admin/onboarding";
+    setStep("verify");
+  }
+
+  async function handleVerify(e: React.FormEvent) {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    const verifyRes = await fetch("/api/auth/verify-email-code", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ email, code }),
+    });
+    const verifyData = await verifyRes.json();
+
+    if (!verifyRes.ok) {
+      setLoading(false);
+      setError(verifyData.error ?? "Código incorrecto.");
+      return;
+    }
+
     const login = await signIn("credentials", { email, password, redirect: false });
     setLoading(false);
     if (login?.error) {
       setError(tr.errors.loginFail);
     } else {
-      window.location.href = redirectTo;
+      window.location.href = "/admin/onboarding";
     }
+  }
+
+  async function resendCode() {
+    setResending(true);
+    await fetch("/api/auth/resend-verify-code", {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ email }),
+    });
+    setResending(false);
+    setResent(true);
+    setTimeout(() => setResent(false), 5000);
   }
 
   async function handleGoogle() {
     setLoading(true);
     await signIn("google", { callbackUrl: "/admin" });
+  }
+
+  if (step === "verify") {
+    return (
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-2 mb-2">
+          <div className="w-12 h-12 rounded-full bg-[#4f8ef7]/15 flex items-center justify-center">
+            <Mail className="w-5 h-5 text-[#4f8ef7]" />
+          </div>
+          <h1 className="text-xl font-semibold text-white text-center">Verificá tu email</h1>
+          <p className="text-sm text-white/40 text-center">
+            Enviamos un código de 6 dígitos a <strong className="text-white/60">{email}</strong>
+          </p>
+        </div>
+
+        {error && (
+          <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg px-3 py-2 text-center">
+            {error}
+          </p>
+        )}
+        {resent && (
+          <p className="text-sm text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 rounded-lg px-3 py-2 flex items-center gap-2 justify-center">
+            <CheckCircle2 className="w-4 h-4" /> Código reenviado
+          </p>
+        )}
+
+        <form onSubmit={handleVerify} className="flex flex-col gap-3">
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            maxLength={6}
+            value={code}
+            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+            placeholder="000000"
+            autoFocus
+            autoComplete="one-time-code"
+            className="bg-white/5 border border-white/10 rounded-lg px-3 py-3 text-white text-xl placeholder:text-white/20 focus:outline-none focus:border-[#4f8ef7]/50 transition text-center tracking-[0.5em] font-mono"
+          />
+          <button
+            type="submit"
+            disabled={loading || code.length < 6}
+            className="bg-[#4f8ef7] hover:bg-[#3a7ae0] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition flex items-center justify-center gap-2"
+          >
+            {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+            Verificar y continuar
+          </button>
+        </form>
+
+        <button
+          onClick={resendCode}
+          disabled={resending}
+          className="flex items-center justify-center gap-1.5 text-xs text-white/30 hover:text-white/60 transition mt-1"
+        >
+          <RotateCcw className="w-3.5 h-3.5" />
+          {resending ? "Reenviando…" : "Reenviar código"}
+        </button>
+
+        <p className="text-center text-xs text-white/30 mt-1">
+          Revisá también tu carpeta de spam.
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -123,9 +225,10 @@ export default function RegisterForm() {
 
       <button
         type="submit" disabled={loading}
-        className="mt-2 bg-[#4f8ef7] hover:bg-[#3a7ae0] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition"
+        className="mt-2 bg-[#4f8ef7] hover:bg-[#3a7ae0] disabled:opacity-50 text-white font-semibold rounded-lg px-4 py-2.5 text-sm transition flex items-center justify-center gap-2"
       >
-        {loading ? tr.loading : tr.submit}
+        {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+        {loading ? "Creando cuenta…" : tr.submit}
       </button>
 
       <div className="flex items-center gap-3 my-1">

@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, ShieldAlert, EyeOff } from "lucide-react";
-import Link from "next/link";
+import { Menu, EyeOff } from "lucide-react";
 import type { AuthUser } from "@/lib/session";
 import { NotificationToggle } from "./NotificationToggle";
 
@@ -28,6 +27,8 @@ const BREADCRUMBS: Record<string, string> = {
   "/admin/clients":            "Clients",
   "/admin/clients/suppliers":  "Clients · Suppliers",
   "/admin/clients/":           "Clients · Perfil",
+  "/admin/soporte":            "Soporte",
+  "/admin/tasks":              "Tareas",
 };
 
 export function TopBar({
@@ -75,15 +76,6 @@ export function TopBar({
       </div>
 
       <div className="flex items-center gap-1">
-        {user.superAdmin && !isViewing && (
-          <Link
-            href="/super-admin"
-            title="Panel super admin"
-            className="p-1.5 rounded-lg text-amber-400/70 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"
-          >
-            <ShieldAlert className="w-4 h-4" />
-          </Link>
-        )}
         {isViewing && (
           <button
             onClick={stopViewing}

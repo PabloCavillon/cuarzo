@@ -1,7 +1,8 @@
 import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 import { requireSuperAdmin, apiError } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
-import { SuperAdminClient } from "./SuperAdminClient";
+import { SuperPanel } from "./SuperPanel";
 
 export default async function SuperAdminPage() {
   let user;
@@ -12,46 +13,56 @@ export default async function SuperAdminPage() {
     redirect("/login");
   }
 
-  const tenants = await prisma.tenant.findMany({
-    orderBy: { createdAt: "desc" },
-    select: {
-      id:        true,
-      name:      true,
-      slug:      true,
-      plan:      true,
-      active:    true,
-      onboarded: true,
-      createdAt: true,
-      _count: {
-        select: { users: true, modules: true },
+  const jar = await cookies();
+  if (!jar.get("sa-pin")?.value) {
+    redirect("/super-admin/login");
+  }
+
+  const [tenants, tickets] = await Promise.all([
+    prisma.tenant.findMany({
+      orderBy: { createdAt: "desc" },
+      select: {
+        id: true, name: true, slug: true, plan: true,
+        active: true, onboarded: true, createdAt: true,
+        _count: { select: { users: true, modules: true } },
       },
-    },
-  });
+    }),
+    prisma.supportTicket.findMany({
+      orderBy: { updatedAt: "desc" },
+      take: 200,
+      include: {
+        tenant:  { select: { id: true, name: true } },
+        user:    { select: { id: true, name: true } },
+        replies: { select: { id: true } },
+      },
+    }),
+  ]);
 
   return (
-    <div className="min-h-screen bg-[#0a1628] px-6 py-10">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <p className="text-xs text-white/30 mb-1">Super Admin · {user.email}</p>
-          <h1 className="text-2xl font-bold text-white">Panel Global</h1>
-          <p className="text-sm text-white/40 mt-1">{tenants.length} tenants registrados</p>
-        </div>
-
-        <SuperAdminClient
-          tenants={tenants.map((t) => ({
-            id:        t.id,
-            name:      t.name,
-            slug:      t.slug,
-            plan:      t.plan,
-            active:    t.active,
-            onboarded: t.onboarded,
-            createdAt: t.createdAt.toISOString(),
-            users:     t._count.users,
-            modules:   t._count.modules,
-          }))}
-          currentViewTenantId={user.tenantId !== user.realTenantId ? user.tenantId : null}
-        />
-      </div>
-    </div>
+    <SuperPanel
+      user={{ email: user.email, name: user.name }}
+      currentViewTenantId={user.tenantId !== user.realTenantId ? user.tenantId : null}
+      tenants={tenants.map((t) => ({
+        id:        t.id,
+        name:      t.name,
+        slug:      t.slug,
+        plan:      t.plan,
+        active:    t.active,
+        onboarded: t.onboarded,
+        createdAt: t.createdAt.toISOString(),
+        users:     t._count.users,
+        modules:   t._count.modules,
+      }))}
+      tickets={tickets.map((t) => ({
+        id:         t.id,
+        subject:    t.subject,
+        status:     t.status,
+        createdAt:  t.createdAt.toISOString(),
+        tenantName: t.tenant.name,
+        tenantId:   t.tenant.id,
+        userName:   t.user.name,
+        replyCount: t.replies.length,
+      }))}
+    />
   );
 }

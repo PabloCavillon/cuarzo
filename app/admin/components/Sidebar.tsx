@@ -6,7 +6,7 @@ import { signOut } from "next-auth/react";
 import {
   LayoutDashboard, Calendar, Package, Boxes,
   ShoppingCart, FileText, Users, Settings,
-  LogOut, X, ChevronRight, Wallet, CreditCard, BarChart2, ListTodo,
+  LogOut, X, ChevronRight, Wallet, CreditCard, BarChart2, ListTodo, Headphones,
 } from "lucide-react";
 import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import type { AuthUser } from "@/lib/session";
@@ -32,8 +32,9 @@ const NAV: NavItem[] = [
   { label: "Tareas",       href: "/admin/tasks",          Icon: ListTodo,        module: null },
   { label: "Reportes",     href: "/admin/reports",        Icon: BarChart2,       module: null },
   { label: "Clients",      href: "/admin/clients",        Icon: Users,           module: null },
-  { label: "Suscripción",  href: "/admin/subscription",   Icon: CreditCard,      module: null },
-  { label: "Configuración",href: "/admin/settings",       Icon: Settings,        module: null },
+  { label: "Suscripción",  href: "/admin/subscription",   Icon: CreditCard,        module: null },
+  { label: "Soporte",      href: "/admin/soporte",         Icon: Headphones,        module: null },
+  { label: "Configuración",href: "/admin/settings",        Icon: Settings,          module: null },
 ];
 
 // ─── Component ────────────────────────────────────────────────────────────────

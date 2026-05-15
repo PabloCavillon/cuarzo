@@ -127,6 +127,13 @@ enum TaskRecurrence {
   yearly
 }
 
+enum TicketStatus {
+  open
+  in_progress
+  resolved
+  closed
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // CORE — Tenants, Modules, Users
 // ─────────────────────────────────────────────────────────────────────────────
@@ -163,6 +170,7 @@ model Tenant {
   auditLogs          AuditLog[]
   tasks              Task[]
   pushSubscriptions  PushSubscription[]
+  supportTickets     SupportTicket[]
 
   @@map("tenants")
 }
@@ -212,13 +220,24 @@ model User {
   image         String?
   googleId      String?   @unique @map("google_id")
   emailVerified DateTime? @map("email_verified")
+  // Two-factor authentication
+  totpSecret     String?   @map("totp_secret")
+  totpEnabled    Boolean   @default(false) @map("totp_enabled")
+  twoFaMethod    String?   @map("two_fa_method")    // "totp" | "email"
+  emailOtpCode   String?   @map("email_otp_code")
+  emailOtpExpiry DateTime? @map("email_otp_expiry")
+  // Email verification OTP (registration)
+  emailVerifyCode   String?   @map("email_verify_code")
+  emailVerifyExpiry DateTime? @map("email_verify_expiry")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")
 
-  tenant            Tenant             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  tasksCreated      Task[]             @relation("TaskCreator")
-  tasksAssigned     Task[]             @relation("TaskAssignee")
-  pushSubscriptions PushSubscription[]
+  tenant              Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tasksCreated        Task[]               @relation("TaskCreator")
+  tasksAssigned       Task[]               @relation("TaskAssignee")
+  pushSubscriptions   PushSubscription[]
+  supportTickets      SupportTicket[]
+  ticketReplies       SupportTicketReply[]
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -753,4 +772,42 @@ model PushSubscription {
 
   @@index([userId])
   @@map("push_subscriptions")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SUPPORT TICKETS
+// ─────────────────────────────────────────────────────────────────────────────
+
+model SupportTicket {
+  id        String       @id @default(uuid())
+  tenantId  String       @map("tenant_id")
+  userId    String       @map("user_id")
+  subject   String
+  body      String
+  status    TicketStatus @default(open)
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
+
+  tenant  Tenant               @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user    User                 @relation(fields: [userId],   references: [id])
+  replies SupportTicketReply[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("support_tickets")
+}
+
+model SupportTicketReply {
+  id        String   @id @default(uuid())
+  ticketId  String   @map("ticket_id")
+  authorId  String?  @map("author_id")
+  fromAdmin Boolean  @default(false) @map("from_admin")
+  body      String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  author User?         @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([ticketId])
+  @@map("support_ticket_replies")
 }

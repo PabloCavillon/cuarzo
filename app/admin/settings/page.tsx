@@ -4,6 +4,7 @@ import { requireAuth, apiError } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { SettingsClient } from "./SettingsClient";
 import { MiTiendaWidget } from "./MiTiendaWidget";
+import { TwoFaPanel } from "./TwoFaPanel";
 
 export default async function SettingsPage() {
   let user;
@@ -16,7 +17,7 @@ export default async function SettingsPage() {
 
   const tid = user.tenantId;
 
-  const [tenant, modules, allUsers, invitations] = await Promise.all([
+  const [tenant, modules, allUsers, invitations, dbUser] = await Promise.all([
     prisma.tenant.findUnique({ where: { id: tid } }),
     prisma.tenantModule.findMany({ where: { tenantId: tid }, orderBy: { enabledAt: "asc" } }),
     prisma.user.findMany({
@@ -28,6 +29,10 @@ export default async function SettingsPage() {
       where:   { tenantId: tid, acceptedAt: null },
       orderBy: { createdAt: "desc" },
       select:  { id: true, email: true, role: true, expiresAt: true, createdAt: true },
+    }),
+    prisma.user.findUnique({
+      where:  { id: user.id },
+      select: { totpEnabled: true, twoFaMethod: true },
     }),
   ]);
 
@@ -41,6 +46,11 @@ export default async function SettingsPage() {
       </div>
 
       <MiTiendaWidget slug={tenant.slug} />
+
+      <TwoFaPanel
+        totpEnabled={dbUser?.totpEnabled ?? false}
+        twoFaMethod={dbUser?.twoFaMethod ?? null}
+      />
 
       <SettingsClient
         tenant={{

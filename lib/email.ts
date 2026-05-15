@@ -379,6 +379,57 @@ export async function sendLowStockAlert({
   });
 }
 
+// ─── 2FA OTP code ─────────────────────────────────────────────────────────────
+
+export async function sendTwoFaOtp({
+  to, name, code,
+}: { to: string; name: string; code: string }): Promise<void> {
+  if (!process.env.RESEND_API_KEY) return;
+
+  const emailBody = `
+    ${heading(`Tu código de verificación`)}
+    ${subtext(`Hola ${name.split(" ")[0]}, usá este código para verificar tu identidad. Expira en 10 minutos.`)}
+    <div style="background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:24px;text-align:center;margin:24px 0;">
+      <span style="font-size:36px;font-weight:800;letter-spacing:0.3em;color:#0a1628;font-family:monospace;">${code}</span>
+    </div>
+    ${divider()}
+    <p style="margin:0;font-size:12px;color:#94a3b8;">Si no solicitaste este código, ignorá este mensaje. Tu cuenta está segura.</p>
+  `;
+
+  await getResend().emails.send({
+    from:    FROM,
+    to:      [to],
+    subject: `${code} — Código de verificación Cuarzo`,
+    html:    shell(emailBody, `Tu código de verificación de 6 dígitos: ${code}`),
+  });
+}
+
+// ─── Email address verification (registration) ────────────────────────────────
+
+export async function sendEmailVerificationCode({
+  to, name, code,
+}: { to: string; name: string; code: string }): Promise<void> {
+  if (!process.env.RESEND_API_KEY) return;
+
+  const emailBody = `
+    ${heading(`Verificá tu email, ${name.split(" ")[0]}!`)}
+    ${badge("Verificación pendiente", "#6366f1")}
+    ${subtext("Ingresá este código en la pantalla de registro para activar tu cuenta Cuarzo. Expira en 15 minutos.")}
+    <div style="background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:24px;text-align:center;margin:24px 0;">
+      <span style="font-size:36px;font-weight:800;letter-spacing:0.3em;color:#0a1628;font-family:monospace;">${code}</span>
+    </div>
+    ${divider()}
+    <p style="margin:0;font-size:12px;color:#94a3b8;">Si no creaste esta cuenta, ignorá este mensaje.</p>
+  `;
+
+  await getResend().emails.send({
+    from:    FROM,
+    to:      [to],
+    subject: `${code} — Verificá tu email en Cuarzo`,
+    html:    shell(emailBody, `Verificá tu email con el código: ${code}`),
+  });
+}
+
 // ─── Booking confirmation ─────────────────────────────────────────────────────
 
 export async function sendBookingConfirmed(payload: BookingEmailPayload): Promise<void> {

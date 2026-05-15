@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
-import { randomBytes } from "crypto";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
-import { sendEmailVerification } from "@/lib/email";
+import { generateEmailOtp } from "@/lib/totp";
+import { sendEmailVerificationCode } from "@/lib/email";
 
 const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -46,7 +46,6 @@ export async function POST(req: NextRequest) {
 
   const normalizedEmail = email.trim().toLowerCase();
 
-  // Check globally — one email = one account across all tenants
   const existing = await prisma.user.findFirst({ where: { email: normalizedEmail } });
   if (existing) {
     return Response.json(
@@ -56,34 +55,29 @@ export async function POST(req: NextRequest) {
   }
 
   const hashed = await bcrypt.hash(password, 12);
-  const slug = `${toSlug(businessName.trim())}-${Math.random().toString(36).slice(2, 8)}`;
+  const slug   = `${toSlug(businessName.trim())}-${Math.random().toString(36).slice(2, 8)}`;
 
-  let createdUserId: string;
+  const verifyCode   = generateEmailOtp();
+  const verifyExpiry = new Date(Date.now() + 15 * 60 * 1000);
 
   await prisma.$transaction(async (tx) => {
     const tenant = await tx.tenant.create({
       data: { name: businessName.trim(), slug, plan: "free" },
     });
-    const user = await tx.user.create({
+    await tx.user.create({
       data: {
-        tenantId: tenant.id,
-        email:    normalizedEmail,
-        name:     name.trim(),
-        role:     "owner",
-        password: hashed,
+        tenantId:         tenant.id,
+        email:            normalizedEmail,
+        name:             name.trim(),
+        role:             "owner",
+        password:         hashed,
+        emailVerifyCode:  verifyCode,
+        emailVerifyExpiry: verifyExpiry,
       },
     });
-    createdUserId = user.id;
   });
 
-  // Send verification email (fire-and-forget)
-  const verifyToken = randomBytes(32).toString("hex");
-  const expiresAt   = new Date(Date.now() + 24 * 60 * 60 * 1000);
-  await prisma.emailVerificationToken.create({
-    data: { userId: createdUserId!, token: verifyToken, expiresAt },
-  });
-  const verifyUrl = `${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/api/auth/verify-email?token=${verifyToken}`;
-  void sendEmailVerification({ to: normalizedEmail, name: name.trim(), verifyUrl });
+  void sendEmailVerificationCode({ to: normalizedEmail, name: name.trim(), code: verifyCode });
 
-  return Response.json({ ok: true, redirectTo: "/admin/onboarding" }, { status: 201 });
+  return Response.json({ ok: true, step: "verify-email" }, { status: 201 });
 }
