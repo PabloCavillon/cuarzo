@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, ShieldAlert, EyeOff } from "lucide-react";
+import Link from "next/link";
 import type { AuthUser } from "@/lib/session";
 import { NotificationToggle } from "./NotificationToggle";
 
@@ -37,6 +38,15 @@ export function TopBar({
   onMenuClick: () => void;
 }) {
   const pathname = usePathname();
+  const router   = useRouter();
+
+  const isViewing = user.superAdmin && user.tenantId !== user.realTenantId;
+
+  async function stopViewing() {
+    await fetch("/api/super-admin/view-tenant", { method: "DELETE" });
+    router.push("/super-admin");
+    router.refresh();
+  }
 
   useEffect(() => {
     if ("serviceWorker" in navigator) {
@@ -65,6 +75,25 @@ export function TopBar({
       </div>
 
       <div className="flex items-center gap-1">
+        {user.superAdmin && !isViewing && (
+          <Link
+            href="/super-admin"
+            title="Panel super admin"
+            className="p-1.5 rounded-lg text-amber-400/70 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"
+          >
+            <ShieldAlert className="w-4 h-4" />
+          </Link>
+        )}
+        {isViewing && (
+          <button
+            onClick={stopViewing}
+            title="Dejar de ver como este tenant"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-400 text-[10px] font-medium hover:bg-amber-500/25 transition-colors"
+          >
+            <EyeOff className="w-3 h-3" />
+            Salir
+          </button>
+        )}
         <NotificationToggle />
         <div className="w-7 h-7 rounded-full bg-white/15 flex items-center justify-center text-xs font-bold text-white">
           {user.name.charAt(0).toUpperCase()}

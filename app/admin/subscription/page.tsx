@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { requireAuth, apiError } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { SubscriptionClient } from "./SubscriptionClient";
+import { FREE_MODULE_MAX } from "@/lib/module-catalog";
 
 export default async function SubscriptionPage() {
   let user;
@@ -38,7 +39,14 @@ export default async function SubscriptionPage() {
           slug:     p.slug,
           name:     p.name,
           priceUSD: p.priceUSD.toString(),
-          features: p.features as string[],
+          features: p.slug === "free"
+            ? [
+                `Elegí ${FREE_MODULE_MAX} módulos: Bookings, Catálogo, Stock, Caja o Pedidos`,
+                "1 usuario",
+                "50 reservas/mes · 10 productos",
+                "Sin límite de tiempo",
+              ]
+            : p.features as string[],
         }))}
         current={sub
           ? {
