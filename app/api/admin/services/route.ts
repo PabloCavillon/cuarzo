@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { checkServiceLimit } from "@/lib/plan-limits";
+import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { checkServiceLimit } from "@/lib/utils/plan-limits";
 
 export async function POST(req: NextRequest) {
   let user;

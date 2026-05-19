@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { verifyTotp } from "@/lib/totp";
+import { requireAuth, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { verifyTotp } from "@/lib/auth/totp";
 
 export async function POST(req: NextRequest) {
   let user;

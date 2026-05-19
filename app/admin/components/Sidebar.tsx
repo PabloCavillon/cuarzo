@@ -9,7 +9,7 @@ import {
   LogOut, X, ChevronRight, Wallet, CreditCard, BarChart2, ListTodo, Headphones,
 } from "lucide-react";
 import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
-import type { AuthUser } from "@/lib/session";
+import type { AuthUser } from "@/lib/auth/session";
 
 // ─── Nav definition ───────────────────────────────────────────────────────────
 

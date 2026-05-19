@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Package } from "lucide-react";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 
 function fmt(n: number | string | { toString(): string }) {
   return Number(n).toLocaleString("es-AR", {

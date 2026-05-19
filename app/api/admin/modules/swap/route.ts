@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { FREE_MODULE_INFO, FREE_MODULE_MAX, getLimits } from "@/lib/plan-limits";
+import { requireAuth, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { FREE_MODULE_INFO, FREE_MODULE_MAX, getLimits } from "@/lib/utils/plan-limits";
 
 export async function POST(req: NextRequest) {
   let user;

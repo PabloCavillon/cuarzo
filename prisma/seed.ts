@@ -1,6 +1,6 @@
 import "dotenv/config";
 import bcrypt from "bcryptjs";
-import { PrismaClient } from "../app/generated/prisma/client";
+import { PrismaClient } from "./generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
@@ -585,7 +585,7 @@ async function main() {
   console.log("  Owner:      admin@cuarzo.dev   / admin123  (superAdmin=true)");
   console.log("  Admin:      manager@cuarzo.dev / admin456");
   console.log("  Staff:      staff@cuarzo.dev   / staff123");
-  console.log("  SuperAdmin: http://localhost:3000/superadmin");
+  console.log("  SuperAdmin: http://localhost:3000/super-admin");
   console.log("═══════════════════════════════════════════════════════════\n");
 }
 

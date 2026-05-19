@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { getAccessTicket } from "@/lib/afip/wsaa";
-import { solicitarCAE, getUltimoAutorizado, TIPO_COMPROBANTE_AFIP } from "@/lib/afip/wsfe";
-import { TipoComprobante } from "@/app/generated/prisma/client";
+import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { getAccessTicket } from "@/lib/api/afip/wsaa";
+import { solicitarCAE, getUltimoAutorizado, TIPO_COMPROBANTE_AFIP } from "@/lib/api/afip/wsfe";
+import { TipoComprobante } from "@/prisma/generated/client";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { sendBookingConfirmed } from "@/lib/email";
-import { checkBookingLimit } from "@/lib/plan-limits";
+import { prisma } from "@/lib/db/prisma";
+import { sendBookingConfirmed } from "@/lib/integrations/email";
+import { checkBookingLimit } from "@/lib/utils/plan-limits";
 
 // ─── Wire format ─────────────────────────────────────────────────────────────
 

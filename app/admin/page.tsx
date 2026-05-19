@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { requireAuth, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireAuth, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 import {
   Calendar, Clock, CheckCircle2, Users, Package,
   Boxes, TrendingUp, TrendingDown, Wallet, FileText,

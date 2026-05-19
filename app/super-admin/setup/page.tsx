@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { requireSuperAdmin, apiError } from "@/lib/session";
-import { generateTotpSecret, getTotpUri } from "@/lib/totp";
+import { requireSuperAdmin, apiError } from "@/lib/auth/session";
+import { generateTotpSecret, getTotpUri } from "@/lib/auth/totp";
 import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { Shield, Smartphone, Key, AlertTriangle, ExternalLink } from "lucide-react";
 import Link from "next/link";

@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
-import { requireAuth, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireAuth, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 import { SubscriptionClient } from "./SubscriptionClient";
-import { FREE_MODULE_MAX } from "@/lib/module-catalog";
+import { FREE_MODULE_MAX } from "@/lib/utils/module-catalog";
 
 export default async function SubscriptionPage() {
   let user;

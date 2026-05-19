@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireSuperAdmin, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireSuperAdmin, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 
 export async function GET(req: NextRequest) {
   try { await requireSuperAdmin(); } catch (e) { return apiError(e); }

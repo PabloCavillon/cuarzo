@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { requireSuperAdmin, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireSuperAdmin, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 import { SuperPanel } from "./SuperPanel";
 
 export default async function SuperAdminPage() {

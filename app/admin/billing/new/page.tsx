@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { requireAuth, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireAuth, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 import { InvoiceForm } from "./InvoiceForm";
 
 export default async function NewInvoicePage() {

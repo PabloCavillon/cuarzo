@@ -1,9 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { createMPSubscription, cancelMPSubscription, createMPPlan } from "@/lib/mercadopago";
+import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { createMPSubscription, cancelMPSubscription, createMPPlan } from "@/lib/api/mercadopago";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 type CheckoutResult = { ok: true; url: string } | { ok: false; error: string };

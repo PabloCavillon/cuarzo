@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { CuarzoIsotype } from "./CuarzoLogo";
+import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { useT } from "@/lib/i18n/provider";
 
 const COMPANY_HREFS: Record<string, string> = {

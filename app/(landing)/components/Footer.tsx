@@ -1,4 +1,4 @@
-import { CuarzoIsotype } from "./CuarzoLogo";
+import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import FooterClient from "./FooterClient";
 
 export default function Footer() {

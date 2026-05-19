@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
-import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/plan-limits";
+import { prisma } from "@/lib/db/prisma";
+import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/utils/plan-limits";
 
 export async function POST(req: NextRequest) {
   const session = await auth();

@@ -22,7 +22,7 @@ import {
   sendPasswordReset,
   sendEmailVerification,
   sendLowStockAlert,
-} from "@/lib/email";
+} from "@/lib/integrations/email";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

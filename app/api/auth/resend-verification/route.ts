@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
 import { randomBytes } from "crypto";
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
-import { sendEmailVerification } from "@/lib/email";
+import { prisma } from "@/lib/db/prisma";
+import { sendEmailVerification } from "@/lib/integrations/email";
 
 export async function POST(req: NextRequest) {
   const contentLength = req.headers.get("content-length");

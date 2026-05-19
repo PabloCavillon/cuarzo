@@ -5,7 +5,7 @@ import { motion, useScroll, useSpring, useTransform } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { CuarzoIsotype } from "./CuarzoLogo";
+import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { useT } from "@/lib/i18n/provider";
 
 // Three.js bundle loads lazily after the hero text is painted.

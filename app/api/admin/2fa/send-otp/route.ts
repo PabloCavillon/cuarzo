@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { requireAuth, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { generateEmailOtp } from "@/lib/totp";
-import { sendTwoFaOtp } from "@/lib/email";
+import { requireAuth, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { generateEmailOtp } from "@/lib/auth/totp";
+import { sendTwoFaOtp } from "@/lib/integrations/email";
 
 export async function POST() {
   let user;

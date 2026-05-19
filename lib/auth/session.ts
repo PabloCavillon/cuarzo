@@ -1,7 +1,7 @@
 import "server-only";
 import { auth } from "@/auth";
 import { cookies } from "next/headers";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 
 export type UserRole = "owner" | "admin" | "staff";
 

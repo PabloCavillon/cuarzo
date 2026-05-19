@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import { requireAuth } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 import OnboardingClient from "./OnboardingClient";
 
 export default async function OnboardingPage() {

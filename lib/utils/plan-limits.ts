@@ -1,4 +1,4 @@
-import { prisma } from "./prisma";
+import { prisma } from "@/lib/db/prisma";
 import { FREE_MODULE_MAX, FREE_MODULE_INFO } from "./module-catalog";
 export { FREE_MODULE_MAX, FREE_MODULE_INFO };
 

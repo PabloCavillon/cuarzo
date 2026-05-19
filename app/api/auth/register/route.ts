@@ -1,8 +1,8 @@
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
-import { prisma } from "@/lib/prisma";
-import { generateEmailOtp } from "@/lib/totp";
-import { sendEmailVerificationCode } from "@/lib/email";
+import { prisma } from "@/lib/db/prisma";
+import { generateEmailOtp } from "@/lib/auth/totp";
+import { sendEmailVerificationCode } from "@/lib/integrations/email";
 
 const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/;
 

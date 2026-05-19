@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { generateEmailOtp } from "@/lib/totp";
-import { sendEmailVerificationCode } from "@/lib/email";
+import { prisma } from "@/lib/db/prisma";
+import { generateEmailOtp } from "@/lib/auth/totp";
+import { sendEmailVerificationCode } from "@/lib/integrations/email";
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json().catch(() => ({})) as { email?: string };

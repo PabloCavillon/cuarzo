@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Menu, EyeOff } from "lucide-react";
-import type { AuthUser } from "@/lib/session";
+import type { AuthUser } from "@/lib/auth/session";
 import { NotificationToggle } from "./NotificationToggle";
 
 const BREADCRUMBS: Record<string, string> = {

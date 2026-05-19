@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { getMPSubscription } from "@/lib/mercadopago";
+import { prisma } from "@/lib/db/prisma";
+import { getMPSubscription } from "@/lib/api/mercadopago";
 
 const MP_STATUS_MAP: Record<string, "pending" | "authorized" | "paused" | "cancelled" | "expired"> = {
   pending:    "pending",

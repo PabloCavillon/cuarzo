@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CuarzoIsotype } from "./CuarzoLogo";
+import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { useT } from "@/lib/i18n/provider";
 
 export default function WhyCuarzo() {

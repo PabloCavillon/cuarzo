@@ -3,7 +3,7 @@
 import { useState, type ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
-import type { AuthUser } from "@/lib/session";
+import type { AuthUser } from "@/lib/auth/session";
 
 export function AdminShell({
   children,

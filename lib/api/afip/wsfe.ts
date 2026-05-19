@@ -1,7 +1,7 @@
 "use server";
 
 import { getAccessTicket } from "./wsaa";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 
 const WSFE_PROD = "https://servicios1.afip.gov.ar/wsfev1/service.asmx";
 const WSFE_TEST = "https://wswhomo.afip.gov.ar/wsfev1/service.asmx";

@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { auth } from "@/auth";
-import { prisma } from "@/lib/prisma";
-import { toCSV, csvResponse } from "@/lib/export-csv";
+import { prisma } from "@/lib/db/prisma";
+import { toCSV, csvResponse } from "@/lib/utils/export-csv";
 
 const MODULES = ["clients", "suppliers", "products", "orders", "bookings", "caja"] as const;
 type ExportModule = typeof MODULES[number];

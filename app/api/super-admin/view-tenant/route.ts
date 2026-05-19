@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireSuperAdmin, apiError, VIEW_TENANT_COOKIE } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireSuperAdmin, apiError, VIEW_TENANT_COOKIE } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 
 // POST /api/super-admin/view-tenant  { tenantId }  → set viewing cookie
 export async function POST(req: NextRequest) {

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Globe } from "lucide-react";
 import Link from "next/link";
-import { CuarzoIsotype } from "./CuarzoLogo";
+import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { useT, useLocale, useSetLocale } from "@/lib/i18n/provider";
 import { locales, localeLabels } from "@/lib/i18n";
 

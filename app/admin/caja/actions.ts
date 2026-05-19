@@ -1,8 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
+import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 

@@ -1,7 +1,7 @@
 "use server";
 
 import forge from "node-forge";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 
 const WSAA_PROD = "https://wsaa.afip.gov.ar/ws/services/LoginCms";
 const WSAA_TEST = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";

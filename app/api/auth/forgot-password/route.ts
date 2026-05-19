@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { randomBytes } from "crypto";
-import { prisma } from "@/lib/prisma";
-import { sendPasswordReset } from "@/lib/email";
+import { prisma } from "@/lib/db/prisma";
+import { sendPasswordReset } from "@/lib/integrations/email";
 
 export async function POST(req: NextRequest) {
   const contentLength = req.headers.get("content-length");

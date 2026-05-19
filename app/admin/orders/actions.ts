@@ -1,9 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { sendOrderCreated, sendOrderStatusUpdate } from "@/lib/email";
+import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { sendOrderCreated, sendOrderStatusUpdate } from "@/lib/integrations/email";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 type CreateResult = { ok: true; id: string } | { ok: false; error: string };

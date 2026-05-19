@@ -1,5 +1,5 @@
 import webpush from "web-push";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 
 webpush.setVapidDetails(
   process.env.VAPID_SUBJECT!,

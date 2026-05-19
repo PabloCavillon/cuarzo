@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth, apiError } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { sendPushToUser } from "@/lib/webpush";
+import { requireAuth, apiError } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { sendPushToUser } from "@/lib/integrations/webpush";
 
 type Ctx = { params: Promise<{ id: string }> };
 

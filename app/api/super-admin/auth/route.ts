@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireSuperAdmin, apiError } from "@/lib/session";
-import { verifyTotp } from "@/lib/totp";
+import { requireSuperAdmin, apiError } from "@/lib/auth/session";
+import { verifyTotp } from "@/lib/auth/totp";
 
 const SA_COOKIE = "sa-pin";
 

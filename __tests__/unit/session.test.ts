@@ -13,7 +13,7 @@ vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports (after mocks) ─────────────────────────────────────────────────────
 
-import { requireAuth, apiError } from "@/lib/session";
+import { requireAuth, apiError } from "@/lib/auth/session";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

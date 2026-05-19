@@ -1,12 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { requireAuth } from "@/lib/session";
-import { prisma } from "@/lib/prisma";
-import { sendInvitation } from "@/lib/email";
-import { checkMemberLimit } from "@/lib/plan-limits";
-import { audit } from "@/lib/audit";
-import { getRequestIp } from "@/lib/request-ip";
+import { requireAuth } from "@/lib/auth/session";
+import { prisma } from "@/lib/db/prisma";
+import { sendInvitation } from "@/lib/integrations/email";
+import { checkMemberLimit } from "@/lib/utils/plan-limits";
+import { audit } from "@/lib/utils/audit";
+import { getRequestIp } from "@/lib/utils/request-ip";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 

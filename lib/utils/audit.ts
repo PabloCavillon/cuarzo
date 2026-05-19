@@ -1,5 +1,5 @@
-import { Prisma } from "@/app/generated/prisma/client";
-import { prisma } from "./prisma";
+import { Prisma } from "@/prisma/generated/client";
+import { prisma } from "@/lib/db/prisma";
 
 export async function audit(
   tenantId:   string,

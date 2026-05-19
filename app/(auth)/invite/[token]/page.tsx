@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/db/prisma";
 import { InviteClient } from "./InviteClient";
 
 type P = Promise<{ token: string }>;
