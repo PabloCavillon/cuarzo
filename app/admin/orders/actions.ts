@@ -107,42 +107,61 @@ export async function updateOrderStatus(id: string, status: string): Promise<Act
 
     await prisma.order.update({ where: { id }, data: { status: status as never } });
 
-    // On confirm → create stock movements (sale)
+    // On confirm → create stock movements (sale) — single transaction, no N+1
     if (status === "confirmed") {
-      const items = await prisma.orderItem.findMany({ where: { orderId: id } });
-      const warehouses = await prisma.stockWarehouse.findMany({
-        where: { tenantId: tid, active: true },
-        take: 1,
-        orderBy: { name: "asc" },
-      });
+      const [items, warehouses] = await Promise.all([
+        prisma.orderItem.findMany({ where: { orderId: id } }),
+        prisma.stockWarehouse.findMany({
+          where: { tenantId: tid, active: true },
+          take: 1,
+          orderBy: { name: "asc" },
+        }),
+      ]);
       const warehouseId = warehouses[0]?.id;
 
-      if (warehouseId) {
-        for (const item of items) {
-          const current = await prisma.stockItem.findFirst({
-            where: { productId: item.productId, variantId: item.variantId ?? null, warehouseId },
-          });
-          const currentQty = current?.qty ?? 0;
-          const newQty     = Math.max(0, currentQty - item.qty);
+      if (warehouseId && items.length) {
+        // Batch-load all relevant stock items in one query
+        const stockItems = await prisma.stockItem.findMany({
+          where: {
+            warehouseId,
+            OR: items.map((it) => ({
+              productId: it.productId,
+              variantId: it.variantId ?? null,
+            })),
+          },
+        });
+        const stockMap = new Map(
+          stockItems.map((s) => [`${s.productId}:${s.variantId ?? ""}`, s])
+        );
 
-          await prisma.$transaction([
-            prisma.stockMovement.create({
-              data: {
-                tenantId:      tid,
-                productId:     item.productId,
-                variantId:     item.variantId,
-                warehouseId,
-                delta:         -item.qty,
-                reason:        "sale",
-                referenceId:   id,
-                referenceType: "order",
-              },
-            }),
-            current
-              ? prisma.stockItem.update({ where: { id: current.id }, data: { qty: newQty } })
-              : prisma.stockItem.create({ data: { tenantId: tid, productId: item.productId, variantId: item.variantId, warehouseId, qty: 0 } }),
-          ]);
-        }
+        // One atomic transaction for all movements + stock updates
+        await prisma.$transaction(
+          items.flatMap((item) => {
+            const key     = `${item.productId}:${item.variantId ?? ""}`;
+            const current = stockMap.get(key);
+            const newQty  = Math.max(0, (current?.qty ?? 0) - item.qty);
+
+            return [
+              prisma.stockMovement.create({
+                data: {
+                  tenantId:      tid,
+                  productId:     item.productId,
+                  variantId:     item.variantId,
+                  warehouseId,
+                  delta:         -item.qty,
+                  reason:        "sale",
+                  referenceId:   id,
+                  referenceType: "order",
+                },
+              }),
+              current
+                ? prisma.stockItem.update({ where: { id: current.id }, data: { qty: newQty } })
+                : prisma.stockItem.create({
+                    data: { tenantId: tid, productId: item.productId, variantId: item.variantId, warehouseId, qty: 0 },
+                  }),
+            ];
+          })
+        );
       }
     }
 
@@ -179,19 +198,21 @@ export async function registerPayment(orderId: string, fd: FormData): Promise<Ac
     const amount = parseFloat(fd.get("amount") as string);
     const method = (fd.get("method") as string)?.trim();
 
-    if (!amount || amount <= 0) return { ok: false, error: "Monto inválido" };
+    if (!amount || amount <= 0 || amount > 999_999_999.99) return { ok: false, error: "Monto inválido" };
     if (!method) return { ok: false, error: "Método de pago requerido" };
 
-    await prisma.payment.create({
-      data: {
-        tenantId: tid,
-        orderId,
-        amount,
-        currency: "ARS",
-        method:   method as never,
-        status:   "completed",
-      },
-    });
+    await prisma.$transaction([
+      prisma.payment.create({
+        data: {
+          tenantId: tid,
+          orderId,
+          amount,
+          currency: "ARS",
+          method:   method as never,
+          status:   "completed",
+        },
+      }),
+    ]);
 
     revalidatePath(`/admin/orders/${orderId}`);
     return { ok: true };
