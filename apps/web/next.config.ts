@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -44,6 +45,11 @@ const legacyRedirects = [
 ];
 
 const nextConfig: NextConfig = {
+  // Turbopack workspace root = monorepo root so it can resolve hoisted node_modules
+  turbopack: {
+    root: path.join(__dirname, "..", ".."),
+  },
+
   async headers() {
     return [
       {

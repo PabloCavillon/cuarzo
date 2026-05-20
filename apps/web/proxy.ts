@@ -1,4 +1,6 @@
+import NextAuth from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
+import { authConfig } from "./auth.config";
 
 // ─── Per-instance in-memory rate limiter ────────────────────────────────────
 // Best-effort: resets on cold starts, not shared across Vercel instances.
@@ -46,8 +48,10 @@ const LIMITS: Record<string, { requests: number; windowMs: number }> = {
   "GET /api/admin/export":              { requests: 10, windowMs: 60_000 },
 };
 
-// ─── Proxy ────────────────────────────────────────────────────────────────────
-export default function proxy(req: NextRequest) {
+// ─── Auth + Rate-limit proxy ─────────────────────────────────────────────────
+const { auth } = NextAuth(authConfig);
+
+export default auth(function proxy(req: NextRequest) {
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
     req.headers.get("x-real-ip") ??
@@ -73,7 +77,7 @@ export default function proxy(req: NextRequest) {
   }
 
   return NextResponse.next();
-}
+});
 
 export const config = {
   matcher: ["/api/:path*", "/admin/:path*", "/super-admin/:path*"],

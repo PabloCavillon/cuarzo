@@ -5,6 +5,12 @@ import pg from "pg";
 // Load .env for local dev (no-op in Vercel where vars come from the dashboard)
 config();
 
+// Set SKIP_MIGRATE=1 to skip DB migration (e.g. local builds without a running DB).
+if (process.env.SKIP_MIGRATE === "1") {
+  console.log("SKIP_MIGRATE=1 — skipping database migration.");
+  process.exit(0);
+}
+
 // Use Neon's direct (non-pooled) URL for schema sync.
 // POSTGRES_URL_NON_POOLING is injected by Neon's Vercel integration.
 // Falls back to DATABASE_URL for local dev.
