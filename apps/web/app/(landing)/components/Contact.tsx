@@ -47,7 +47,7 @@ export default function Contact() {
           <dl className="mt-10 space-y-4">
             <div>
               <dt className="ink-2 text-base">{t.contact.emailLabel}</dt>
-              <dd><a href="mailto:dev@cuarzostudio.com" className="ink underline underline-offset-4">dev@cuarzostudio.com</a></dd>
+              <dd><a href="mailto:contacto@cuarzostudio.com" className="ink underline underline-offset-4">contacto@cuarzostudio.com</a></dd>
             </div>
             <div>
               <dt className="ink-2 text-base">WhatsApp</dt>

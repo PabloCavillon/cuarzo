@@ -1,6 +1,6 @@
 # Pablo Cavillon
 **Desarrollador Full Stack freelance · Java (Spring Boot) · Node.js · React / Next.js**
-Mendoza, Argentina · Trabajo remoto · pabloa.cavillon@gmail.com · +54 11 6656-5670
+Mendoza, Argentina · Trabajo remoto · contacto@cuarzostudio.com · +54 11 6656-5670
 [linkedin.com/in/pablo-cavillon](https://linkedin.com/in/pablo-cavillon/) · [github.com/PabloCavillon](https://github.com/PabloCavillon) · [cuarzostudio.com](https://cuarzostudio.com)
 
 ---

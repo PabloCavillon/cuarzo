@@ -500,7 +500,7 @@ export async function sendContactMessage({ name, email, company, message }: Cont
 
   const { error } = await getResend().emails.send({
     from:    FROM,
-    to:      ["dev@cuarzostudio.com"],
+    to:      ["contacto@cuarzostudio.com"],
     replyTo: email,
     subject: `Consulta de ${name}`,
     html:    shell(emailBody, `Consulta de ${escapeHtml(name)}`),

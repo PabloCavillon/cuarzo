@@ -225,7 +225,7 @@ const es: T = {
     },
     submit: "Enviar mensaje",
     sending: "Enviando...",
-    error: "No pudimos enviar tu mensaje. Probá de nuevo o escribinos a dev@cuarzostudio.com.",
+    error: "No pudimos enviar tu mensaje. Probá de nuevo o escribinos a contacto@cuarzostudio.com.",
     success: {
       heading: "¡Mensaje enviado!",
       description: "Te respondemos en 24 horas hábiles.",
@@ -569,7 +569,7 @@ const en: T = {
     },
     submit: "Send message",
     sending: "Sending...",
-    error: "We couldn't send your message. Try again or write to dev@cuarzostudio.com.",
+    error: "We couldn't send your message. Try again or write to contacto@cuarzostudio.com.",
     success: {
       heading: "Message sent!",
       description: "We'll reply within 24 business hours.",
@@ -912,7 +912,7 @@ const pt: T = {
     },
     submit: "Enviar mensagem",
     sending: "Enviando...",
-    error: "Não foi possível enviar sua mensagem. Tente novamente ou escreva para dev@cuarzostudio.com.",
+    error: "Não foi possível enviar sua mensagem. Tente novamente ou escreva para contacto@cuarzostudio.com.",
     success: {
       heading: "Mensagem enviada!",
       description: "Respondemos em 24 horas úteis.",

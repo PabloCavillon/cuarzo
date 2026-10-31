@@ -27,7 +27,7 @@ Interfaz en es, en y pt (lib/i18n), con español rioplatense como voz principal.
 Nombre CUARZO e isotipo facetado (app/components/CuarzoLogo.tsx). El azul y el cristal de cuarzo en 3D son compromisos de marca confirmados por el dueño. El nombre remite al cuarzo como base invisible y precisa de la tecnología.
 
 ## Evidence on Hand
-Los casos de éxito y sus métricas son inventados, igual que las cifras de uptime, onboarding y escalabilidad: no publicarlos. No hay testimonios, logos de clientes ni benchmarks. Sí hay un trabajo real citado en el copy: dominio y mail de projaska.com. Los planes y precios de lib/i18n son reales. No se ofrece SLA ni onboarding dedicado. Las consultas se responden en 24 horas hábiles; casilla de contacto: dev@cuarzostudio.com.
+Los casos de éxito y sus métricas son inventados, igual que las cifras de uptime, onboarding y escalabilidad: no publicarlos. No hay testimonios, logos de clientes ni benchmarks. Sí hay un trabajo real citado en el copy: dominio y mail de projaska.com. Los planes y precios de lib/i18n son reales. No se ofrece SLA ni onboarding dedicado. Las consultas se responden en 24 horas hábiles; casilla de contacto: contacto@cuarzostudio.com.
 
 ## Product Principles
 - Mostrar lo que el producto hace, no prometer números que no se pueden respaldar.

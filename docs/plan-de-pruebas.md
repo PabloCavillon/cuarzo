@@ -39,7 +39,7 @@ El dueño también es super admin y saltea los controles de rol: los permisos se
 - [ ] Con movimiento reducido activado en el sistema, el cristal queda quieto.
 - [ ] Todos los enlaces del menú y del pie llevan al lugar correcto.
 - [ ] Los planes coinciden con `/admin/subscription`.
-- [ ] Contacto: el mensaje llega a `dev@cuarzostudio.com`.
+- [ ] Contacto: el mensaje llega a `contacto@cuarzostudio.com`.
 - [ ] Contacto: datos vacíos o email inválido muestran error; un nombre con `<b>` llega como texto.
 - [ ] El enlace de WhatsApp abre un chat con 11 6656-5670, en celular y en escritorio.
 - [ ] `/cv` carga.

@@ -122,9 +122,9 @@ export default function CVPage() {
             </div>
 
             <div className="flex flex-col gap-2 sm:items-end">
-              <a href="mailto:pabloa.cavillon@gmail.com" className={contactLink}>
+              <a href="mailto:contacto@cuarzostudio.com" className={contactLink}>
                 <Mail className="w-3.5 h-3.5" />
-                pabloa.cavillon@gmail.com
+                contacto@cuarzostudio.com
               </a>
               <a href={WHATSAPP} target="_blank" rel="noopener noreferrer" className={contactLink}>
                 <MessageCircle className="w-3.5 h-3.5" />
@@ -276,7 +276,7 @@ export default function CVPage() {
               Escribir por WhatsApp
             </a>
             <a
-              href="mailto:pabloa.cavillon@gmail.com"
+              href="mailto:contacto@cuarzostudio.com"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-white/20 text-white text-sm font-semibold rounded-full hover:bg-white/8 transition-colors"
             >
               <Mail className="w-4 h-4" />

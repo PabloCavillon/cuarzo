@@ -138,7 +138,7 @@ function downloadICS(booking: BookingResult, calendarLabel: string) {
     `DTSTART:${dtStart}`,
     `DTEND:${dtEnd}`,
     `SUMMARY:${booking.serviceName} — CUARZO`,
-    `DESCRIPTION:${calendarLabel}\\: ${booking.code}\\nContacto\\: dev@cuarzostudio.com`,
+    `DESCRIPTION:${calendarLabel}\\: ${booking.code}\\nContacto\\: contacto@cuarzostudio.com`,
     "END:VEVENT",
     "END:VCALENDAR",
   ].join("\r\n");
