@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
+import { inBackground } from "@/lib/integrations/background";
 import { sendBookingConfirmed } from "@/lib/integrations/email";
-import { checkBookingLimit } from "@/lib/utils/plan-limits";
+import { checkBookingLimit, findBookableTenant } from "@/lib/utils/plan-limits";
+import { todayAR } from "@/lib/utils/dates";
+import { isTaken, toMinutes } from "@/lib/utils/slots";
 
 // ─── Wire format ─────────────────────────────────────────────────────────────
 
@@ -57,19 +60,18 @@ function validate(raw: unknown): { ok: true; data: ValidInput } | { ok: false; e
     return { ok: false, error: "Fecha con formato inválido." };
   }
   const [y, m, d] = b.date.split("-").map(Number);
-  const dateObj = new Date(y, m - 1, d);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  if (dateObj <= today) {
+  const dateObj = new Date(Date.UTC(y, m - 1, d));
+  const today = todayAR();
+  if (b.date <= today) {
     return { ok: false, error: "La fecha debe ser futura." };
   }
-  const dow = dateObj.getDay();
+  const dow = dateObj.getUTCDay();
   if (dow === 0 || dow === 6) {
     return { ok: false, error: "Solo se pueden reservar días hábiles (lunes a viernes)." };
   }
   // Prevent bookings too far in the future (> 60 days)
-  const maxDate = new Date(today);
-  maxDate.setDate(maxDate.getDate() + 60);
+  const maxDate = new Date(`${today}T00:00:00Z`);
+  maxDate.setUTCDate(maxDate.getUTCDate() + 60);
   if (dateObj > maxDate) {
     return { ok: false, error: "No se pueden hacer reservas con más de 60 días de anticipación." };
   }
@@ -188,7 +190,7 @@ export async function POST(req: NextRequest) {
   const { slug, serviceId, date, time, name, email, phone, notes } = result.data;
 
   try {
-    const tenant = await prisma.tenant.findUnique({ where: { slug } });
+    const tenant = await findBookableTenant(slug);
     if (!tenant) {
       return NextResponse.json({ error: "Servicio no disponible." }, { status: 503 });
     }
@@ -210,20 +212,26 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Servicio no encontrado." }, { status: 404 });
     }
 
+    if (toMinutes(time) + service.durationMin > 18 * 60) {
+      return NextResponse.json({ error: "El servicio no termina antes de las 18:00." }, { status: 422 });
+    }
+
     const code = await uniqueCode();
     if (!code) {
       return NextResponse.json({ error: "No se pudo generar un código único." }, { status: 500 });
     }
 
     const booking = await prisma.$transaction(async (tx) => {
-      // Serializes bookings for one slot so two visitors cannot both pass the check.
-      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${service.id}:${date}:${time}`}))`;
+      // Serializes the business's day so two visitors cannot both pass the check.
+      // One booking at a time per business: there is no per-staff calendar.
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${tenant.id}:${date}`}))`;
 
-      const taken = await tx.turneraBooking.findFirst({
-        where: { serviceId: service.id, date, time, status: { not: "cancelled" } },
-        select: { id: true },
+      const sameDay = await tx.turneraBooking.findMany({
+        where:  { tenantId: tenant.id, date, status: { not: "cancelled" } },
+        select: { time: true, durationMinSnap: true },
       });
-      if (taken) return null;
+      const busy = sameDay.map((b) => ({ time: b.time, duration: b.durationMinSnap }));
+      if (isTaken(time, service.durationMin, busy)) return null;
 
       return tx.turneraBooking.create({
         data: {
@@ -248,7 +256,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Ese horario ya fue reservado. Elegí otro." }, { status: 409 });
     }
 
-    void sendBookingConfirmed({
+    inBackground(() => sendBookingConfirmed({
       to:          email,
       name,
       code:        booking.code,
@@ -256,7 +264,7 @@ export async function POST(req: NextRequest) {
       date:        booking.date,
       time:        booking.time,
       price:       Number(booking.priceSnap.toString()),
-    });
+    }));
 
     return NextResponse.json({ booking: toResponse(booking) }, { status: 201 });
   } catch (err) {

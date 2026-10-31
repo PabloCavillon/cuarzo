@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
+import { inBackground } from "@/lib/integrations/background";
 import { sendInvitation } from "@/lib/integrations/email";
 import { checkMemberLimit } from "@/lib/utils/plan-limits";
 import { audit } from "@/lib/utils/audit";
@@ -25,8 +26,9 @@ export async function inviteMember(fd: FormData): Promise<ActionResult> {
     if (!email || !EMAIL_RE.test(email)) return { ok: false, error: "Invalid email" };
     if (!["admin", "staff"].includes(role))  return { ok: false, error: "Invalid role" };
 
-    const existing = await prisma.user.findFirst({ where: { tenantId: tid, email } });
-    if (existing) return { ok: false, error: "Ya existe un miembro con ese email" };
+    // Login finds users by email alone, so one email can only live in one business.
+    const existing = await prisma.user.findFirst({ where: { email } });
+    if (existing) return { ok: false, error: "Ya existe una cuenta con ese email" };
 
     const tenant = await prisma.tenant.findUnique({ where: { id: tid }, select: { name: true, plan: true } });
 
@@ -43,16 +45,16 @@ export async function inviteMember(fd: FormData): Promise<ActionResult> {
       update: { role: role as never, expiresAt, acceptedAt: null },
     });
 
-    void sendInvitation({
+    inBackground(() => sendInvitation({
       to:         email,
       tenantName: tenant?.name ?? "Cuarzo",
       invitedBy:  user.name,
       role,
       token:      inv.token,
-    });
+    }));
 
     const ip = await getRequestIp();
-    void audit(tid, user.id, "invite.sent", "invitation", inv.id, { email, role }, ip);
+    inBackground(() => audit(tid, user.id, "invite.sent", "invitation", inv.id, { email, role }, ip));
     revalidatePath("/admin/settings");
     return { ok: true };
   } catch (e) {
@@ -89,9 +91,14 @@ export async function removeMember(targetId: string): Promise<ActionResult> {
     if (!target || target.tenantId !== tid) return { ok: false, error: "Usuario no encontrado" };
     if (target.role === "owner") return { ok: false, error: "No se puede eliminar al owner" };
 
-    await prisma.user.delete({ where: { id: targetId } });
+    // Tasks and tickets require an author: they stay with whoever removes the member.
+    await prisma.$transaction([
+      prisma.task.updateMany({ where: { createdById: targetId }, data: { createdById: user.id } }),
+      prisma.supportTicket.updateMany({ where: { userId: targetId }, data: { userId: user.id } }),
+      prisma.user.delete({ where: { id: targetId } }),
+    ]);
     const ip = await getRequestIp();
-    void audit(tid, user.id, "member.removed", "user", targetId, { removedEmail: target.email }, ip);
+    inBackground(() => audit(tid, user.id, "member.removed", "user", targetId, { removedEmail: target.email }, ip));
     revalidatePath("/admin/settings");
     return { ok: true };
   } catch (e) {

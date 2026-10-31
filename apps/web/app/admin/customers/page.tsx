@@ -45,7 +45,7 @@ export default async function ClientsPage({ searchParams }: { searchParams: SP }
           <p className="text-sm text-white/40 mt-0.5">Base de clientes</p>
         </div>
         <Link
-          href="/admin/customers/suppliers"
+          href="/admin/providers"
           className="flex items-center gap-2 px-4 py-2 bg-white/8 hover:bg-white/12 text-white/60 hover:text-white text-sm rounded-xl transition-colors"
         >
           <Truck className="w-4 h-4" />

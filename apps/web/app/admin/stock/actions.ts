@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
+import { hasModule } from "@/lib/utils/plan-limits";
+import { inBackground } from "@/lib/integrations/background";
 import { sendLowStockAlert } from "@/lib/integrations/email";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
@@ -40,33 +42,26 @@ export async function adjustStock(formData: FormData): Promise<ActionResult> {
   if (!product  || product.tenantId  !== user.tenantId) return { ok: false, error: "Product not found." };
   if (!warehouse || warehouse.tenantId !== user.tenantId) return { ok: false, error: "Depósito no encontrado." };
 
-  // Get current qty then write atomically
-  const current = await prisma.stockItem.findFirst({
-    where: { tenantId: user.tenantId, productId, variantId: null, warehouseId },
-  });
-  const currentQty = current?.qty ?? 0;
-  const delta = newQty - currentQty;
-
-  if (delta === 0) return { ok: true };
+  if (!(await hasModule(user.tenantId, "stock"))) return { ok: false, error: "Módulo no disponible en tu plan." };
 
   try {
-    await prisma.$transaction([
-      prisma.stockMovement.create({
-        data: {
-          tenantId: user.tenantId,
-          productId,
-          warehouseId,
-          delta,
-          reason,
-          notes,
-        },
-      }),
-      current
-        ? prisma.stockItem.update({ where: { id: current.id }, data: { qty: newQty } })
-        : prisma.stockItem.create({
-            data: { tenantId: user.tenantId, productId, warehouseId, qty: newQty },
-          }),
-    ]);
+    const current = await prisma.$transaction(async (tx) => {
+      // The unique index does not cover a null variantId, so a double click could add a second row.
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`stock:${productId}:${warehouseId}`}))`;
+
+      const row = await tx.stockItem.findFirst({
+        where: { tenantId: user.tenantId, productId, variantId: null, warehouseId },
+      });
+      const delta = newQty - (row?.qty ?? 0);
+      if (delta === 0) return row;
+
+      await tx.stockMovement.create({
+        data: { tenantId: user.tenantId, productId, warehouseId, delta, reason, notes },
+      });
+      if (row) await tx.stockItem.update({ where: { id: row.id }, data: { qty: newQty } });
+      else await tx.stockItem.create({ data: { tenantId: user.tenantId, productId, warehouseId, qty: newQty } });
+      return row;
+    });
     revalidatePath("/admin/stock");
     revalidatePath("/admin/stock/movements");
 
@@ -86,7 +81,7 @@ export async function adjustStock(formData: FormData): Promise<ActionResult> {
           select: { name: true },
         });
         if (owner && tenant) {
-          void sendLowStockAlert({
+          inBackground(() => sendLowStockAlert({
             to:         owner.email,
             tenantName: tenant.name,
             products:   [{
@@ -96,7 +91,7 @@ export async function adjustStock(formData: FormData): Promise<ActionResult> {
               minStock:  item.minStock,
               warehouse: item.warehouse.name,
             }],
-          });
+          }));
         }
       }
     }

@@ -2752,6 +2752,8 @@ export const UserScalarFieldEnum = {
   emailVerifyCode: 'emailVerifyCode',
   emailVerifyExpiry: 'emailVerifyExpiry',
   otpAttempts: 'otpAttempts',
+  loginAttempts: 'loginAttempts',
+  lockedUntil: 'lockedUntil',
   sessionVersion: 'sessionVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

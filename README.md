@@ -17,12 +17,13 @@ npm run test:run --workspace=apps/web
 | Variable | Para qué sirve |
 |---|---|
 | `DATABASE_URL` | Base de datos |
+| `NEXT_PUBLIC_APP_URL` | URL pública, usada en enlaces de emails y de pago. Obligatoria en producción |
 | `AUTH_SECRET` | Firma sesiones y cookies de 2FA |
 | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | Login con Google |
 | `RESEND_API_KEY` | Mails, incluido el formulario de contacto |
 | `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` | Suscripciones |
 | `AFIP_KEY_SECRET` | Cifra la clave privada de AFIP de cada negocio |
 | `SUPER_ADMIN_TOTP_SECRET` | Segundo factor del super admin |
-| `VAPID_SUBJECT`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | Notificaciones push (opcionales) |
+| `VAPID_SUBJECT`, `VAPID_PUBLIC_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | Notificaciones push (opcionales). Las dos públicas llevan el mismo valor |
 
 Documentos de producto y diseño: `PRODUCT.md` y `DESIGN.md`.

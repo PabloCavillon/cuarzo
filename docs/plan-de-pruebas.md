@@ -7,7 +7,7 @@ Marcá cada casilla al probarla. Si algo falla, anotá URL, usuario y qué esper
 
 Usá una base de pruebas, por ejemplo una rama de Neon. No uses la de producción: el seed crea un negocio demo con un super admin.
 
-- [ ] En `apps/web/.env`, cargar `DATABASE_URL`, `AUTH_SECRET`, `AFIP_KEY_SECRET` y `NEXTAUTH_URL` / `NEXT_PUBLIC_APP_URL` (`http://localhost:3000`).
+- [ ] En `apps/web/.env`, cargar `DATABASE_URL`, `AUTH_SECRET`, `AFIP_KEY_SECRET` y `NEXT_PUBLIC_APP_URL` (`http://localhost:3000`).
 - [ ] Crear las tablas: `npx prisma db push`, desde `apps/web`.
 - [ ] Cargar los datos: `SEED_PASSWORD=<una contraseña larga> npx prisma db seed`. En una base remota es obligatoria; en `localhost` no.
 - [ ] Levantar la app: `npm run dev`.
@@ -19,7 +19,7 @@ Usá una base de pruebas, por ejemplo una rama de Neon. No uses la de producció
 | `SUPER_ADMIN_TOTP_SECRET` | Panel de super admin (se obtiene en `/super-admin/setup`) | Bloque 12 bloqueado |
 | `MERCADOPAGO_ACCESS_TOKEN` / `MERCADOPAGO_WEBHOOK_SECRET` (sandbox) | Suscripción y webhook | Bloque 10 incompleto |
 | Certificado de homologación de AFIP | Emitir facturas | Bloque 9 incompleto |
-| `NEXT_PUBLIC_VAPID_PUBLIC_KEY` y su clave privada | Notificaciones push | Bloque 11 incompleto |
+| `VAPID_SUBJECT`, `VAPID_PUBLIC_KEY`, `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | Notificaciones push | Bloque 11 incompleto |
 
 ### Usuarios
 
@@ -72,10 +72,10 @@ El dueño también es super admin y saltea los controles de rol: los permisos se
 Repetí cada fila como admin y como staff.
 
 - [ ] `/admin/settings`: el staff no puede cambiar datos del negocio.
-- [ ] `/admin/settings/audit`: el admin ve el registro y el staff no. **Revisar:** hoy el staff termina en `/login` aunque tenga sesión.
-- [ ] `/admin/onboarding`: **revisar** lo mismo; admin y staff terminan en `/login`.
+- [ ] `/admin/settings/audit`: el admin ve el registro y el staff vuelve a `/admin`.
+- [ ] `/admin/onboarding`: admin y staff vuelven a `/admin`.
 - [ ] `/admin/subscription`: solo el dueño puede cambiar o cancelar el plan. **Revisar:** admin y staff pueden abrir la página.
-- [ ] `/admin/billing/settings`: solo dueño y admin guardan. **Revisar:** el staff puede abrir la página.
+- [ ] `/admin/billing/settings`: solo el dueño guarda. **Revisar:** admin y staff pueden abrir la página.
 - [ ] `/admin/finance` y `/admin/reports`: decidir si el staff debe ver dinero. Hoy puede abrir ambas.
 - [ ] Invitar a un usuario: llega el email y al aceptar queda en el negocio con el rol elegido.
 - [ ] Reabrir una invitación ya usada: rechazada.
@@ -87,6 +87,8 @@ Repetí cada fila como admin y como staff.
 - [ ] En `/appointments/demo`, reservar paso a paso: llega la confirmación con código.
 - [ ] Un servicio desactivado no aparece.
 - [ ] Dos navegadores reservan el mismo horario a la vez: solo uno lo consigue.
+- [ ] Un turno de 120 minutos a las 10:00 deja ocupadas las 10:30 y las 11:30 en todos los servicios del negocio.
+- [ ] A las 22:00 hora argentina se puede reservar para el día siguiente.
 - [ ] Reservar a más de 60 días: rechazado.
 - [ ] Probar días y horarios no laborables.
 - [ ] `/appointments/my-bookings`: el código encuentra la reserva y un email no.

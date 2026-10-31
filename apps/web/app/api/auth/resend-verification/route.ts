@@ -2,6 +2,8 @@ import { NextRequest } from "next/server";
 import { randomBytes } from "crypto";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/db/prisma";
+import { inBackground } from "@/lib/integrations/background";
+import { appUrl } from "@/lib/utils/app-url";
 import { sendEmailVerification } from "@/lib/integrations/email";
 
 export async function POST(req: NextRequest) {
@@ -26,8 +28,8 @@ export async function POST(req: NextRequest) {
     data: { userId: user.id, token, expiresAt },
   });
 
-  const verifyUrl = `${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/api/auth/verify-email?token=${token}`;
-  void sendEmailVerification({ to: user.email, name: user.name, verifyUrl });
+  const verifyUrl = `${appUrl()}/api/auth/verify-email?token=${token}`;
+  inBackground(() => sendEmailVerification({ to: user.email, name: user.name, verifyUrl }));
 
   return Response.json({ ok: true });
 }

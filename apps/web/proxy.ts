@@ -40,6 +40,7 @@ const LIMITS: Record<string, { requests: number; windowMs: number }> = {
   "POST /api/appointments/bookings":         { requests: 5,  windowMs: 60_000 },
   "GET /api/appointments/bookings":          { requests: 20, windowMs: 60_000 },
   "GET /api/appointments/services":          { requests: 60, windowMs: 60_000 },
+  "GET /api/appointments/availability":      { requests: 60, windowMs: 60_000 },
   "POST /api/auth/verify-email-code":    { requests: 10, windowMs: 60_000 },
   "POST /api/auth/resend-verify-code":   { requests: 3,  windowMs: 300_000 },
   "POST /api/admin/2fa/verify":          { requests: 10, windowMs: 60_000 },
@@ -47,7 +48,7 @@ const LIMITS: Record<string, { requests: number; windowMs: number }> = {
   "POST /api/super-admin/auth":          { requests: 5,  windowMs: 60_000 },
   "POST /api/contact":                  { requests: 5,  windowMs: 60_000 },
   "POST /api/auth/register":            { requests: 3,  windowMs: 60_000 },
-  "POST /api/auth/signin":              { requests: 10, windowMs: 60_000 },
+  "POST /api/auth/callback/credentials": { requests: 10, windowMs: 60_000 },
   "POST /api/auth/forgot-password":     { requests: 3,  windowMs: 300_000 }, // 3 per 5 min
   "POST /api/auth/reset-password":      { requests: 5,  windowMs: 300_000 },
   "POST /api/auth/resend-verification": { requests: 3,  windowMs: 300_000 },

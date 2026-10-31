@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 // ── Hoisted mocks ─────────────────────────────────────────────────────────────
 
 const prismaMock = vi.hoisted(() => ({
-  tenant: { findUnique: vi.fn() },
+  tenant: { findFirst: vi.fn() },
   turneraService: { findMany: vi.fn() },
 }));
 
@@ -44,7 +44,7 @@ function getReq(slug?: string): NextRequest {
 describe("GET /api/appointments/services", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    prismaMock.tenant.findUnique.mockResolvedValue(DEMO_TENANT);
+    prismaMock.tenant.findFirst.mockResolvedValue(DEMO_TENANT);
     prismaMock.turneraService.findMany.mockResolvedValue(DB_SERVICES);
   });
 
@@ -84,7 +84,7 @@ describe("GET /api/appointments/services", () => {
   });
 
   it("returns 503 when the tenant does not exist", async () => {
-    prismaMock.tenant.findUnique.mockResolvedValue(null);
+    prismaMock.tenant.findFirst.mockResolvedValue(null);
     const res = await GET(getReq());
     expect(res.status).toBe(503);
     const body = await res.json();
@@ -120,16 +120,16 @@ describe("GET /api/appointments/services", () => {
 
   it("uses 'demo' slug by default when no slug param is provided", async () => {
     await GET(getReq());
-    expect(prismaMock.tenant.findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { slug: "demo" } }),
+    expect(prismaMock.tenant.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.objectContaining({ slug: "demo", active: true }) }),
     );
   });
 
   it("uses the provided slug param when given", async () => {
-    prismaMock.tenant.findUnique.mockResolvedValue({ ...DEMO_TENANT, slug: "mi-tienda" });
+    prismaMock.tenant.findFirst.mockResolvedValue({ ...DEMO_TENANT, slug: "mi-tienda" });
     await GET(getReq("mi-tienda"));
-    expect(prismaMock.tenant.findUnique).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { slug: "mi-tienda" } }),
+    expect(prismaMock.tenant.findFirst).toHaveBeenCalledWith(
+      expect.objectContaining({ where: expect.objectContaining({ slug: "mi-tienda", active: true }) }),
     );
   });
 });

@@ -5,6 +5,7 @@ import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { getAccessTicket } from "@/lib/api/afip/wsaa";
 import { encryptAfipKey } from "@/lib/api/afip/key-crypto";
+import { hasModule } from "@/lib/utils/plan-limits";
 import { solicitarCAE, getUltimoAutorizado, TIPO_COMPROBANTE_AFIP } from "@/lib/api/afip/wsfe";
 import { TipoComprobante } from "@/prisma/generated/client";
 
@@ -70,6 +71,8 @@ export async function createInvoice(fd: FormData): Promise<ActionResult> {
     const user = await requireAuth("admin");
     const tid  = user.tenantId;
 
+    if (!(await hasModule(tid, "fiscal"))) return { ok: false, error: "Módulo no disponible en tu plan." };
+
     const cfg = await prisma.fiscalConfig.findUnique({ where: { tenantId: tid } });
     if (!cfg)          return { ok: false, error: "Configure los datos fiscales primero" };
     if (!cfg.afipCert) return { ok: false, error: "Certificado AFIP no configurado" };
@@ -85,8 +88,18 @@ export async function createInvoice(fd: FormData): Promise<ActionResult> {
     const importeTotal    = Number((importeNeto + importeIVA).toFixed(2));
     const alicuotaId      = ALICUOTA_ID[fd.get("ivaRate") as string] ?? 5;
 
+    const condicionIvaReceptor = parseInt(fd.get("condicionIvaReceptor") as string, 10) || 5;
+    const fechaAfip = (name: string) => (fd.get(name) as string)?.replace(/-/g, "") || undefined;
+    const servicioDesde = fechaAfip("servicioDesde");
+    const servicioHasta = fechaAfip("servicioHasta");
+    const vtoPago       = fechaAfip("vtoPago");
+
     const tipoNum = TIPO_COMPROBANTE_AFIP[tipoStr];
     if (tipoNum === undefined) return { ok: false, error: "Invalid invoice type" };
+    if (importeNeto <= 0) return { ok: false, error: "El importe debe ser mayor a 0" };
+    if (concepto !== 1 && !(servicioDesde && servicioHasta && vtoPago)) {
+      return { ok: false, error: "Completá el período del servicio y el vencimiento de pago" };
+    }
 
     const result = await solicitarCAE(tid, {
       tipoComprobante: tipoNum,
@@ -99,6 +112,10 @@ export async function createInvoice(fd: FormData): Promise<ActionResult> {
       importeIVA,
       importeTotal,
       alicuotaId,
+      condicionIvaReceptor,
+      servicioDesde,
+      servicioHasta,
+      vtoPago,
     });
 
     // AFIP already issued this number: losing the row would leave a ghost invoice.

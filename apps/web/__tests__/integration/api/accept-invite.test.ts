@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 
 const prismaMock = vi.hoisted(() => ({
   invitation: { findUnique: vi.fn(), update: vi.fn() },
-  user:       { findFirst: vi.fn(), create: vi.fn() },
+  user:       { findFirst: vi.fn(), create: vi.fn(), count: vi.fn() },
   $transaction: vi.fn(),
 }));
 
@@ -44,6 +44,7 @@ describe("POST /api/auth/accept-invite", () => {
     vi.clearAllMocks();
     prismaMock.invitation.findUnique.mockResolvedValue(VALID_INVITATION);
     prismaMock.user.findFirst.mockResolvedValue(null);
+    prismaMock.user.count.mockResolvedValue(0);
     prismaMock.user.create.mockResolvedValue({ id: "new-user" });
     prismaMock.invitation.update.mockResolvedValue({});
     // $transaction receives an array of already-started promises — resolve them all

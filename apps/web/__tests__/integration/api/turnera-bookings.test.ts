@@ -5,11 +5,11 @@ import { nextWeekday } from "../../helpers/mock-factories";
 // ── Hoisted mocks ─────────────────────────────────────────────────────────────
 
 const prismaMock = vi.hoisted(() => ({
-  tenant:         { findUnique: vi.fn() },
+  tenant:         { findFirst: vi.fn() },
   turneraService: { findFirst: vi.fn() },
   turneraBooking: {
     findUnique: vi.fn(),
-    findFirst:  vi.fn(),
+    findMany:   vi.fn(),
     create:     vi.fn(),
     count:      vi.fn().mockResolvedValue(0),
   },
@@ -93,7 +93,8 @@ describe("POST /api/appointments/bookings", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     prismaMock.$transaction.mockImplementation((fn: (tx: typeof prismaMock) => unknown) => fn(prismaMock));
-    prismaMock.tenant.findUnique.mockResolvedValue(DEMO_TENANT);
+    prismaMock.turneraBooking.findMany.mockResolvedValue([]);
+    prismaMock.tenant.findFirst.mockResolvedValue(DEMO_TENANT);
     prismaMock.turneraService.findFirst.mockResolvedValue(DEMO_SERVICE);
     prismaMock.turneraBooking.findUnique.mockResolvedValue(null); // code collision check
     prismaMock.turneraBooking.create.mockResolvedValue(DB_BOOKING);
@@ -172,10 +173,17 @@ describe("POST /api/appointments/bookings", () => {
   });
 
   it("returns 409 when the slot is already taken", async () => {
-    prismaMock.turneraBooking.findFirst.mockResolvedValue({ id: "other" });
+    prismaMock.turneraBooking.findMany.mockResolvedValue([{ time: validPayload().time, durationMinSnap: 30 }]);
     const res = await POST(postReq(validPayload()));
     expect(res.status).toBe(409);
     expect(prismaMock.turneraBooking.create).not.toHaveBeenCalled();
+  });
+
+  it("returns 409 when a longer booking of another service overlaps", async () => {
+    const [h, m] = validPayload().time.split(":").map(Number);
+    const earlier = `${String(h - 1).padStart(2, "0")}:${String(m).padStart(2, "0")}`;
+    prismaMock.turneraBooking.findMany.mockResolvedValue([{ time: earlier, durationMinSnap: 120 }]);
+    expect((await POST(postReq(validPayload()))).status).toBe(409);
   });
 
   it("returns 422 for date more than 60 days ahead", async () => {
@@ -230,7 +238,7 @@ describe("POST /api/appointments/bookings", () => {
   // ── DB checks ───────────────────────────────────────────────────────────────
 
   it("returns 503 when demo tenant is not found", async () => {
-    prismaMock.tenant.findUnique.mockResolvedValue(null);
+    prismaMock.tenant.findFirst.mockResolvedValue(null);
     const res = await POST(postReq(validPayload()));
     expect(res.status).toBe(503);
   });
@@ -269,7 +277,7 @@ describe("GET /api/appointments/bookings", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     prismaMock.$transaction.mockImplementation((fn: (tx: typeof prismaMock) => unknown) => fn(prismaMock));
-    prismaMock.tenant.findUnique.mockResolvedValue(DEMO_TENANT);
+    prismaMock.tenant.findFirst.mockResolvedValue(DEMO_TENANT);
   });
 
   it("returns 400 without a code", async () => {

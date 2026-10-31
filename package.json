@@ -2,8 +2,7 @@
   "name": "cuarzo",
   "private": true,
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ],
   "optionalDependencies": {
     "lightningcss-linux-x64-gnu": "1.32.0",

@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import { randomBytes } from "crypto";
 import { prisma } from "@/lib/db/prisma";
+import { inBackground } from "@/lib/integrations/background";
+import { appUrl } from "@/lib/utils/app-url";
 import { sendPasswordReset } from "@/lib/integrations/email";
 
 export async function POST(req: NextRequest) {
@@ -31,8 +33,8 @@ export async function POST(req: NextRequest) {
       data: { email: normalizedEmail, token, expiresAt },
     });
 
-    const resetUrl = `${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/reset-password?token=${token}`;
-    void sendPasswordReset({ to: normalizedEmail, name: user.name, resetUrl });
+    const resetUrl = `${appUrl()}/reset-password?token=${token}`;
+    inBackground(() => sendPasswordReset({ to: normalizedEmail, name: user.name, resetUrl }));
   }
 
   return Response.json({ ok: true });

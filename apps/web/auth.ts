@@ -6,6 +6,9 @@ import { randomBytes } from "crypto";
 import { prisma } from "@/lib/db/prisma";
 import { authConfig } from "./auth.config";
 
+const MAX_LOGIN_ATTEMPTS = 10;
+const LOCK_MS = 15 * 60 * 1000;
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
 
@@ -36,12 +39,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const user = await prisma.user.findFirst({
           where: { email, active: true },
-          select: { id: true, email: true, name: true, password: true },
+          select: { id: true, email: true, name: true, password: true, loginAttempts: true, lockedUntil: true },
         });
         if (!user?.password) return null;
+        if (user.lockedUntil && user.lockedUntil > new Date()) return null;
 
         const valid = await bcrypt.compare(password, user.password);
-        if (!valid) return null;
+        if (!valid) {
+          const attempts = user.loginAttempts + 1;
+          const locked   = attempts >= MAX_LOGIN_ATTEMPTS;
+          await prisma.user.update({
+            where: { id: user.id },
+            data:  locked
+              ? { loginAttempts: 0, lockedUntil: new Date(Date.now() + LOCK_MS) }
+              : { loginAttempts: attempts },
+          });
+          return null;
+        }
+        if (user.loginAttempts > 0) {
+          await prisma.user.update({ where: { id: user.id }, data: { loginAttempts: 0 } });
+        }
 
         return { id: user.id, email: user.email, name: user.name };
       },

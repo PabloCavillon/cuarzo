@@ -16,10 +16,15 @@ const prismaMock = vi.hoisted(() => ({
 
 vi.mock("@/lib/auth/session", () => sessionMock);
 vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/utils/plan-limits", () => ({
+  hasModule:         async () => true,
+  checkProductLimit: async () => true,
+}));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
 import { createMovimiento, updateMovimiento, deleteMovimiento } from "@/app/admin/finance/actions";
+import { noonAR } from "@/lib/utils/dates";
 
 // ── Setup ─────────────────────────────────────────────────────────────────────
 
@@ -101,15 +106,11 @@ describe("createMovimiento", () => {
 
   it("uses today as fecha when not provided", async () => {
     prismaMock.cajaMovimiento.create.mockResolvedValue({ id: "m4" });
-    const before = new Date();
     const fd = makeFormData({ tipo: "ingreso", monto: "100", descripcion: "Test" });
     await createMovimiento(fd);
-    const after = new Date();
 
     const callData = prismaMock.cajaMovimiento.create.mock.calls[0][0].data;
-    const fecha = callData.fecha as Date;
-    expect(fecha.getTime()).toBeGreaterThanOrEqual(before.getTime() - 100);
-    expect(fecha.getTime()).toBeLessThanOrEqual(after.getTime() + 100);
+    expect(callData.fecha).toEqual(noonAR());
   });
 
   it("returns error when unauthenticated", async () => {

@@ -1,4 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
+import type { ModuleSlug } from "@/prisma/generated/client";
 import { FREE_MODULE_MAX, FREE_MODULE_INFO } from "./module-catalog";
 export { FREE_MODULE_MAX, FREE_MODULE_INFO };
 
@@ -99,4 +100,34 @@ export async function checkMemberLimit(tenantId: string, plan: string): Promise<
 
 export function isModuleAllowed(plan: string, module: string): boolean {
   return getLimits(plan).modules.includes(module);
+}
+
+export async function hasModule(tenantId: string, module: ModuleSlug): Promise<boolean> {
+  const row = await prisma.tenantModule.findFirst({
+    where:  { tenantId, module, active: true },
+    select: { tenant: { select: { plan: true } } },
+  });
+  return !!row && isModuleAllowed(row.tenant.plan, module);
+}
+
+// After a downgrade: keeps the oldest modules the new plan allows and turns off the rest.
+export async function trimModulesToPlan(tenantId: string, plan: string) {
+  const { modules, modulesMax } = getLimits(plan);
+  const active = await prisma.tenantModule.findMany({
+    where:   { tenantId, active: true },
+    orderBy: { enabledAt: "asc" },
+  });
+  const allowed = active.filter((m) => modules.includes(m.module));
+  const keep    = modulesMax === -1 ? allowed : allowed.slice(0, modulesMax);
+  await prisma.tenantModule.updateMany({
+    where: { tenantId, module: { notIn: keep.map((m) => m.module) } },
+    data:  { active: false },
+  });
+}
+
+// The public booking pages only serve live businesses with the module on.
+export function findBookableTenant(slug: string) {
+  return prisma.tenant.findFirst({
+    where: { slug, active: true, modules: { some: { module: "turnera", active: true } } },
+  });
 }

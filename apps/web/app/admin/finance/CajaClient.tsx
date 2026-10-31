@@ -175,7 +175,7 @@ function MovModal({
             <input
               name="fecha"
               type="date"
-              defaultValue={editing ? toInputDate(editing.fecha) : new Date().toISOString().slice(0, 10)}
+              defaultValue={editing ? toInputDate(editing.fecha) : new Date().toLocaleDateString("sv-SE")}
               className={inputCls}
             />
           </div>

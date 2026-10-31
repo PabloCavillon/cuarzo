@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
+import { findBookableTenant } from "@/lib/utils/plan-limits";
 
 export interface ServiceResponse {
   id: string;
@@ -13,7 +14,7 @@ export interface ServiceResponse {
 export async function GET(req: NextRequest) {
   const slug = req.nextUrl.searchParams.get("slug") ?? "demo";
   try {
-    const tenant = await prisma.tenant.findUnique({ where: { slug } });
+    const tenant = await findBookableTenant(slug);
     if (!tenant) {
       return NextResponse.json({ error: "Servicio no disponible." }, { status: 503 });
     }

@@ -1,8 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { PaymentMethod } from "@/prisma/generated/client";
 import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
+import { hasModule } from "@/lib/utils/plan-limits";
+import { inBackground } from "@/lib/integrations/background";
 import { sendOrderCreated, sendOrderStatusUpdate } from "@/lib/integrations/email";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
@@ -15,6 +18,8 @@ export async function createOrder(fd: FormData): Promise<CreateResult> {
     const user = await requireAuth("staff");
     const tid  = user.tenantId;
 
+    if (!(await hasModule(tid, "orders"))) return { ok: false, error: "Módulo no disponible en tu plan." };
+
     const clientName  = (fd.get("clientName") as string)?.trim();
     const clientEmail = (fd.get("clientEmail") as string)?.trim().toLowerCase();
     const clientPhone = (fd.get("clientPhone") as string)?.trim() || null;
@@ -23,10 +28,32 @@ export async function createOrder(fd: FormData): Promise<CreateResult> {
 
     if (!clientName || !clientEmail) return { ok: false, error: "Nombre y email del cliente son requeridos" };
 
-    type ItemInput = { productId: string; variantId: string | null; skuSnap: string; nameSnap: string; qty: number; unitPrice: number };
-    let items: ItemInput[] = [];
-    try { items = JSON.parse(itemsJson) as ItemInput[]; } catch { return { ok: false, error: "Items inválidos" }; }
-    if (!items.length) return { ok: false, error: "El pedido debe tener al menos un producto" };
+    type ItemInput = { productId: string; variantId: string | null; qty: number; unitPrice: number };
+    let lines: ItemInput[] = [];
+    try { lines = JSON.parse(itemsJson) as ItemInput[]; } catch { return { ok: false, error: "Items inválidos" }; }
+    if (!lines.length) return { ok: false, error: "El pedido debe tener al menos un producto" };
+
+    // Name and SKU come from the catalog; the price stays editable because the form allows it.
+    const products = await prisma.catalogProduct.findMany({
+      where:   { id: { in: lines.map((l) => l.productId) }, tenantId: tid },
+      include: { variants: true },
+    });
+    const items: (ItemInput & { skuSnap: string; nameSnap: string })[] = [];
+    for (const line of lines) {
+      const product = products.find((p) => p.id === line.productId);
+      const variant = product?.variants.find((v) => v.id === line.variantId);
+      if (!product || (line.variantId && !variant)) return { ok: false, error: "Producto no encontrado" };
+      if (!Number.isInteger(line.qty) || line.qty < 1) return { ok: false, error: "Cantidad inválida" };
+      if (!Number.isFinite(line.unitPrice) || line.unitPrice < 0) return { ok: false, error: "Precio inválido" };
+      items.push({
+        productId: product.id,
+        variantId: variant?.id ?? null,
+        skuSnap:   variant?.sku ?? product.sku,
+        nameSnap:  variant ? `${product.name} · ${variant.name}` : product.name,
+        qty:       line.qty,
+        unitPrice: line.unitPrice,
+      });
+    }
 
     // Upsert order client
     const orderClient = await prisma.orderClient.upsert({
@@ -63,13 +90,13 @@ export async function createOrder(fd: FormData): Promise<CreateResult> {
 
     revalidatePath("/admin/orders");
 
-    void sendOrderCreated({
+    inBackground(() => sendOrderCreated({
       to:      clientEmail,
       name:    clientName,
       orderId: order.id,
       items:   items.map((it) => ({ nameSnap: it.nameSnap, skuSnap: it.skuSnap, qty: it.qty, unitPrice: it.unitPrice })),
       total,
-    });
+    }));
 
     return { ok: true, id: order.id };
   } catch (e) {
@@ -114,32 +141,41 @@ export async function updateOrderStatus(id: string, status: string): Promise<Act
       if (moved.count === 0) throw new Error("El pedido cambió de estado. Recargá la página.");
 
       if (status === "confirmed") {
-        const [items, warehouse] = await Promise.all([
-          tx.orderItem.findMany({ where: { orderId: id } }),
-          tx.stockWarehouse.findFirst({ where: { tenantId: tid, active: true }, orderBy: { name: "asc" } }),
-        ]);
-        if (!warehouse) return;
+        const items = await tx.orderItem.findMany({ where: { orderId: id } });
 
         for (const item of items) {
-          const where = { warehouseId: warehouse.id, productId: item.productId, variantId: item.variantId ?? null };
-          const stock = await tx.stockItem.findFirst({ where });
-          // Only what really left the shelf, so a cancel gives back the same amount.
-          const taken = Math.min(stock?.qty ?? 0, item.qty);
-          if (stock && taken > 0) {
-            await tx.stockItem.update({ where: { id: stock.id }, data: { qty: { decrement: taken } } });
-          }
-          await tx.stockMovement.create({
-            data: {
-              tenantId:      tid,
-              productId:     item.productId,
-              variantId:     item.variantId,
-              warehouseId:   warehouse.id,
-              delta:         -taken,
-              reason:        "sale",
-              referenceId:   id,
-              referenceType: "order",
-            },
+          const rows = await tx.stockItem.findMany({
+            where:   { tenantId: tid, productId: item.productId, variantId: item.variantId ?? null, warehouse: { active: true } },
+            orderBy: { qty: "desc" },
           });
+          // Products nobody tracks in stock can still be sold.
+          if (rows.length === 0) continue;
+
+          let left = item.qty;
+          for (const row of rows) {
+            const taken = Math.min(row.qty, left);
+            if (taken === 0) continue;
+            // Guarded so a concurrent order cannot push the quantity below zero.
+            const moved = await tx.stockItem.updateMany({
+              where: { id: row.id, qty: { gte: taken } },
+              data:  { qty: { decrement: taken } },
+            });
+            if (moved.count === 0) throw new Error(`Stock insuficiente de ${item.nameSnap}`);
+            await tx.stockMovement.create({
+              data: {
+                tenantId:      tid,
+                productId:     item.productId,
+                variantId:     item.variantId,
+                warehouseId:   row.warehouseId,
+                delta:         -taken,
+                reason:        "sale",
+                referenceId:   id,
+                referenceType: "order",
+              },
+            });
+            left -= taken;
+          }
+          if (left > 0) throw new Error(`Stock insuficiente de ${item.nameSnap}`);
         }
       }
 
@@ -174,13 +210,13 @@ export async function updateOrderStatus(id: string, status: string): Promise<Act
 
     const EMAIL_NOTIFY = ["confirmed", "processing", "shipped", "delivered"];
     if (EMAIL_NOTIFY.includes(status)) {
-      void sendOrderStatusUpdate({
+      inBackground(() => sendOrderStatusUpdate({
         to:      order.client.email,
         name:    order.client.name,
         orderId: id,
         status,
         total:   Number(order.total.toString()),
-      });
+      }));
     }
 
     return { ok: true };
@@ -202,21 +238,21 @@ export async function registerPayment(orderId: string, fd: FormData): Promise<Ac
     const amount = parseFloat(fd.get("amount") as string);
     const method = (fd.get("method") as string)?.trim();
 
+    if (order.status === "cancelled") return { ok: false, error: "El pedido está cancelado" };
     if (!amount || amount <= 0 || amount > 999_999_999.99) return { ok: false, error: "Monto inválido" };
     if (!method) return { ok: false, error: "Método de pago requerido" };
+    if (!(method in PaymentMethod)) return { ok: false, error: "Método de pago inválido" };
 
-    await prisma.$transaction([
-      prisma.payment.create({
-        data: {
-          tenantId: tid,
-          orderId,
-          amount,
-          currency: "ARS",
-          method:   method as never,
-          status:   "completed",
-        },
-      }),
-    ]);
+    await prisma.payment.create({
+      data: {
+        tenantId: tid,
+        orderId,
+        amount,
+        currency: "ARS",
+        method:   method as PaymentMethod,
+        status:   "completed",
+      },
+    });
 
     revalidatePath(`/admin/orders/${orderId}`);
     return { ok: true };

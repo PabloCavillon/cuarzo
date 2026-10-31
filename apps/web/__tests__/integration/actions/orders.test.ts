@@ -12,6 +12,9 @@ const prismaMock = vi.hoisted(() => ({
     update:     vi.fn(),
     updateMany: vi.fn(),
   },
+  catalogProduct: {
+    findMany: vi.fn(),
+  },
   orderClient: {
     upsert: vi.fn(),
   },
@@ -27,6 +30,7 @@ const prismaMock = vi.hoisted(() => ({
   },
   stockItem: {
     findFirst: vi.fn(),
+    findMany:  vi.fn(),
     create:    vi.fn(),
     update:    vi.fn(),
     updateMany: vi.fn(),
@@ -45,6 +49,10 @@ const emailMock = vi.hoisted(() => ({
 
 vi.mock("@/lib/auth/session", () => sessionMock);
 vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/utils/plan-limits", () => ({
+  hasModule:         async () => true,
+  checkProductLimit: async () => true,
+}));
 vi.mock("@/lib/integrations/email",   () => emailMock);
 
 // ── Imports ───────────────────────────────────────────────────────────────────
@@ -67,11 +75,30 @@ beforeEach(() => {
     typeof arg === "function" ? arg(prismaMock) : Promise.all(arg as Promise<unknown>[]));
   prismaMock.order.updateMany.mockResolvedValue({ count: 1 });
   prismaMock.stockMovement.findMany.mockResolvedValue([]);
+    prismaMock.stockItem.findMany.mockResolvedValue([]);
+    prismaMock.catalogProduct.findMany.mockImplementation(({ where }: { where: { id: { in: string[] } } }) =>
+      Promise.resolve(where.id.in.map((id) => ({ id, sku: "SKU", name: "Producto", variants: [] }))));
 });
 
 // ── createOrder ───────────────────────────────────────────────────────────────
 
 describe("createOrder", () => {
+  it.each([
+    ["negative quantity", { qty: -5 }],
+    ["fractional quantity", { qty: 1.5 }],
+    ["negative price", { unitPrice: -1 }],
+  ])("rejects %s", async (_, change) => {
+    const fd = makeFormData({ clientName: "A", clientEmail: "a@b.com", items: JSON.stringify([{ ...ITEMS[0], ...change }]) });
+    expect((await createOrder(fd)).ok).toBe(false);
+    expect(prismaMock.order.create).not.toHaveBeenCalled();
+  });
+
+  it("rejects a product from another business", async () => {
+    prismaMock.catalogProduct.findMany.mockResolvedValue([]);
+    const fd = makeFormData({ clientName: "A", clientEmail: "a@b.com", items: JSON.stringify(ITEMS) });
+    expect(await createOrder(fd)).toEqual({ ok: false, error: "Producto no encontrado" });
+  });
+
   it("creates an order and returns ok: true with the order id", async () => {
     prismaMock.orderClient.upsert.mockResolvedValue({ id: "oc-1" });
     prismaMock.order.create.mockResolvedValue({ id: "ord-1" });
@@ -187,6 +214,35 @@ describe("updateOrderStatus", () => {
     );
   });
 
+  it("takes stock from whichever warehouse has it", async () => {
+    prismaMock.order.findUnique.mockResolvedValue(DRAFT_ORDER);
+    prismaMock.orderItem.findMany.mockResolvedValue([{ productId: "p1", variantId: null, qty: 5, nameSnap: "Remera" }]);
+    prismaMock.stockItem.findMany.mockResolvedValue([
+      { id: "s1", warehouseId: "w1", qty: 3 },
+      { id: "s2", warehouseId: "w2", qty: 2 },
+    ]);
+    prismaMock.stockItem.updateMany.mockResolvedValue({ count: 1 });
+
+    expect(await updateOrderStatus("ord-1", "confirmed")).toEqual({ ok: true });
+    expect(prismaMock.stockMovement.create).toHaveBeenCalledTimes(2);
+  });
+
+  it("refuses to confirm without enough stock", async () => {
+    prismaMock.order.findUnique.mockResolvedValue(DRAFT_ORDER);
+    prismaMock.orderItem.findMany.mockResolvedValue([{ productId: "p1", variantId: null, qty: 5, nameSnap: "Remera" }]);
+    prismaMock.stockItem.findMany.mockResolvedValue([{ id: "s1", warehouseId: "w1", qty: 3 }]);
+    prismaMock.stockItem.updateMany.mockResolvedValue({ count: 1 });
+
+    expect(await updateOrderStatus("ord-1", "confirmed")).toEqual({ ok: false, error: "Stock insuficiente de Remera" });
+  });
+
+  it("still sells a product nobody tracks in stock", async () => {
+    prismaMock.order.findUnique.mockResolvedValue(DRAFT_ORDER);
+    prismaMock.orderItem.findMany.mockResolvedValue([{ productId: "p1", variantId: null, qty: 5, nameSnap: "Remera" }]);
+
+    expect(await updateOrderStatus("ord-1", "confirmed")).toEqual({ ok: true });
+  });
+
   it("gives stock back when a confirmed order is cancelled", async () => {
     prismaMock.order.findUnique.mockResolvedValue({ ...DRAFT_ORDER, status: "confirmed" });
     prismaMock.stockMovement.findMany.mockResolvedValue([
@@ -290,7 +346,7 @@ describe("registerPayment", () => {
     prismaMock.order.findUnique.mockResolvedValue(ORDER);
     prismaMock.payment.create.mockResolvedValue({ id: "pay-1" });
 
-    const fd = makeFormData({ amount: "500", method: "cash" });
+    const fd = makeFormData({ amount: "500", method: "efectivo" });
     const result = await registerPayment("ord-1", fd);
 
     expect(result).toEqual({ ok: true });
@@ -303,21 +359,21 @@ describe("registerPayment", () => {
 
   it("returns error when order is not found", async () => {
     prismaMock.order.findUnique.mockResolvedValue(null);
-    const fd = makeFormData({ amount: "100", method: "cash" });
+    const fd = makeFormData({ amount: "100", method: "efectivo" });
     const result = await registerPayment("missing", fd);
     expect(result).toEqual({ ok: false, error: "Pedido no encontrado" });
   });
 
   it("returns error when amount is 0", async () => {
     prismaMock.order.findUnique.mockResolvedValue(ORDER);
-    const fd = makeFormData({ amount: "0", method: "cash" });
+    const fd = makeFormData({ amount: "0", method: "efectivo" });
     const result = await registerPayment("ord-1", fd);
     expect(result).toEqual({ ok: false, error: "Monto inválido" });
   });
 
   it("returns error when amount is negative", async () => {
     prismaMock.order.findUnique.mockResolvedValue(ORDER);
-    const fd = makeFormData({ amount: "-100", method: "cash" });
+    const fd = makeFormData({ amount: "-100", method: "efectivo" });
     const result = await registerPayment("ord-1", fd);
     expect(result).toEqual({ ok: false, error: "Monto inválido" });
   });
@@ -331,7 +387,7 @@ describe("registerPayment", () => {
 
   it("returns error when order belongs to a different tenant", async () => {
     prismaMock.order.findUnique.mockResolvedValue({ id: "ord-1", tenantId: "other" });
-    const fd = makeFormData({ amount: "100", method: "cash" });
+    const fd = makeFormData({ amount: "100", method: "efectivo" });
     const result = await registerPayment("ord-1", fd);
     expect(result).toEqual({ ok: false, error: "Pedido no encontrado" });
   });

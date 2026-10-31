@@ -1,3 +1,6 @@
+-- CreateSchema
+CREATE SCHEMA IF NOT EXISTS "public";
+
 -- CreateEnum
 CREATE TYPE "TenantPlan" AS ENUM ('free', 'starter', 'pro', 'enterprise');
 
@@ -5,7 +8,10 @@ CREATE TYPE "TenantPlan" AS ENUM ('free', 'starter', 'pro', 'enterprise');
 CREATE TYPE "UserRole" AS ENUM ('owner', 'admin', 'staff');
 
 -- CreateEnum
-CREATE TYPE "ModuleSlug" AS ENUM ('turnera', 'catalog', 'stock', 'orders', 'payments', 'fiscal');
+CREATE TYPE "ModuleSlug" AS ENUM ('turnera', 'catalog', 'stock', 'orders', 'payments', 'fiscal', 'caja');
+
+-- CreateEnum
+CREATE TYPE "CajaTipo" AS ENUM ('ingreso', 'egreso');
 
 -- CreateEnum
 CREATE TYPE "BookingStatus" AS ENUM ('confirmed', 'cancelled', 'no_show');
@@ -23,7 +29,22 @@ CREATE TYPE "PaymentMethod" AS ENUM ('mercadopago', 'transferencia', 'efectivo',
 CREATE TYPE "StockMovementReason" AS ENUM ('sale', 'purchase', 'return_customer', 'return_supplier', 'adjustment', 'damage', 'initial');
 
 -- CreateEnum
+CREATE TYPE "SubscriptionStatus" AS ENUM ('pending', 'authorized', 'paused', 'cancelled', 'expired');
+
+-- CreateEnum
 CREATE TYPE "TipoComprobante" AS ENUM ('A', 'B', 'C', 'M', 'X');
+
+-- CreateEnum
+CREATE TYPE "TaskStatus" AS ENUM ('pending', 'in_progress', 'done', 'cancelled');
+
+-- CreateEnum
+CREATE TYPE "TaskPriority" AS ENUM ('low', 'medium', 'high', 'urgent');
+
+-- CreateEnum
+CREATE TYPE "TaskRecurrence" AS ENUM ('none', 'daily', 'weekly', 'monthly', 'yearly');
+
+-- CreateEnum
+CREATE TYPE "TicketStatus" AS ENUM ('open', 'in_progress', 'resolved', 'closed');
 
 -- CreateTable
 CREATE TABLE "tenants" (
@@ -32,10 +53,25 @@ CREATE TABLE "tenants" (
     "slug" TEXT NOT NULL,
     "plan" "TenantPlan" NOT NULL DEFAULT 'free',
     "active" BOOLEAN NOT NULL DEFAULT true,
+    "onboarded" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "tenants_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "invitations" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "role" "UserRole" NOT NULL DEFAULT 'staff',
+    "token" TEXT NOT NULL,
+    "expires_at" TIMESTAMP(3) NOT NULL,
+    "accepted_at" TIMESTAMP(3),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "invitations_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -58,10 +94,22 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "role" "UserRole" NOT NULL DEFAULT 'staff',
     "active" BOOLEAN NOT NULL DEFAULT true,
+    "super_admin" BOOLEAN NOT NULL DEFAULT false,
     "password" TEXT,
     "image" TEXT,
     "google_id" TEXT,
     "email_verified" TIMESTAMP(3),
+    "totp_secret" TEXT,
+    "totp_enabled" BOOLEAN NOT NULL DEFAULT false,
+    "two_fa_method" TEXT,
+    "email_otp_code" TEXT,
+    "email_otp_expiry" TIMESTAMP(3),
+    "email_verify_code" TEXT,
+    "email_verify_expiry" TIMESTAMP(3),
+    "otp_attempts" INTEGER NOT NULL DEFAULT 0,
+    "login_attempts" INTEGER NOT NULL DEFAULT 0,
+    "locked_until" TIMESTAMP(3),
+    "session_version" INTEGER NOT NULL DEFAULT 0,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 
@@ -163,6 +211,7 @@ CREATE TABLE "stock_items" (
     "variant_id" TEXT,
     "warehouse_id" TEXT NOT NULL,
     "qty" INTEGER NOT NULL DEFAULT 0,
+    "min_stock" INTEGER NOT NULL DEFAULT 0,
 
     CONSTRAINT "stock_items_pkey" PRIMARY KEY ("id")
 );
@@ -254,6 +303,10 @@ CREATE TABLE "fiscal_configs" (
     "punto_venta" INTEGER NOT NULL,
     "afip_cert" TEXT,
     "afip_key" TEXT,
+    "production" BOOLEAN NOT NULL DEFAULT false,
+    "ta_token" TEXT,
+    "ta_sign" TEXT,
+    "ta_expiration" TIMESTAMP(3),
 
     CONSTRAINT "fiscal_configs_pkey" PRIMARY KEY ("id")
 );
@@ -265,10 +318,20 @@ CREATE TABLE "fiscal_invoices" (
     "order_id" TEXT,
     "payment_id" TEXT,
     "tipo_comprobante" "TipoComprobante" NOT NULL,
+    "punto_venta" INTEGER NOT NULL DEFAULT 1,
     "numero" INTEGER NOT NULL,
+    "fecha" TEXT NOT NULL DEFAULT '',
+    "concepto" INTEGER NOT NULL DEFAULT 1,
+    "receptor_doc_tipo" INTEGER NOT NULL DEFAULT 99,
+    "receptor_doc_nro" TEXT NOT NULL DEFAULT '0',
+    "receptor_nombre" TEXT,
     "cae" TEXT NOT NULL,
     "cae_vto" TIMESTAMP(3) NOT NULL,
+    "importe_neto" DECIMAL(14,2) NOT NULL DEFAULT 0,
+    "importe_iva" DECIMAL(14,2) NOT NULL DEFAULT 0,
     "amount" DECIMAL(14,2) NOT NULL,
+    "environment" TEXT NOT NULL DEFAULT 'test',
+    "metadata" JSONB NOT NULL DEFAULT '{}',
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "fiscal_invoices_pkey" PRIMARY KEY ("id")
@@ -307,8 +370,164 @@ CREATE TABLE "suppliers" (
     CONSTRAINT "suppliers_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "caja_movimientos" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "tipo" "CajaTipo" NOT NULL,
+    "monto" DECIMAL(14,2) NOT NULL,
+    "descripcion" TEXT NOT NULL,
+    "categoria" TEXT,
+    "metodo_pago" TEXT NOT NULL DEFAULT 'efectivo',
+    "notes" TEXT,
+    "fecha" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "caja_movimientos_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "subscription_plans" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "price_usd" DECIMAL(10,2) NOT NULL,
+    "interval_days" INTEGER NOT NULL DEFAULT 30,
+    "features" JSONB NOT NULL DEFAULT '[]',
+    "active" BOOLEAN NOT NULL DEFAULT true,
+    "mp_plan_id" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "subscription_plans_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "subscriptions" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "plan_id" TEXT NOT NULL,
+    "status" "SubscriptionStatus" NOT NULL DEFAULT 'pending',
+    "mp_sub_id" TEXT,
+    "mp_payer_id" TEXT,
+    "mp_checkout_url" TEXT,
+    "current_period_start" TIMESTAMP(3),
+    "current_period_end" TIMESTAMP(3),
+    "cancelled_at" TIMESTAMP(3),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "subscriptions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "password_reset_tokens" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expires_at" TIMESTAMP(3) NOT NULL,
+    "used_at" TIMESTAMP(3),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "password_reset_tokens_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "email_verification_tokens" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "token" TEXT NOT NULL,
+    "expires_at" TIMESTAMP(3) NOT NULL,
+    "used_at" TIMESTAMP(3),
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "email_verification_tokens_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "audit_logs" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "action" TEXT NOT NULL,
+    "resource" TEXT NOT NULL,
+    "resource_id" TEXT,
+    "metadata" JSONB NOT NULL DEFAULT '{}',
+    "ip" TEXT,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "audit_logs_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "tasks" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "description" TEXT,
+    "status" "TaskStatus" NOT NULL DEFAULT 'pending',
+    "priority" "TaskPriority" NOT NULL DEFAULT 'medium',
+    "due_date" TIMESTAMP(3),
+    "recurrence" "TaskRecurrence" NOT NULL DEFAULT 'none',
+    "recurrence_config" JSONB,
+    "assigned_to_id" TEXT,
+    "created_by_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "tasks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "push_subscriptions" (
+    "id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "endpoint" TEXT NOT NULL,
+    "p256dh" TEXT NOT NULL,
+    "auth" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "push_subscriptions_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "support_tickets" (
+    "id" TEXT NOT NULL,
+    "tenant_id" TEXT NOT NULL,
+    "user_id" TEXT NOT NULL,
+    "subject" TEXT NOT NULL,
+    "body" TEXT NOT NULL,
+    "status" "TicketStatus" NOT NULL DEFAULT 'open',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "support_tickets_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "support_ticket_replies" (
+    "id" TEXT NOT NULL,
+    "ticket_id" TEXT NOT NULL,
+    "author_id" TEXT,
+    "from_admin" BOOLEAN NOT NULL DEFAULT false,
+    "body" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "support_ticket_replies_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "tenants_slug_key" ON "tenants"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "invitations_token_key" ON "invitations"("token");
+
+-- CreateIndex
+CREATE INDEX "invitations_token_idx" ON "invitations"("token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "invitations_tenant_id_email_key" ON "invitations"("tenant_id", "email");
 
 -- CreateIndex
 CREATE INDEX "tenant_modules_tenant_id_idx" ON "tenant_modules"("tenant_id");
@@ -398,7 +617,7 @@ CREATE UNIQUE INDEX "fiscal_configs_tenant_id_key" ON "fiscal_configs"("tenant_i
 CREATE INDEX "fiscal_invoices_tenant_id_created_at_idx" ON "fiscal_invoices"("tenant_id", "created_at");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "fiscal_invoices_tenant_id_tipo_comprobante_numero_key" ON "fiscal_invoices"("tenant_id", "tipo_comprobante", "numero");
+CREATE UNIQUE INDEX "fiscal_invoices_tenant_id_tipo_comprobante_punto_venta_nume_key" ON "fiscal_invoices"("tenant_id", "tipo_comprobante", "punto_venta", "numero");
 
 -- CreateIndex
 CREATE INDEX "clients_tenant_id_idx" ON "clients"("tenant_id");
@@ -408,6 +627,72 @@ CREATE INDEX "clients_tenant_id_email_idx" ON "clients"("tenant_id", "email");
 
 -- CreateIndex
 CREATE INDEX "suppliers_tenant_id_idx" ON "suppliers"("tenant_id");
+
+-- CreateIndex
+CREATE INDEX "caja_movimientos_tenant_id_fecha_idx" ON "caja_movimientos"("tenant_id", "fecha");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "subscription_plans_slug_key" ON "subscription_plans"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "subscriptions_tenant_id_key" ON "subscriptions"("tenant_id");
+
+-- CreateIndex
+CREATE INDEX "subscriptions_tenant_id_idx" ON "subscriptions"("tenant_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "password_reset_tokens_token_key" ON "password_reset_tokens"("token");
+
+-- CreateIndex
+CREATE INDEX "password_reset_tokens_email_idx" ON "password_reset_tokens"("email");
+
+-- CreateIndex
+CREATE INDEX "password_reset_tokens_token_idx" ON "password_reset_tokens"("token");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "email_verification_tokens_token_key" ON "email_verification_tokens"("token");
+
+-- CreateIndex
+CREATE INDEX "email_verification_tokens_user_id_idx" ON "email_verification_tokens"("user_id");
+
+-- CreateIndex
+CREATE INDEX "email_verification_tokens_token_idx" ON "email_verification_tokens"("token");
+
+-- CreateIndex
+CREATE INDEX "audit_logs_tenant_id_created_at_idx" ON "audit_logs"("tenant_id", "created_at");
+
+-- CreateIndex
+CREATE INDEX "audit_logs_tenant_id_resource_idx" ON "audit_logs"("tenant_id", "resource");
+
+-- CreateIndex
+CREATE INDEX "audit_logs_tenant_id_user_id_idx" ON "audit_logs"("tenant_id", "user_id");
+
+-- CreateIndex
+CREATE INDEX "tasks_tenant_id_idx" ON "tasks"("tenant_id");
+
+-- CreateIndex
+CREATE INDEX "tasks_tenant_id_status_idx" ON "tasks"("tenant_id", "status");
+
+-- CreateIndex
+CREATE INDEX "tasks_tenant_id_due_date_idx" ON "tasks"("tenant_id", "due_date");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "push_subscriptions_endpoint_key" ON "push_subscriptions"("endpoint");
+
+-- CreateIndex
+CREATE INDEX "push_subscriptions_user_id_idx" ON "push_subscriptions"("user_id");
+
+-- CreateIndex
+CREATE INDEX "support_tickets_tenant_id_idx" ON "support_tickets"("tenant_id");
+
+-- CreateIndex
+CREATE INDEX "support_tickets_status_idx" ON "support_tickets"("status");
+
+-- CreateIndex
+CREATE INDEX "support_ticket_replies_ticket_id_idx" ON "support_ticket_replies"("ticket_id");
+
+-- AddForeignKey
+ALTER TABLE "invitations" ADD CONSTRAINT "invitations_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "tenant_modules" ADD CONSTRAINT "tenant_modules_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -501,3 +786,42 @@ ALTER TABLE "clients" ADD CONSTRAINT "clients_tenant_id_fkey" FOREIGN KEY ("tena
 
 -- AddForeignKey
 ALTER TABLE "suppliers" ADD CONSTRAINT "suppliers_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "caja_movimientos" ADD CONSTRAINT "caja_movimientos_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subscriptions" ADD CONSTRAINT "subscriptions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "subscriptions" ADD CONSTRAINT "subscriptions_plan_id_fkey" FOREIGN KEY ("plan_id") REFERENCES "subscription_plans"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "audit_logs" ADD CONSTRAINT "audit_logs_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tasks" ADD CONSTRAINT "tasks_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tasks" ADD CONSTRAINT "tasks_assigned_to_id_fkey" FOREIGN KEY ("assigned_to_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "tasks" ADD CONSTRAINT "tasks_created_by_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "push_subscriptions" ADD CONSTRAINT "push_subscriptions_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "push_subscriptions" ADD CONSTRAINT "push_subscriptions_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "support_tickets" ADD CONSTRAINT "support_tickets_tenant_id_fkey" FOREIGN KEY ("tenant_id") REFERENCES "tenants"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "support_tickets" ADD CONSTRAINT "support_tickets_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "support_ticket_replies" ADD CONSTRAINT "support_ticket_replies_ticket_id_fkey" FOREIGN KEY ("ticket_id") REFERENCES "support_tickets"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "support_ticket_replies" ADD CONSTRAINT "support_ticket_replies_author_id_fkey" FOREIGN KEY ("author_id") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;

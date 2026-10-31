@@ -6,6 +6,9 @@ import { makeAuthUser, makeFormData } from "../../helpers/mock-factories";
 const sessionMock = vi.hoisted(() => ({ requireAuth: vi.fn() }));
 
 const prismaMock = vi.hoisted(() => ({
+  task:          { updateMany: vi.fn() },
+  supportTicket: { updateMany: vi.fn() },
+  $transaction:  vi.fn((ops: unknown[]) => Promise.all(ops)),
   user: {
     findFirst:  vi.fn(),
     findUnique: vi.fn(),
@@ -51,6 +54,7 @@ const ADMIN  = makeAuthUser({ id: "admin-1", tenantId: TENANT, role: "admin", na
 
 beforeEach(() => {
   vi.resetAllMocks();
+  prismaMock.$transaction.mockImplementation((ops: unknown[]) => Promise.all(ops));
   sessionMock.requireAuth.mockResolvedValue(ADMIN);
   prismaMock.tenant.findUnique.mockResolvedValue({ id: TENANT, name: "Mi Tienda", plan: "pro" });
   prismaMock.invitation.upsert.mockResolvedValue({ id: "inv-1", token: "token-abc" });
@@ -115,7 +119,7 @@ describe("inviteMember", () => {
     prismaMock.user.findFirst.mockResolvedValue({ id: "existing-user" });
     const fd = makeFormData({ email: "existing@example.com", role: "staff" });
     const result = await inviteMember(fd);
-    expect(result).toEqual({ ok: false, error: "Ya existe un miembro con ese email" });
+    expect(result).toEqual({ ok: false, error: "Ya existe una cuenta con ese email" });
     expect(prismaMock.invitation.upsert).not.toHaveBeenCalled();
   });
 

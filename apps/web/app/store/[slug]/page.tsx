@@ -64,8 +64,8 @@ export default async function TiendaPage({
 }) {
   const { slug } = await params;
 
-  const tenant = await prisma.tenant.findUnique({
-    where: { slug },
+  const tenant = await prisma.tenant.findFirst({
+    where: { slug, active: true, modules: { some: { module: "catalog", active: true } } },
     select: { id: true, name: true },
   });
   if (!tenant) notFound();

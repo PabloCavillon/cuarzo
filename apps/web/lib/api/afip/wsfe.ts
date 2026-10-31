@@ -49,6 +49,7 @@ async function callWsfe(url: string, action: string, body: string): Promise<stri
       SOAPAction:     `"http://ar.gov.afip.dif.FEV1/${action}"`,
     },
     body,
+    signal: AbortSignal.timeout(20_000),
   });
   if (!res.ok) throw new Error(`WSFE HTTP ${res.status}`);
   return res.text();
@@ -84,6 +85,11 @@ export type InvoiceRequest = {
   importeIVA: number;
   importeTotal: number;
   alicuotaId: number;
+  condicionIvaReceptor: number;
+  // YYYYMMDD, required by AFIP when the concept includes services
+  servicioDesde?: string;
+  servicioHasta?: string;
+  vtoPago?: string;
   fecha?: string;
 };
 
@@ -93,6 +99,26 @@ export type InvoiceResult = {
   caeVto: Date;
   fecha: string;
 };
+
+function parseCaeVto(raw: string | undefined): Date {
+  return raw
+    ? new Date(`${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6, 8)}`)
+    : new Date(Date.now() + 10 * 24 * 3600 * 1000);
+}
+
+// A lost response does not mean AFIP refused: a retry would issue a second real invoice.
+async function findIssued(
+  url: string, envelopeFor: (inner: string) => string, req: InvoiceRequest, numero: number, fecha: string,
+): Promise<InvoiceResult | null> {
+  const inner = `<ar:FeCompConsReq><ar:CbteTipo>${req.tipoComprobante}</ar:CbteTipo><ar:CbteNro>${numero}</ar:CbteNro><ar:PtoVta>${req.puntoVenta}</ar:PtoVta></ar:FeCompConsReq>`;
+  const xml = await callWsfe(url, "FECompConsultar", envelopeFor(inner));
+  const cae = extractXml(xml, "CodAutorizacion");
+  const sameInvoice =
+    Number(extractXml(xml, "ImpTotal")) === req.importeTotal &&
+    Number(extractXml(xml, "DocNro")) === Number(req.receptorDocNro);
+  if (!cae || !sameInvoice) return null;
+  return { numero, cae, caeVto: parseCaeVto(extractXml(xml, "FchVto")), fecha };
+}
 
 export async function solicitarCAE(tenantId: string, req: InvoiceRequest): Promise<InvoiceResult> {
   const cfg = await prisma.fiscalConfig.findUnique({ where: { tenantId } });
@@ -126,10 +152,14 @@ export async function solicitarCAE(tenantId: string, req: InvoiceRequest): Promi
       <ar:ImpTotConc>0.00</ar:ImpTotConc>
       <ar:ImpNeto>${req.importeNeto.toFixed(2)}</ar:ImpNeto>
       <ar:ImpOpEx>0.00</ar:ImpOpEx>
-      <ar:ImpIVA>${req.importeIVA.toFixed(2)}</ar:ImpIVA>
       <ar:ImpTrib>0.00</ar:ImpTrib>
+      <ar:ImpIVA>${req.importeIVA.toFixed(2)}</ar:ImpIVA>
+      ${req.concepto === 1 ? "" : `<ar:FchServDesde>${req.servicioDesde}</ar:FchServDesde>
+      <ar:FchServHasta>${req.servicioHasta}</ar:FchServHasta>
+      <ar:FchVtoPago>${req.vtoPago}</ar:FchVtoPago>`}
       <ar:MonId>PES</ar:MonId>
       <ar:MonCotiz>1</ar:MonCotiz>
+      <ar:CondicionIVAReceptorId>${req.condicionIvaReceptor}</ar:CondicionIVAReceptorId>
       ${req.tipoComprobante === 11 ? "" : `<ar:Iva>
         <ar:AlicIva>
           <ar:Id>${req.alicuotaId}</ar:Id>
@@ -142,7 +172,17 @@ export async function solicitarCAE(tenantId: string, req: InvoiceRequest): Promi
 </ar:FeCAEReq>`;
 
   const envelope = soapEnvelope("FECAESolicitar", cfg.cuit, ta.token, ta.sign, inner);
-  const xml      = await callWsfe(url, "FECAESolicitar", envelope);
+
+  let xml: string;
+  try {
+    xml = await callWsfe(url, "FECAESolicitar", envelope);
+  } catch {
+    const issued = await findIssued(
+      url, (i) => soapEnvelope("FECompConsultar", cfg.cuit, ta.token, ta.sign, i), req, numero, today,
+    ).catch(() => null);
+    if (issued) return issued;
+    throw new Error(`AFIP no respondió. Antes de reintentar, revisá en AFIP si se emitió el comprobante ${numero}.`);
+  }
 
   const resultado = extractXml(xml, "Resultado");
   if (resultado !== "A") {
@@ -151,10 +191,7 @@ export async function solicitarCAE(tenantId: string, req: InvoiceRequest): Promi
   }
 
   const cae    = extractXml(xml, "CAE") ?? "";
-  const caeVtoStr = extractXml(xml, "CAEFchVto") ?? "";
-  const caeVto = caeVtoStr
-    ? new Date(`${caeVtoStr.slice(0, 4)}-${caeVtoStr.slice(4, 6)}-${caeVtoStr.slice(6, 8)}`)
-    : new Date(Date.now() + 10 * 24 * 3600 * 1000);
+  const caeVto = parseCaeVto(extractXml(xml, "CAEFchVto"));
 
   return { numero, cae, caeVto, fecha: today };
 }

@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { requireAuth, apiError } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
+import { startOfDayAR, todayAR } from "@/lib/utils/dates";
 import {
   Calendar, Clock, CheckCircle2, Users, Package,
   Boxes, TrendingUp, TrendingDown, Wallet, FileText,
@@ -11,28 +12,15 @@ import Link from "next/link";
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function todayRange() {
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  const end = new Date();
-  end.setHours(23, 59, 59, 999);
-  return { start, end };
-}
-
-function weekStart() {
-  const d = new Date();
-  const day = d.getDay();
-  const diff = day === 0 ? -6 : 1 - day;
-  d.setDate(d.getDate() + diff);
-  d.setHours(0, 0, 0, 0);
-  return d;
-}
-
-function todayDateStr() {
-  return new Date().toISOString().split("T")[0];
+  const start = startOfDayAR();
+  return { start, end: new Date(start.getTime() + 24 * 60 * 60 * 1000 - 1) };
 }
 
 function weekStartStr() {
-  return weekStart().toISOString().split("T")[0];
+  const d = new Date(`${todayAR()}T12:00:00Z`);
+  const day = d.getUTCDay();
+  d.setUTCDate(d.getUTCDate() + (day === 0 ? -6 : 1 - day));
+  return d.toISOString().split("T")[0];
 }
 
 function formatDateTime(dateStr: string, timeStr: string) {
@@ -91,7 +79,7 @@ export default async function AdminDashboard() {
   }
 
   const tid      = user.tenantId;
-  const today    = todayDateStr();
+  const today    = todayAR();
   const wkStart  = weekStartStr();
   const { start: todayStart, end: todayEnd } = todayRange();
 
@@ -149,7 +137,7 @@ export default async function AdminDashboard() {
       where: {
         tenantId: tid,
         status:   { in: ["pending", "in_progress"] },
-        dueDate:  { lte: new Date(new Date().setHours(23, 59, 59, 999)) },
+        dueDate:  { lte: todayEnd },
       },
       orderBy: [{ dueDate: "asc" }, { priority: "desc" }],
       take: 5,
@@ -349,7 +337,7 @@ export default async function AdminDashboard() {
           </div>
           <div className="space-y-1">
             {todayTasks.map((t) => {
-              const overdue = t.dueDate && new Date(t.dueDate) < new Date(new Date().setHours(0,0,0,0));
+              const overdue = t.dueDate && new Date(t.dueDate) < todayStart;
               return (
                 <Link
                   key={t.id}

@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import type { ServiceResponse } from "@/app/api/appointments/services/route";
 import { useT, useLocale } from "@/lib/i18n/provider";
+import { isTaken, type Busy } from "@/lib/utils/slots";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -72,7 +73,7 @@ function getBusinessDays(count = 14): Date[] {
   return days;
 }
 
-function getSlots(duration: number, dateStr: string): TimeSlot[] {
+function getSlots(duration: number, busy: Busy[]): TimeSlot[] {
   const slots: TimeSlot[] = [];
   const START = 9 * 60;
   const END   = 18 * 60;
@@ -80,10 +81,7 @@ function getSlots(duration: number, dateStr: string): TimeSlot[] {
     const h   = Math.floor(m / 60);
     const min = m % 60;
     const time = `${String(h).padStart(2, "0")}:${String(min).padStart(2, "0")}`;
-    const seed = dateStr + time;
-    let hash = 0;
-    for (const ch of seed) hash = (Math.imul(31, hash) + ch.charCodeAt(0)) | 0;
-    slots.push({ time, available: Math.abs(hash) % 3 !== 0 });
+    slots.push({ time, available: !isTaken(time, duration, busy) });
   }
   return slots;
 }
@@ -573,7 +571,20 @@ export default function BookingWizard({ slug }: { slug?: string }) {
   }, []);
 
   const availableDates = getBusinessDays();
-  const slots = date && service ? getSlots(service.durationMin, toDateStr(date)) : [];
+  const dateStr = date ? toDateStr(date) : null;
+  const [busy, setBusy] = useState<Busy[]>([]);
+
+  useEffect(() => {
+    if (!dateStr) return;
+    let current = true;
+    fetch(`/api/appointments/availability?date=${dateStr}${slug ? `&slug=${encodeURIComponent(slug)}` : ""}`)
+      .then((r) => (r.ok ? r.json() : { taken: [] }))
+      .then((d: { taken: Busy[] }) => { if (current) setBusy(d.taken); })
+      .catch(() => {}); // the booking request still rejects a taken slot
+    return () => { current = false; };
+  }, [dateStr, slug]);
+
+  const slots = date && service ? getSlots(service.durationMin, busy) : [];
 
   const canAdvance =
     (step === 1 && service !== null && !svcLoading && !svcError) ||

@@ -25,6 +25,14 @@ const DOC_TIPOS = [
   { value: "96", label: "DNI" },
 ];
 
+// AFIP's CondicionIVAReceptorId
+const CONDICIONES_IVA = [
+  { value: "5", label: "Consumidor Final" },
+  { value: "1", label: "Responsable Inscripto" },
+  { value: "6", label: "Monotributo" },
+  { value: "4", label: "Exento" },
+];
+
 type Props = {
   puntoVenta: number;
   production: boolean;
@@ -37,6 +45,7 @@ export function InvoiceForm({ puntoVenta, production }: Props) {
   const [error,  setError]  = useState<string | null>(null);
 
   const [tipo,          setTipo]          = useState("B");
+  const [concepto,      setConcepto]      = useState("1");
   const [docTipo,       setDocTipo]       = useState("99");
   const [ivaIdx,        setIvaIdx]        = useState(0);
   const [importeNeto,   setImporteNeto]   = useState("");
@@ -96,13 +105,30 @@ export function InvoiceForm({ puntoVenta, production }: Props) {
           </div>
           <div>
             <label className="block text-xs font-medium text-white/50 mb-1.5">Concepto</label>
-            <select name="concepto" defaultValue="1" className={inputCls + " cursor-pointer"}>
+            <select name="concepto" value={concepto} onChange={(e) => setConcepto(e.target.value)} className={inputCls + " cursor-pointer"}>
               <option value="1">Productos</option>
               <option value="2">Servicios</option>
               <option value="3">Productos y Servicios</option>
             </select>
           </div>
         </div>
+
+        {concepto !== "1" && (
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-xs font-medium text-white/50 mb-1.5">Servicio desde</label>
+              <input name="servicioDesde" type="date" required className={inputCls} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-white/50 mb-1.5">Servicio hasta</label>
+              <input name="servicioHasta" type="date" required className={inputCls} />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-white/50 mb-1.5">Vencimiento de pago</label>
+              <input name="vtoPago" type="date" required className={inputCls} />
+            </div>
+          </div>
+        )}
 
         <div className="flex items-center gap-2 text-xs text-white/30">
           <Receipt className="w-3.5 h-3.5" />
@@ -131,6 +157,15 @@ export function InvoiceForm({ puntoVenta, production }: Props) {
               placeholder={docTipo === "99" ? "0" : "ej. 20-12345678-9"}
               className={inputCls} />
           </div>
+        </div>
+
+        <div>
+          <label className="block text-xs font-medium text-white/50 mb-1.5">Condición frente al IVA</label>
+          <select name="condicionIvaReceptor" defaultValue="5" className={inputCls + " cursor-pointer"}>
+            {CONDICIONES_IVA.map((c) => (
+              <option key={c.value} value={c.value}>{c.label}</option>
+            ))}
+          </select>
         </div>
 
         <div>

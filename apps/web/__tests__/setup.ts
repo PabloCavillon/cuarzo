@@ -31,6 +31,11 @@ vi.mock("next-auth/react", () => ({
   useSession: vi.fn(() => ({ data: null, status: "unauthenticated" })),
 }));
 
+// ── after() needs a live request; tests run the work right away ───────────────
+vi.mock("@/lib/integrations/background", () => ({
+  inBackground: (task: () => Promise<unknown>) => { void task(); },
+}));
+
 // ── Resend email SDK ─────────────────────────────────────────────────────────
 // Must use a regular function (not arrow) so `new Resend()` works as a constructor.
 vi.mock("resend", () => ({

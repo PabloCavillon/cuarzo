@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db/prisma";
+import { checkMemberLimit } from "@/lib/utils/plan-limits";
 
 export async function POST(req: NextRequest) {
   const contentLength = req.headers.get("content-length");
@@ -27,10 +28,13 @@ export async function POST(req: NextRequest) {
   if (inv.acceptedAt)    return Response.json({ error: "La invitación ya fue usada." }, { status: 409 });
   if (inv.expiresAt < new Date()) return Response.json({ error: "La invitación expiró." }, { status: 410 });
 
-  const existing = await prisma.user.findFirst({
-    where: { tenantId: inv.tenantId, email: inv.email },
-  });
+  // Login finds users by email alone, so one email can only live in one business.
+  const existing = await prisma.user.findFirst({ where: { email: inv.email } });
   if (existing) return Response.json({ error: "Ya existe una cuenta con este email." }, { status: 409 });
+
+  if (!(await checkMemberLimit(inv.tenantId, inv.tenant.plan))) {
+    return Response.json({ error: "El negocio alcanzó el límite de usuarios de su plan." }, { status: 402 });
+  }
 
   const hashed = await bcrypt.hash(password, 12);
 

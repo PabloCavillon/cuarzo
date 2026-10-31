@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
+import { checkProductLimit, hasModule } from "@/lib/utils/plan-limits";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -24,6 +25,12 @@ export async function createProduct(formData: FormData): Promise<ActionResult> {
   if (!name)                         return { ok: false, error: "Name is required." };
   if (!sku)                          return { ok: false, error: "SKU is required." };
   if (isNaN(basePrice) || basePrice < 0) return { ok: false, error: "El precio no es válido." };
+
+  if (!(await hasModule(user.tenantId, "catalog"))) return { ok: false, error: "Módulo no disponible en tu plan." };
+  const tenant = await prisma.tenant.findUnique({ where: { id: user.tenantId }, select: { plan: true } });
+  if (!(await checkProductLimit(user.tenantId, tenant?.plan ?? "free"))) {
+    return { ok: false, error: "Alcanzaste el límite de productos de tu plan." };
+  }
 
   try {
     await prisma.catalogProduct.create({

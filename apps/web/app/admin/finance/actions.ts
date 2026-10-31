@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
+import { noonAR } from "@/lib/utils/dates";
+import { hasModule } from "@/lib/utils/plan-limits";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
@@ -10,6 +12,8 @@ export async function createMovimiento(fd: FormData): Promise<ActionResult> {
   try {
     const user = await requireAuth("staff");
     const tid  = user.tenantId;
+
+    if (!(await hasModule(tid, "caja"))) return { ok: false, error: "Módulo no disponible en tu plan." };
 
     const tipo        = fd.get("tipo") as "ingreso" | "egreso";
     const monto       = parseFloat(fd.get("monto") as string);
@@ -23,7 +27,7 @@ export async function createMovimiento(fd: FormData): Promise<ActionResult> {
     if (!monto || monto <= 0)  return { ok: false, error: "Monto debe ser mayor a 0" };
     if (!descripcion)          return { ok: false, error: "Description required" };
 
-    const fecha = fechaStr ? new Date(fechaStr) : new Date();
+    const fecha = noonAR(fechaStr || undefined);
 
     await prisma.cajaMovimiento.create({
       data: { tenantId: tid, tipo, monto, descripcion, categoria, metodoPago, notes, fecha },
@@ -56,7 +60,7 @@ export async function updateMovimiento(id: string, fd: FormData): Promise<Action
     if (!monto || monto <= 0)  return { ok: false, error: "Monto debe ser mayor a 0" };
     if (!descripcion)          return { ok: false, error: "Description required" };
 
-    const fecha = fechaStr ? new Date(fechaStr) : mov.fecha;
+    const fecha = fechaStr ? noonAR(fechaStr) : mov.fecha;
 
     await prisma.cajaMovimiento.update({
       where: { id },

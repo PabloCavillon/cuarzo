@@ -26,7 +26,6 @@ const BREADCRUMBS: Record<string, string> = {
   "/admin/settings":                 "Settings",
   "/admin/reports":                  "Reports",
   "/admin/customers":                "Customers",
-  "/admin/customers/suppliers":      "Customers · Suppliers",
   "/admin/customers/":               "Customers · Profile",
   "/admin/tickets":                  "Support",
   "/admin/tasks":                    "Tasks",

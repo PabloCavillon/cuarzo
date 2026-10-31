@@ -135,7 +135,7 @@ export function SubscriptionClient({
   }
 
   function handleCancel() {
-    if (!confirm("¿Cancelar la suscripción? El acceso se mantiene hasta fin del período.")) return;
+    if (!confirm("¿Cancelar la suscripción? Tu negocio pasa al plan gratis ahora.")) return;
     setError(null);
     startTransition(async () => {
       const res = await cancelSubscription();

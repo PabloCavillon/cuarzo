@@ -4,11 +4,11 @@ import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { createMPSubscription, cancelMPSubscription, createMPPlan } from "@/lib/api/mercadopago";
+import { appUrl } from "@/lib/utils/app-url";
+import { trimModulesToPlan } from "@/lib/utils/plan-limits";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 type CheckoutResult = { ok: true; url: string } | { ok: false; error: string };
-
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 export async function startSubscription(planSlug: string): Promise<CheckoutResult> {
   try {
@@ -17,17 +17,26 @@ export async function startSubscription(planSlug: string): Promise<CheckoutResul
 
     const plan = await prisma.subscriptionPlan.findUnique({ where: { slug: planSlug } });
     if (!plan) return { ok: false, error: "Plan no encontrado" };
+    const existing = await prisma.subscription.findUnique({ where: { tenantId: tid } });
+    const payingNow = existing?.mpSubId && existing.status === "authorized";
+
     if (Number(plan.priceUSD) === 0) {
-      // Free plan: just upsert the subscription directly
+      // Must happen first: once the id is gone, Mercado Pago keeps charging with no way to stop it.
+      if (payingNow) await cancelMPSubscription(existing.mpSubId!);
+
       await prisma.subscription.upsert({
         where:  { tenantId: tid },
         create: { tenantId: tid, planId: plan.id, status: "authorized" },
         update: { planId: plan.id, status: "authorized", cancelledAt: null, mpSubId: null, mpCheckoutUrl: null },
       });
       await prisma.tenant.update({ where: { id: tid }, data: { plan: "free" } });
+      await trimModulesToPlan(tid, "free");
       revalidatePath("/admin/subscription");
       return { ok: true, url: "/admin/subscription" };
     }
+
+    // The new subscription replaces the stored id, which would strand the one being charged.
+    if (payingNow) return { ok: false, error: "Cancelá tu plan actual antes de cambiarlo." };
 
     // Paid plan: ensure the plan exists in MP
     let mpPlanId = plan.mpPlanId;
@@ -35,19 +44,19 @@ export async function startSubscription(planSlug: string): Promise<CheckoutResul
       const mpPlan = await createMPPlan({
         reason:    `Cuarzo ${plan.name}`,
         amountUSD: Number(plan.priceUSD),
-        backUrl:   `${APP_URL}/admin/subscription`,
+        backUrl:   `${appUrl()}/admin/subscription`,
       });
       mpPlanId = mpPlan.id;
       await prisma.subscriptionPlan.update({ where: { id: plan.id }, data: { mpPlanId } });
     }
 
     const dbUser = await prisma.user.findFirst({ where: { tenantId: tid, role: "owner" } });
-    const email  = dbUser?.email ?? "unknown@cuarzo.dev";
+    if (!dbUser) return { ok: false, error: "El negocio no tiene dueño." };
 
     const mpSub = await createMPSubscription({
       planMpId:  mpPlanId,
-      payerEmail: email,
-      backUrl:   `${APP_URL}/admin/subscription`,
+      payerEmail: dbUser.email,
+      backUrl:   `${appUrl()}/admin/subscription`,
     });
 
     await prisma.subscription.upsert({
@@ -92,6 +101,7 @@ export async function cancelSubscription(): Promise<ActionResult> {
       data:  { status: "cancelled", cancelledAt: new Date() },
     });
     await prisma.tenant.update({ where: { id: tid }, data: { plan: "free" } });
+    await trimModulesToPlan(tid, "free");
 
     revalidatePath("/admin/subscription");
     return { ok: true };

@@ -28,11 +28,13 @@ export type AggregateUser = {
 
 export type UserAvgAggregateOutputType = {
   otpAttempts: number | null
+  loginAttempts: number | null
   sessionVersion: number | null
 }
 
 export type UserSumAggregateOutputType = {
   otpAttempts: number | null
+  loginAttempts: number | null
   sessionVersion: number | null
 }
 
@@ -56,6 +58,8 @@ export type UserMinAggregateOutputType = {
   emailVerifyCode: string | null
   emailVerifyExpiry: Date | null
   otpAttempts: number | null
+  loginAttempts: number | null
+  lockedUntil: Date | null
   sessionVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -81,6 +85,8 @@ export type UserMaxAggregateOutputType = {
   emailVerifyCode: string | null
   emailVerifyExpiry: Date | null
   otpAttempts: number | null
+  loginAttempts: number | null
+  lockedUntil: Date | null
   sessionVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -106,6 +112,8 @@ export type UserCountAggregateOutputType = {
   emailVerifyCode: number
   emailVerifyExpiry: number
   otpAttempts: number
+  loginAttempts: number
+  lockedUntil: number
   sessionVersion: number
   createdAt: number
   updatedAt: number
@@ -115,11 +123,13 @@ export type UserCountAggregateOutputType = {
 
 export type UserAvgAggregateInputType = {
   otpAttempts?: true
+  loginAttempts?: true
   sessionVersion?: true
 }
 
 export type UserSumAggregateInputType = {
   otpAttempts?: true
+  loginAttempts?: true
   sessionVersion?: true
 }
 
@@ -143,6 +153,8 @@ export type UserMinAggregateInputType = {
   emailVerifyCode?: true
   emailVerifyExpiry?: true
   otpAttempts?: true
+  loginAttempts?: true
+  lockedUntil?: true
   sessionVersion?: true
   createdAt?: true
   updatedAt?: true
@@ -168,6 +180,8 @@ export type UserMaxAggregateInputType = {
   emailVerifyCode?: true
   emailVerifyExpiry?: true
   otpAttempts?: true
+  loginAttempts?: true
+  lockedUntil?: true
   sessionVersion?: true
   createdAt?: true
   updatedAt?: true
@@ -193,6 +207,8 @@ export type UserCountAggregateInputType = {
   emailVerifyCode?: true
   emailVerifyExpiry?: true
   otpAttempts?: true
+  loginAttempts?: true
+  lockedUntil?: true
   sessionVersion?: true
   createdAt?: true
   updatedAt?: true
@@ -305,6 +321,8 @@ export type UserGroupByOutputType = {
   emailVerifyCode: string | null
   emailVerifyExpiry: Date | null
   otpAttempts: number
+  loginAttempts: number
+  lockedUntil: Date | null
   sessionVersion: number
   createdAt: Date
   updatedAt: Date
@@ -353,6 +371,8 @@ export type UserWhereInput = {
   emailVerifyCode?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   otpAttempts?: Prisma.IntFilter<"User"> | number
+  loginAttempts?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   sessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -384,6 +404,8 @@ export type UserOrderByWithRelationInput = {
   emailVerifyCode?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   otpAttempts?: Prisma.SortOrder
+  loginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -419,6 +441,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   emailVerifyCode?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   otpAttempts?: Prisma.IntFilter<"User"> | number
+  loginAttempts?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   sessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -450,6 +474,8 @@ export type UserOrderByWithAggregationInput = {
   emailVerifyCode?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   otpAttempts?: Prisma.SortOrder
+  loginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -483,6 +509,8 @@ export type UserScalarWhereWithAggregatesInput = {
   emailVerifyCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   otpAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number
+  loginAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   sessionVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -507,6 +535,8 @@ export type UserCreateInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -538,6 +568,8 @@ export type UserUncheckedCreateInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -567,6 +599,8 @@ export type UserUpdateInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -598,6 +632,8 @@ export type UserUncheckedUpdateInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -628,6 +664,8 @@ export type UserCreateManyInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -652,6 +690,8 @@ export type UserUpdateManyMutationInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -677,6 +717,8 @@ export type UserUncheckedUpdateManyInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -717,6 +759,8 @@ export type UserCountOrderByAggregateInput = {
   emailVerifyCode?: Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrder
   otpAttempts?: Prisma.SortOrder
+  loginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -724,6 +768,7 @@ export type UserCountOrderByAggregateInput = {
 
 export type UserAvgOrderByAggregateInput = {
   otpAttempts?: Prisma.SortOrder
+  loginAttempts?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
 }
 
@@ -747,6 +792,8 @@ export type UserMaxOrderByAggregateInput = {
   emailVerifyCode?: Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrder
   otpAttempts?: Prisma.SortOrder
+  loginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -772,6 +819,8 @@ export type UserMinOrderByAggregateInput = {
   emailVerifyCode?: Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrder
   otpAttempts?: Prisma.SortOrder
+  loginAttempts?: Prisma.SortOrder
+  lockedUntil?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -779,6 +828,7 @@ export type UserMinOrderByAggregateInput = {
 
 export type UserSumOrderByAggregateInput = {
   otpAttempts?: Prisma.SortOrder
+  loginAttempts?: Prisma.SortOrder
   sessionVersion?: Prisma.SortOrder
 }
 
@@ -939,6 +989,8 @@ export type UserCreateWithoutTenantInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -968,6 +1020,8 @@ export type UserUncheckedCreateWithoutTenantInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1027,6 +1081,8 @@ export type UserScalarWhereInput = {
   emailVerifyCode?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   otpAttempts?: Prisma.IntFilter<"User"> | number
+  loginAttempts?: Prisma.IntFilter<"User"> | number
+  lockedUntil?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   sessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -1051,6 +1107,8 @@ export type UserCreateWithoutTasksAssignedInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1081,6 +1139,8 @@ export type UserUncheckedCreateWithoutTasksAssignedInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1114,6 +1174,8 @@ export type UserCreateWithoutTasksCreatedInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1144,6 +1206,8 @@ export type UserUncheckedCreateWithoutTasksCreatedInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1188,6 +1252,8 @@ export type UserUpdateWithoutTasksAssignedInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1218,6 +1284,8 @@ export type UserUncheckedUpdateWithoutTasksAssignedInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1257,6 +1325,8 @@ export type UserUpdateWithoutTasksCreatedInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1287,6 +1357,8 @@ export type UserUncheckedUpdateWithoutTasksCreatedInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1315,6 +1387,8 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1345,6 +1419,8 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1389,6 +1465,8 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1419,6 +1497,8 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1447,6 +1527,8 @@ export type UserCreateWithoutSupportTicketsInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1477,6 +1559,8 @@ export type UserUncheckedCreateWithoutSupportTicketsInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1521,6 +1605,8 @@ export type UserUpdateWithoutSupportTicketsInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1551,6 +1637,8 @@ export type UserUncheckedUpdateWithoutSupportTicketsInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1579,6 +1667,8 @@ export type UserCreateWithoutTicketRepliesInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1609,6 +1699,8 @@ export type UserUncheckedCreateWithoutTicketRepliesInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1653,6 +1745,8 @@ export type UserUpdateWithoutTicketRepliesInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1683,6 +1777,8 @@ export type UserUncheckedUpdateWithoutTicketRepliesInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1711,6 +1807,8 @@ export type UserCreateManyTenantInput = {
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
   otpAttempts?: number
+  loginAttempts?: number
+  lockedUntil?: Date | string | null
   sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1735,6 +1833,8 @@ export type UserUpdateWithoutTenantInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1764,6 +1864,8 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1793,6 +1895,8 @@ export type UserUncheckedUpdateManyWithoutTenantInput = {
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  loginAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  lockedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1885,6 +1989,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
   otpAttempts?: boolean
+  loginAttempts?: boolean
+  lockedUntil?: boolean
   sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1917,6 +2023,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
   otpAttempts?: boolean
+  loginAttempts?: boolean
+  lockedUntil?: boolean
   sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1943,6 +2051,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
   otpAttempts?: boolean
+  loginAttempts?: boolean
+  lockedUntil?: boolean
   sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1969,12 +2079,14 @@ export type UserSelectScalar = {
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
   otpAttempts?: boolean
+  loginAttempts?: boolean
+  lockedUntil?: boolean
   sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "name" | "role" | "active" | "superAdmin" | "password" | "image" | "googleId" | "emailVerified" | "totpSecret" | "totpEnabled" | "twoFaMethod" | "emailOtpCode" | "emailOtpExpiry" | "emailVerifyCode" | "emailVerifyExpiry" | "otpAttempts" | "sessionVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "name" | "role" | "active" | "superAdmin" | "password" | "image" | "googleId" | "emailVerified" | "totpSecret" | "totpEnabled" | "twoFaMethod" | "emailOtpCode" | "emailOtpExpiry" | "emailVerifyCode" | "emailVerifyExpiry" | "otpAttempts" | "loginAttempts" | "lockedUntil" | "sessionVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   tasksCreated?: boolean | Prisma.User$tasksCreatedArgs<ExtArgs>
@@ -2021,6 +2133,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     emailVerifyCode: string | null
     emailVerifyExpiry: Date | null
     otpAttempts: number
+    loginAttempts: number
+    lockedUntil: Date | null
     sessionVersion: number
     createdAt: Date
     updatedAt: Date
@@ -2472,6 +2586,8 @@ export interface UserFieldRefs {
   readonly emailVerifyCode: Prisma.FieldRef<"User", 'String'>
   readonly emailVerifyExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly otpAttempts: Prisma.FieldRef<"User", 'Int'>
+  readonly loginAttempts: Prisma.FieldRef<"User", 'Int'>
+  readonly lockedUntil: Prisma.FieldRef<"User", 'DateTime'>
   readonly sessionVersion: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>

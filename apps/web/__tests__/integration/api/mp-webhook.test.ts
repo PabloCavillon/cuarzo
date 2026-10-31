@@ -9,6 +9,7 @@ const prismaMock = vi.hoisted(() => ({
     update:    vi.fn(),
   },
   tenant: { update: vi.fn() },
+  tenantModule: { findMany: vi.fn(), updateMany: vi.fn() },
   $transaction: vi.fn(),
 }));
 
@@ -58,6 +59,8 @@ describe("POST /api/webhooks/mercadopago", () => {
     prismaMock.subscription.findFirst.mockResolvedValue(DB_SUB);
     prismaMock.subscription.update.mockResolvedValue({});
     prismaMock.tenant.update.mockResolvedValue({});
+    prismaMock.tenantModule.findMany.mockResolvedValue([]);
+    prismaMock.tenantModule.updateMany.mockResolvedValue({});
     prismaMock.$transaction.mockImplementation((ops: Promise<unknown>[]) => Promise.all(ops));
   });
 
@@ -134,6 +137,8 @@ describe("POST /api/webhooks/mercadopago", () => {
       prismaMock.subscription.findFirst.mockResolvedValue(DB_SUB);
       prismaMock.subscription.update.mockResolvedValue({});
     prismaMock.tenant.update.mockResolvedValue({});
+    prismaMock.tenantModule.findMany.mockResolvedValue([]);
+    prismaMock.tenantModule.updateMany.mockResolvedValue({});
     prismaMock.$transaction.mockImplementation((ops: Promise<unknown>[]) => Promise.all(ops));
     });
   }

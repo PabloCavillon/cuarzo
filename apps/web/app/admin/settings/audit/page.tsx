@@ -16,7 +16,7 @@ export default async function AuditLogPage() {
     user = await requireAuth("admin");
   } catch (e) {
     void apiError(e);
-    redirect("/login");
+    redirect((e as { status?: number }).status === 403 ? "/admin" : "/login");
   }
 
   const logs = await prisma.auditLog.findMany({

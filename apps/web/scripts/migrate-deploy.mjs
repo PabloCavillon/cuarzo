@@ -43,5 +43,25 @@ async function wake() {
   }
 }
 
+const BASELINE = "0_baseline";
+
+async function isBaselined() {
+  const client = new pg.Client({ connectionString: dbUrl });
+  await client.connect();
+  try {
+    const { rows: [table] } = await client.query("SELECT to_regclass('_prisma_migrations') AS name");
+    if (!table.name) return false;
+    const { rowCount } = await client.query("SELECT 1 FROM _prisma_migrations WHERE migration_name = $1", [BASELINE]);
+    return rowCount > 0;
+  } finally {
+    await client.end().catch(() => {});
+  }
+}
+
 await wake();
-execSync("npx prisma db push", { stdio: "inherit", env });
+// Databases built with db push move to migrations once: first match the schema, then record it.
+if (!(await isBaselined())) {
+  execSync("npx prisma db push", { stdio: "inherit", env });
+  execSync(`npx prisma migrate resolve --applied ${BASELINE}`, { stdio: "inherit", env });
+}
+execSync("npx prisma migrate deploy", { stdio: "inherit", env });

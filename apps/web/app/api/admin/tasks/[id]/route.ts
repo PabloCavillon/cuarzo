@@ -5,6 +5,17 @@ import { sendPushToUser } from "@/lib/integrations/webpush";
 
 type Ctx = { params: Promise<{ id: string }> };
 
+// Jan 31 + 1 month is Feb 28, not Mar 3.
+function addMonths(date: Date, months: number): Date {
+  const next = new Date(date);
+  const day  = next.getDate();
+  next.setDate(1);
+  next.setMonth(next.getMonth() + months);
+  const lastDay = new Date(next.getFullYear(), next.getMonth() + 1, 0).getDate();
+  next.setDate(Math.min(day, lastDay));
+  return next;
+}
+
 export async function PATCH(req: NextRequest, { params }: Ctx) {
   let user;
   try { user = await requireAuth("staff"); } catch (e) {
@@ -84,25 +95,31 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
 
   // A finished recurring task spawns its next occurrence.
   if (data.status === "done" && existing.status !== "done" && task.recurrence !== "none") {
-    const next = new Date(task.dueDate ?? Date.now());
+    let next = new Date(task.dueDate ?? Date.now());
     if (task.recurrence === "daily")   next.setDate(next.getDate() + 1);
     if (task.recurrence === "weekly")  next.setDate(next.getDate() + 7);
-    if (task.recurrence === "monthly") next.setMonth(next.getMonth() + 1);
-    if (task.recurrence === "yearly")  next.setFullYear(next.getFullYear() + 1);
+    if (task.recurrence === "monthly") next = addMonths(next, 1);
+    if (task.recurrence === "yearly")  next = addMonths(next, 12);
 
-    await prisma.task.create({
-      data: {
-        tenantId:         task.tenantId,
-        createdById:      task.createdById,
-        assignedToId:     task.assignedToId,
-        title:            task.title,
-        description:      task.description,
-        priority:         task.priority,
-        recurrence:       task.recurrence,
-        recurrenceConfig: task.recurrenceConfig ?? undefined,
-        dueDate:          next,
-      },
+    // Reopening and finishing a task again must not spawn a second copy.
+    const spawned = await prisma.task.findFirst({
+      where: { tenantId: task.tenantId, title: task.title, recurrence: task.recurrence, dueDate: next },
     });
+    if (!spawned) {
+      await prisma.task.create({
+        data: {
+          tenantId:         task.tenantId,
+          createdById:      task.createdById,
+          assignedToId:     task.assignedToId,
+          title:            task.title,
+          description:      task.description,
+          priority:         task.priority,
+          recurrence:       task.recurrence,
+          recurrenceConfig: task.recurrenceConfig ?? undefined,
+          dueDate:          next,
+        },
+      });
+    }
   }
 
   // Notify new assignee when reassigned

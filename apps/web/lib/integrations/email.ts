@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { appUrl } from "@/lib/utils/app-url";
 
 let _resend: Resend | null = null;
 function getResend(): Resend {
@@ -6,7 +7,7 @@ function getResend(): Resend {
   return _resend;
 }
 
-const FROM = "Cuarzo <noreply@cuarzo.dev>";
+const FROM = "Cuarzo <noreply@cuarzostudio.com>";
 
 // ─── Template shell ───────────────────────────────────────────────────────────
 
@@ -258,7 +259,7 @@ export async function sendInvitation({
 }): Promise<void> {
   if (!process.env.RESEND_API_KEY) return;
 
-  const acceptUrl = `${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/invite/${token}`;
+  const acceptUrl = `${appUrl()}/invite/${token}`;
   const roleLabel = role === "admin" ? "Admin" : "Staff";
 
   const emailBody = `
@@ -367,7 +368,7 @@ export async function sendLowStockAlert({
     ${badge(`${products.length} producto${products.length > 1 ? "s" : ""} con stock bajo`, "#ef4444")}
     ${subtext(`Los siguientes productos de <strong>${escapeHtml(tenantName)}</strong> están por debajo de su stock mínimo:`)}
     ${table}
-    <a href="${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/admin/stock"
+    <a href="${appUrl()}/admin/stock"
        style="color:#0a1628;font-size:13px;font-weight:600;">Ver stock →</a>
   `;
 

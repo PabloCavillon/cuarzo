@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
 import type { TenantPlan } from "@/prisma/generated/client";
 import { getMPSubscription } from "@/lib/api/mercadopago";
+import { trimModulesToPlan } from "@/lib/utils/plan-limits";
 
 const MP_STATUS_MAP: Record<string, "pending" | "authorized" | "paused" | "cancelled" | "expired"> = {
   pending:    "pending",
@@ -77,6 +78,8 @@ export async function POST(req: NextRequest) {
       }),
       ...(tenantPlan ? [prisma.tenant.update({ where: { id: sub.tenantId }, data: { plan: tenantPlan as TenantPlan } })] : []),
     ]);
+
+    if (tenantPlan) await trimModulesToPlan(sub.tenantId, tenantPlan);
 
     return NextResponse.json({ ok: true });
   } catch (e) {

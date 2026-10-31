@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/db/prisma";
+import { inBackground } from "@/lib/integrations/background";
 import { generateEmailOtp } from "@/lib/auth/totp";
 import { sendEmailVerificationCode } from "@/lib/integrations/email";
 
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
     data:  { emailVerifyCode: code, emailVerifyExpiry: expiry, otpAttempts: 0 },
   });
 
-  void sendEmailVerificationCode({ to: email.trim().toLowerCase(), name: user.name, code });
+  inBackground(() => sendEmailVerificationCode({ to: email.trim().toLowerCase(), name: user.name, code }));
 
   return Response.json({ ok: true });
 }

@@ -7,8 +7,8 @@ export default async function OnboardingPage() {
   let user;
   try {
     user = await requireAuth("owner");
-  } catch {
-    redirect("/login");
+  } catch (e) {
+    redirect((e as { status?: number }).status === 403 ? "/admin" : "/login");
   }
 
   const tenant = await prisma.tenant.findUnique({

@@ -21,10 +21,15 @@ const prismaMock = vi.hoisted(() => ({
     create: vi.fn(),
   },
   $transaction: vi.fn(),
+  $executeRaw:  vi.fn(),
 }));
 
 vi.mock("@/lib/auth/session", () => sessionMock);
 vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/utils/plan-limits", () => ({
+  hasModule:         async () => true,
+  checkProductLimit: async () => true,
+}));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -38,10 +43,7 @@ const USER   = makeAuthUser({ tenantId: TENANT });
 beforeEach(() => {
   vi.resetAllMocks();
   sessionMock.requireAuth.mockResolvedValue(USER);
-  prismaMock.$transaction.mockImplementation(async (ops: unknown[]) => {
-    for (const op of ops) await op;
-    return [];
-  });
+  prismaMock.$transaction.mockImplementation((fn: (tx: typeof prismaMock) => unknown) => fn(prismaMock));
 });
 
 // ── adjustStock ───────────────────────────────────────────────────────────────
@@ -61,9 +63,9 @@ describe("adjustStock", () => {
     const result = await adjustStock(fd);
 
     expect(result).toEqual({ ok: true });
-    expect(prismaMock.$transaction).toHaveBeenCalled();
-    const txArgs = prismaMock.$transaction.mock.calls[0][0] as unknown[];
-    expect(txArgs).toHaveLength(2);
+    expect(prismaMock.$executeRaw).toHaveBeenCalled();
+    expect(prismaMock.stockMovement.create).toHaveBeenCalled();
+    expect(prismaMock.stockItem.update).toHaveBeenCalled();
   });
 
   it("creates a new stockItem when none exists yet", async () => {
@@ -80,7 +82,7 @@ describe("adjustStock", () => {
     expect(prismaMock.$transaction).toHaveBeenCalled();
   });
 
-  it("returns ok: true without hitting DB when delta is 0", async () => {
+  it("returns ok: true without writing when delta is 0", async () => {
     prismaMock.catalogProduct.findUnique.mockResolvedValue(PRODUCT);
     prismaMock.stockWarehouse.findUnique.mockResolvedValue(WAREHOUSE);
     prismaMock.stockItem.findFirst.mockResolvedValue({ id: "si-1", qty: 10 });
@@ -89,7 +91,7 @@ describe("adjustStock", () => {
     const result = await adjustStock(fd);
 
     expect(result).toEqual({ ok: true });
-    expect(prismaMock.$transaction).not.toHaveBeenCalled();
+    expect(prismaMock.stockMovement.create).not.toHaveBeenCalled();
   });
 
   it("returns error when productId is missing", async () => {

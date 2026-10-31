@@ -6,6 +6,7 @@ import { makeAuthUser, makeFormData } from "../../helpers/mock-factories";
 const sessionMock = vi.hoisted(() => ({ requireAuth: vi.fn() }));
 
 const prismaMock = vi.hoisted(() => ({
+  tenant: { findUnique: vi.fn() },
   catalogProduct: {
     findUnique: vi.fn(),
     create:     vi.fn(),
@@ -15,6 +16,10 @@ const prismaMock = vi.hoisted(() => ({
 
 vi.mock("@/lib/auth/session", () => sessionMock);
 vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/utils/plan-limits", () => ({
+  hasModule:         async () => true,
+  checkProductLimit: async () => true,
+}));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 

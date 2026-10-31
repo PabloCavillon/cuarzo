@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/db/prisma";
+import { inBackground } from "@/lib/integrations/background";
 import { generateEmailOtp } from "@/lib/auth/totp";
 import { sendEmailVerificationCode } from "@/lib/integrations/email";
 
@@ -77,7 +78,7 @@ export async function POST(req: NextRequest) {
     });
   });
 
-  void sendEmailVerificationCode({ to: normalizedEmail, name: name.trim(), code: verifyCode });
+  inBackground(() => sendEmailVerificationCode({ to: normalizedEmail, name: name.trim(), code: verifyCode }));
 
   return Response.json({ ok: true, step: "verify-email" }, { status: 201 });
 }
