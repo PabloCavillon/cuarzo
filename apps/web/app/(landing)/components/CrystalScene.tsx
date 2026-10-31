@@ -106,12 +106,6 @@ export default function CrystalScene() {
 
       <Crystal still={still} />
 
-      {/* One thin orbit: the only ornament on the page */}
-      <mesh rotation={[1.32, 0.28, 0]}>
-        <torusGeometry args={[1.6, 0.005, 8, 160]} />
-        <meshBasicMaterial color="#8fb2ff" />
-      </mesh>
-
       <OrbitControls
         enableZoom={false}
         enablePan={false}

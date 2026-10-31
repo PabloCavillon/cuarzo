@@ -142,14 +142,14 @@ components:
 
 **Alcance:** este sistema gobierna únicamente la landing pública (`apps/web/app/(landing)/`). El panel de administración conserva su aspecto propio, con Inter y la escala navy de `apps/web/app/globals.css`; nada de este archivo se aplica a esa app ni reemplaza sus decisiones. Los tokens viven en la clase `.landing`, no en `:root`, justamente para no filtrarse.
 
-Un cristal de cuarzo en 3D gira sobre azul noche y todo lo demás se aparta: mucho aire, poco color y lectura cómoda antes que efecto. El neofuturismo acá es de geometría (curvas amplias, cápsulas, líneas de un píxel, una órbita finísima), no de luces. La página alterna bloques noche y claros, y esa alternancia es toda su profundidad.
+Un cristal de cuarzo en 3D gira sobre azul noche y todo lo demás se aparta: mucho aire, poco color y lectura cómoda antes que efecto. El neofuturismo acá es de geometría (curvas amplias, cápsulas, líneas de un píxel), no de luces. La página alterna bloques noche y claros, y esa alternancia es toda su profundidad.
 
 El mundo nació de rechazar una pared de vidrio difícil de leer: la materia cristalina queda confinada a una sola pieza y las superficies de interfaz son opacas y planas. La densidad es baja, con una idea por sección y listas resueltas en filas separadas por líneas en lugar de tarjetas.
 
 **Key Characteristics:**
 - Azul como único color, sobre azul noche y blanco porcelana.
 - Títulos en Jost liviana, en mayúsculas y minúsculas; texto en Hanken Grotesk de 18 px.
-- Un cristal 3D y una órbita fina como únicos ornamentos.
+- Un cristal 3D en el hero y una órbita fina en SVG más adelante como únicos ornamentos.
 - Curvas amplias en los bloques, cápsulas en las acciones, líneas de 1 px.
 - Superficies opacas y planas, sin sombras.
 
@@ -161,7 +161,7 @@ Una sola familia azul en tres alturas: noche para el suelo oscuro, eléctrico pa
 - **Azul Eléctrico** (#2450e6): acción principal sobre superficies claras, enlaces de fila, hover de navegación, selección de texto y fondo del plan destacado.
 - **Azul Profundo** (#1a3bb3): solo hover del botón primario.
 - **Azul Pálido** (#dbe4ff): hover del botón blanco y texto secundario dentro del plan destacado.
-- **Azul Órbita** (#8fb2ff): trazo de la órbita, en el 3D y en su regreso en SVG. Nunca texto de interfaz.
+- **Azul Órbita** (#8fb2ff): trazo de la órbita en SVG. Nunca texto de interfaz.
 
 ### Neutral
 - **Azul Noche** (#071033): fondo de bloques oscuros, del pie y del lienzo 3D, que debe coincidir exactamente con el bloque para que el vidrio refracte la página.
@@ -207,7 +207,7 @@ Columna central de hasta 80rem con márgenes de 1.5rem, que pasan a 2.5rem desde
 
 El patrón editorial es asimétrico: título a la izquierda y contenido a la derecha en `2fr 3fr`, con separación de 5rem en escritorio. En una sola columna, el título apila sobre su contenido. El bloque "A medida" fija su título con sticky en escritorio mientras la lista avanza.
 
-El hero ocupa la altura completa desde 1024 px, con texto hasta 56% del ancho y el cristal en el 52% derecho, de modo que órbita y título pueden acercarse. Por debajo, el cristal baja a un bloque de 24rem, o 32rem desde 640 px. Los planes pasan de una a dos columnas en 640 px y a cuatro en 1024 px. La navegación completa aparece recién en 1280 px; por debajo se colapsa en menú.
+El hero ocupa la altura completa desde 1024 px, con texto hasta 56% del ancho y el cristal en el 52% derecho, de modo que cristal y título pueden acercarse. Por debajo, el cristal baja a un bloque de 24rem, o 32rem desde 640 px. Los planes pasan de una a dos columnas en 640 px y a cuatro en 1024 px. La navegación completa aparece recién en 1280 px; por debajo se colapsa en menú.
 
 ## Elevation & Depth
 
@@ -257,11 +257,11 @@ Todos los estados interactivos cambian solo de color, en 250ms ease-out. Nada se
 - **Style:** título, descripción y dato auxiliar, con 1.75rem de padding vertical y línea superior de 1 px; la última fila también cierra abajo. Reemplazan a las grillas de tarjetas.
 - **Hover:** en filas enlazadas, el título pasa a Azul Eléctrico.
 
-### Cristal y órbita
-Pieza firma del mundo: cuarzo hexagonal biterminado con facetas duras, material de transmisión total (índice de refracción 1.52, rugosidad 0.04) tintado en azul e iluminado con un entorno sintético, sin recursos externos. Lo rodea una órbita de trazo finísimo. Gira solo, flota apenas y se arrastra en escritorio, sin zoom ni desplazamiento; en táctil no captura el gesto para no bloquear el scroll. Con `prefers-reduced-motion` queda quieto. Mientras carga muestra el isotipo, sin salto de layout.
+### Cristal
+Pieza firma del mundo: cuarzo hexagonal biterminado con facetas duras, material de transmisión total (índice de refracción 1.52, rugosidad 0.04) tintado en azul e iluminado con un entorno sintético, sin recursos externos. Va solo, sin anillo alrededor. Gira solo, flota apenas y se arrastra en escritorio, sin zoom ni desplazamiento; en táctil no captura el gesto para no bloquear el scroll. Con `prefers-reduced-motion` queda quieto. Mientras carga muestra el isotipo, sin salto de layout.
 
 ### Named Rules
-**La Regla de la Pieza Única.** Hay un solo cristal 3D por página, en el hero. Más adelante puede regresar solo la órbita, como trazo de 1 px, nunca el cristal.
+**La Regla de la Pieza Única.** Hay un solo cristal 3D por página, en el hero. Más adelante solo aparece la órbita, como trazo de 1 px, nunca el cristal.
 
 ## Do's and Don'ts
 

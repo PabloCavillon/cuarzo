@@ -50,6 +50,10 @@ export default function Contact() {
               <dd><a href="mailto:dev@cuarzostudio.com" className="ink underline underline-offset-4">dev@cuarzostudio.com</a></dd>
             </div>
             <div>
+              <dt className="ink-2 text-base">WhatsApp</dt>
+              <dd><a href="https://wa.me/5491166565670" target="_blank" rel="noopener noreferrer" className="ink underline underline-offset-4">11 6656-5670</a></dd>
+            </div>
+            <div>
               <dt className="ink-2 text-base">{t.contact.locationLabel}</dt>
               <dd className="ink">{t.contact.locationValue}</dd>
             </div>

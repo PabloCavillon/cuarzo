@@ -7,7 +7,7 @@ export default function WhyCuarzo() {
 
   return (
     <section className="night relative overflow-hidden rounded-[2.5rem] lg:rounded-[5rem] mx-3 lg:mx-6">
-      {/* The hero's orbit, returning once past the fold */}
+      {/* The page's one orbit line */}
       <svg aria-hidden viewBox="0 0 540 540" fill="none" className="absolute hidden lg:block -right-24 -top-32 w-104 text-[#8fb2ff]">
         <ellipse cx="270" cy="270" rx="262" ry="108" transform="rotate(-18 270 270)" stroke="currentColor" vectorEffect="non-scaling-stroke" />
       </svg>

@@ -38,11 +38,18 @@ function rand(arr: unknown[]) {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
+  // Known demo passwords must never reach a shared database.
+  const isLocal = /@(localhost|127.0.0.1)[:/]/.test(process.env.DATABASE_URL ?? "");
+  const sharedPw = process.env.SEED_PASSWORD;
+  if (!isLocal && !sharedPw) {
+    throw new Error("Base remota: definí SEED_PASSWORD para no crear usuarios con contraseñas conocidas.");
+  }
+
   // ── 1. Tenant ────────────────────────────────────────────────────────────────
   const tenant = await prisma.tenant.upsert({
     where:  { slug: "demo" },
-    update: { name: "Cuarzo Demo", onboarded: true },
-    create: { name: "Cuarzo Demo", slug: "demo", plan: "starter", onboarded: true },
+    update: { name: "Cuarzo Demo", plan: "pro", onboarded: true },
+    create: { name: "Cuarzo Demo", slug: "demo", plan: "pro", onboarded: true },
   });
   console.log(`✓ tenant: ${tenant.slug} (${tenant.id})`);
 
@@ -57,35 +64,36 @@ async function main() {
   console.log("✓ modules enabled");
 
   // ── 3. Users ──────────────────────────────────────────────────────────────────
-  const ownerPw  = await bcrypt.hash("admin123",  12);
-  const adminPw  = await bcrypt.hash("admin456",  12);
-  const staffPw  = await bcrypt.hash("staff123",  12);
+  const ownerPw  = await bcrypt.hash(sharedPw ?? "admin123",  12);
+  const adminPw  = await bcrypt.hash(sharedPw ?? "admin456",  12);
+  const staffPw  = await bcrypt.hash(sharedPw ?? "staff123",  12);
+  const emailVerified = new Date(); // requireAuth rejects unverified users
 
   const owner = await prisma.user.upsert({
     where:  { tenantId_email: { tenantId: tenant.id, email: "admin@cuarzo.dev" } },
-    update: { superAdmin: true },
+    update: { superAdmin: true, password: ownerPw, emailVerified },
     create: {
       tenantId: tenant.id, email: "admin@cuarzo.dev",
       name: "Pablo Cavillon", role: "owner", password: ownerPw,
-      superAdmin: true,
+      superAdmin: true, emailVerified,
     },
   });
 
   const adminUser = await prisma.user.upsert({
     where:  { tenantId_email: { tenantId: tenant.id, email: "manager@cuarzo.dev" } },
-    update: {},
+    update: { password: adminPw, emailVerified },
     create: {
       tenantId: tenant.id, email: "manager@cuarzo.dev",
-      name: "Valentina Gómez", role: "admin", password: adminPw,
+      name: "Valentina Gómez", role: "admin", password: adminPw, emailVerified,
     },
   });
 
   await prisma.user.upsert({
     where:  { tenantId_email: { tenantId: tenant.id, email: "staff@cuarzo.dev" } },
-    update: {},
+    update: { password: staffPw, emailVerified },
     create: {
       tenantId: tenant.id, email: "staff@cuarzo.dev",
-      name: "Lucas Fernández", role: "staff", password: staffPw,
+      name: "Lucas Fernández", role: "staff", password: staffPw, emailVerified,
     },
   });
 
@@ -94,9 +102,9 @@ async function main() {
   // ── 4. Subscription plans ─────────────────────────────────────────────────────
   const plans = [
     { slug: "free",       name: "Free",       priceUSD: 0,   features: ["1 usuario", "Turnera", "50 turnos/mes"] },
-    { slug: "starter",    name: "Starter",    priceUSD: 19,  features: ["3 usuarios", "Todos los módulos", "500 turnos/mes", "Soporte email"] },
-    { slug: "pro",        name: "Pro",        priceUSD: 49,  features: ["10 usuarios", "Módulos ilimitados", "Turnos ilimitados", "ARCA", "Soporte prioritario"] },
-    { slug: "enterprise", name: "Enterprise", priceUSD: 149, features: ["Usuarios ilimitados", "Todo en Pro", "SLA 99.9%", "Onboarding", "API full"] },
+    { slug: "starter",    name: "Starter",    priceUSD: 19,  features: ["3 usuarios", "Todos los módulos menos ARCA", "500 turnos/mes", "Soporte email"] },
+    { slug: "pro",        name: "Pro",        priceUSD: 49,  features: ["10 usuarios", "Todos los módulos", "Turnos ilimitados", "ARCA", "Soporte prioritario"] },
+    { slug: "enterprise", name: "Enterprise", priceUSD: 149, features: ["Usuarios ilimitados", "Todo en Pro"] },
   ];
 
   for (const p of plans) {
@@ -534,13 +542,9 @@ async function main() {
     { tipo: "egreso" as const,  monto: 11000,  descripcion: "Suscripción plataformas (ARCA + Cuarzo)",    categoria: "Servicios",  metodoPago: "mercadopago",    fecha: daysAgo(2)  },
   ];
 
-  for (const mov of cajaData) {
-    const existingMov = await prisma.cajaMovimiento.findFirst({
-      where: { tenantId: tenant.id, descripcion: mov.descripcion, fecha: mov.fecha },
-    });
-    if (!existingMov) {
-      await prisma.cajaMovimiento.create({ data: { tenantId: tenant.id, ...mov } });
-    }
+  // Dates move with today, so only a whole-table check keeps a re-run from duplicating.
+  if ((await prisma.cajaMovimiento.count({ where: { tenantId: tenant.id } })) === 0) {
+    await prisma.cajaMovimiento.createMany({ data: cajaData.map((mov) => ({ tenantId: tenant.id, ...mov })) });
   }
   console.log(`✓ caja movimientos (${cajaData.length})`);
 
@@ -560,31 +564,28 @@ async function main() {
   }
 
   // ── 15. Subscription plan for the demo tenant ──────────────────────────────────
-  const starterPlan = await prisma.subscriptionPlan.findUnique({ where: { slug: "starter" } });
-  if (starterPlan) {
-    const existingSub = await prisma.subscription.findUnique({ where: { tenantId: tenant.id } });
-    if (!existingSub) {
-      await prisma.subscription.create({
-        data: {
-          tenantId:           tenant.id,
-          planId:             starterPlan.id,
-          status:             "authorized",
-          currentPeriodStart: daysAgo(5),
-          currentPeriodEnd:   daysAhead(25),
-        },
-      });
-      console.log("✓ subscription: starter (authorized)");
-    }
-  }
+  const proPlan = await prisma.subscriptionPlan.findUniqueOrThrow({ where: { slug: "pro" } });
+  await prisma.subscription.upsert({
+    where:  { tenantId: tenant.id },
+    update: { planId: proPlan.id },
+    create: {
+      tenantId:           tenant.id,
+      planId:             proPlan.id,
+      status:             "authorized",
+      currentPeriodStart: daysAgo(5),
+      currentPeriodEnd:   daysAhead(25),
+    },
+  });
+  console.log("✓ subscription: pro (authorized)");
 
   // ── Summary ───────────────────────────────────────────────────────────────────
   console.log("\n═══════════════════════════════════════════════════════════");
   console.log("  Seed complete — Cuarzo Demo ready to explore");
   console.log("═══════════════════════════════════════════════════════════");
   console.log("  URL:        http://localhost:3000/admin");
-  console.log("  Owner:      admin@cuarzo.dev   / admin123  (superAdmin=true)");
-  console.log("  Admin:      manager@cuarzo.dev / admin456");
-  console.log("  Staff:      staff@cuarzo.dev   / staff123");
+  console.log(`  Owner:      admin@cuarzo.dev   / ${sharedPw ? "SEED_PASSWORD" : "admin123"}  (superAdmin=true)`);
+  console.log(`  Admin:      manager@cuarzo.dev / ${sharedPw ? "SEED_PASSWORD" : "admin456"}`);
+  console.log(`  Staff:      staff@cuarzo.dev   / ${sharedPw ? "SEED_PASSWORD" : "staff123"}`);
   console.log("  SuperAdmin: http://localhost:3000/super-admin");
   console.log("═══════════════════════════════════════════════════════════\n");
 }
