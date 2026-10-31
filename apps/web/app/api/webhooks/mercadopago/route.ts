@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db/prisma";
+import type { TenantPlan } from "@/prisma/generated/client";
 import { getMPSubscription } from "@/lib/api/mercadopago";
 
 const MP_STATUS_MAP: Record<string, "pending" | "authorized" | "paused" | "cancelled" | "expired"> = {
@@ -27,7 +28,9 @@ function verifyMPSignature(req: NextRequest, rawBody: string, dataId: string): b
 
   const template = `id:${dataId};request-id:${requestId};ts:${ts}`;
   const expected = crypto.createHmac("sha256", secret).update(template).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(v1, "hex"), Buffer.from(expected, "hex"));
+  const actual = Buffer.from(v1, "hex");
+  const wanted = Buffer.from(expected, "hex");
+  return actual.length === wanted.length && crypto.timingSafeEqual(actual, wanted);
 }
 
 export async function POST(req: NextRequest) {
@@ -51,21 +54,29 @@ export async function POST(req: NextRequest) {
       throw err;
     });
 
-    const sub = await prisma.subscription.findFirst({ where: { mpSubId } });
+    const sub = await prisma.subscription.findFirst({ where: { mpSubId }, include: { plan: true } });
     if (!sub) return NextResponse.json({ ok: true });
 
     const status = MP_STATUS_MAP[mpSub.status ?? ""] ?? "pending";
 
-    await prisma.subscription.update({
-      where: { id: sub.id },
-      data: {
-        status,
-        mpPayerId:          String(mpSub.payer_id ?? ""),
-        currentPeriodStart: mpSub.date_created ? new Date(mpSub.date_created) : undefined,
-        currentPeriodEnd:   mpSub.next_payment_date ? new Date(mpSub.next_payment_date) : undefined,
-        ...(status === "cancelled" ? { cancelledAt: new Date() } : {}),
-      },
-    });
+    // tenant.plan is what every limit reads, so it must move with the subscription.
+    const tenantPlan =
+      status === "authorized" ? sub.plan.slug :
+      status === "cancelled" || status === "expired" ? "free" : undefined;
+
+    await prisma.$transaction([
+      prisma.subscription.update({
+        where: { id: sub.id },
+        data: {
+          status,
+          mpPayerId:          String(mpSub.payer_id ?? ""),
+          currentPeriodStart: mpSub.date_created ? new Date(mpSub.date_created) : undefined,
+          currentPeriodEnd:   mpSub.next_payment_date ? new Date(mpSub.next_payment_date) : undefined,
+          ...(status === "cancelled" ? { cancelledAt: new Date() } : {}),
+        },
+      }),
+      ...(tenantPlan ? [prisma.tenant.update({ where: { id: sub.tenantId }, data: { plan: tenantPlan as TenantPlan } })] : []),
+    ]);
 
     return NextResponse.json({ ok: true });
   } catch (e) {

@@ -1,0 +1,443 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-30T15:05:33.667Z",
+  "title": "Design System: Cuarzo Landing",
+  "extensions": {
+    "colorMeta": {
+      "blue": {
+        "role": "primary",
+        "displayName": "Azul Eléctrico",
+        "canonical": "#2450e6",
+        "tonalRamp": [
+          "oklch(15% 0.115 265.5)",
+          "oklch(26% 0.200 265.5)",
+          "oklch(37% 0.231 265.5)",
+          "oklch(49% 0.231 265.5)",
+          "oklch(61% 0.231 265.5)",
+          "oklch(72% 0.215 265.5)",
+          "oklch(84% 0.123 265.5)",
+          "oklch(95% 0.038 265.5)"
+        ]
+      },
+      "blue-deep": {
+        "role": "primary",
+        "displayName": "Azul Profundo",
+        "canonical": "#1a3bb3",
+        "tonalRamp": [
+          "oklch(15% 0.096 265.8)",
+          "oklch(26% 0.167 265.8)",
+          "oklch(37% 0.193 265.8)",
+          "oklch(49% 0.193 265.8)",
+          "oklch(61% 0.193 265.8)",
+          "oklch(72% 0.180 265.8)",
+          "oklch(84% 0.103 265.8)",
+          "oklch(95% 0.032 265.8)"
+        ]
+      },
+      "blue-pale": {
+        "role": "primary",
+        "displayName": "Azul Pálido",
+        "canonical": "#dbe4ff",
+        "tonalRamp": [
+          "oklch(15% 0.019 271.0)",
+          "oklch(26% 0.033 271.0)",
+          "oklch(37% 0.038 271.0)",
+          "oklch(49% 0.038 271.0)",
+          "oklch(61% 0.038 271.0)",
+          "oklch(72% 0.036 271.0)",
+          "oklch(84% 0.020 271.0)",
+          "oklch(95% 0.006 271.0)"
+        ]
+      },
+      "orbit": {
+        "role": "primary",
+        "displayName": "Azul Órbita",
+        "canonical": "#8fb2ff",
+        "tonalRamp": [
+          "oklch(15% 0.059 265.1)",
+          "oklch(26% 0.102 265.1)",
+          "oklch(37% 0.118 265.1)",
+          "oklch(49% 0.118 265.1)",
+          "oklch(61% 0.118 265.1)",
+          "oklch(72% 0.110 265.1)",
+          "oklch(84% 0.063 265.1)",
+          "oklch(95% 0.020 265.1)"
+        ]
+      },
+      "night": {
+        "role": "neutral",
+        "displayName": "Azul Noche",
+        "canonical": "#071033",
+        "tonalRamp": [
+          "oklch(15% 0.035 267.8)",
+          "oklch(26% 0.061 267.8)",
+          "oklch(37% 0.070 267.8)",
+          "oklch(49% 0.070 267.8)",
+          "oklch(61% 0.070 267.8)",
+          "oklch(72% 0.066 267.8)",
+          "oklch(84% 0.038 267.8)",
+          "oklch(95% 0.012 267.8)"
+        ]
+      },
+      "night-raised": {
+        "role": "neutral",
+        "displayName": "Noche Elevada",
+        "canonical": "#121d4a",
+        "tonalRamp": [
+          "oklch(15% 0.042 269.1)",
+          "oklch(26% 0.074 269.1)",
+          "oklch(37% 0.085 269.1)",
+          "oklch(49% 0.085 269.1)",
+          "oklch(61% 0.085 269.1)",
+          "oklch(72% 0.079 269.1)",
+          "oklch(84% 0.045 269.1)",
+          "oklch(95% 0.014 269.1)"
+        ]
+      },
+      "night-line": {
+        "role": "neutral",
+        "displayName": "Línea Noche",
+        "canonical": "#27335f",
+        "tonalRamp": [
+          "oklch(15% 0.040 270.2)",
+          "oklch(26% 0.069 270.2)",
+          "oklch(37% 0.079 270.2)",
+          "oklch(49% 0.079 270.2)",
+          "oklch(61% 0.079 270.2)",
+          "oklch(72% 0.074 270.2)",
+          "oklch(84% 0.042 270.2)",
+          "oklch(95% 0.013 270.2)"
+        ]
+      },
+      "night-ink-2": {
+        "role": "neutral",
+        "displayName": "Bruma",
+        "canonical": "#c6d0ec",
+        "tonalRamp": [
+          "oklch(15% 0.020 269.9)",
+          "oklch(26% 0.035 269.9)",
+          "oklch(37% 0.040 269.9)",
+          "oklch(49% 0.040 269.9)",
+          "oklch(61% 0.040 269.9)",
+          "oklch(72% 0.038 269.9)",
+          "oklch(84% 0.022 269.9)",
+          "oklch(95% 0.007 269.9)"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Blanco Porcelana",
+        "canonical": "#f4f6fb",
+        "tonalRamp": [
+          "oklch(15% 0.003 268.5)",
+          "oklch(26% 0.006 268.5)",
+          "oklch(37% 0.007 268.5)",
+          "oklch(49% 0.007 268.5)",
+          "oklch(61% 0.007 268.5)",
+          "oklch(72% 0.007 268.5)",
+          "oklch(84% 0.004 268.5)",
+          "oklch(95% 0.001 268.5)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Blanco",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "oklch(15% 0.000 89.9)",
+          "oklch(26% 0.000 89.9)",
+          "oklch(37% 0.000 89.9)",
+          "oklch(49% 0.000 89.9)",
+          "oklch(61% 0.000 89.9)",
+          "oklch(72% 0.000 89.9)",
+          "oklch(84% 0.000 89.9)",
+          "oklch(95% 0.000 89.9)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#0a1330",
+        "tonalRamp": [
+          "oklch(15% 0.030 267.7)",
+          "oklch(26% 0.051 267.7)",
+          "oklch(37% 0.059 267.7)",
+          "oklch(49% 0.059 267.7)",
+          "oklch(61% 0.059 267.7)",
+          "oklch(72% 0.055 267.7)",
+          "oklch(84% 0.032 267.7)",
+          "oklch(95% 0.010 267.7)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Tinta Media",
+        "canonical": "#434e6b",
+        "tonalRamp": [
+          "oklch(15% 0.025 268.2)",
+          "oklch(26% 0.044 268.2)",
+          "oklch(37% 0.050 268.2)",
+          "oklch(49% 0.050 268.2)",
+          "oklch(61% 0.050 268.2)",
+          "oklch(72% 0.047 268.2)",
+          "oklch(84% 0.027 268.2)",
+          "oklch(95% 0.008 268.2)"
+        ]
+      },
+      "placeholder": {
+        "role": "neutral",
+        "displayName": "Marcador",
+        "canonical": "#5b6684",
+        "tonalRamp": [
+          "oklch(15% 0.025 269.0)",
+          "oklch(26% 0.043 269.0)",
+          "oklch(37% 0.050 269.0)",
+          "oklch(49% 0.050 269.0)",
+          "oklch(61% 0.050 269.0)",
+          "oklch(72% 0.046 269.0)",
+          "oklch(84% 0.026 269.0)",
+          "oklch(95% 0.008 269.0)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Línea",
+        "canonical": "#d5dbea",
+        "tonalRamp": [
+          "oklch(15% 0.011 268.4)",
+          "oklch(26% 0.019 268.4)",
+          "oklch(37% 0.022 268.4)",
+          "oklch(49% 0.022 268.4)",
+          "oklch(61% 0.022 268.4)",
+          "oklch(72% 0.020 268.4)",
+          "oklch(84% 0.011 268.4)",
+          "oklch(95% 0.004 268.4)"
+        ]
+      },
+      "field-line": {
+        "role": "primary",
+        "displayName": "Azul Eléctrico",
+        "canonical": "#8390ac",
+        "tonalRamp": [
+          "oklch(15% 0.115 265.5)",
+          "oklch(26% 0.200 265.5)",
+          "oklch(37% 0.231 265.5)",
+          "oklch(49% 0.231 265.5)",
+          "oklch(61% 0.231 265.5)",
+          "oklch(72% 0.215 265.5)",
+          "oklch(84% 0.123 265.5)",
+          "oklch(95% 0.038 265.5)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Solo el título del hero."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Títulos de sección, precios y confirmación del formulario."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nombres de módulos, servicios y planes; cierres de sección."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Descripción del hero."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texto corrido de lectura, 18 px."
+      },
+      "body-small": {
+        "displayName": "Body Small",
+        "purpose": "Navegación, pie, características y datos auxiliares."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Botones, etiquetas de campo y encabezados del pie."
+      }
+    },
+    "shadows": [
+      {
+        "name": "inner-line",
+        "value": "inset 0 0 0 1px #d5dbea",
+        "purpose": "Borde del botón silencioso; es un trazo, no una elevación. Sobre noche usa #27335f."
+      }
+    ],
+    "motion": [
+      {
+        "name": "color-change",
+        "value": "250ms ease-out",
+        "purpose": "Única transición de interfaz; solo color."
+      },
+      {
+        "name": "crystal-rotate",
+        "value": "OrbitControls autoRotateSpeed 1.0",
+        "purpose": "Giro continuo del cristal; se detiene con prefers-reduced-motion."
+      },
+      {
+        "name": "crystal-float",
+        "value": "sin(t * 0.55) * 0.07",
+        "purpose": "Flotación vertical mínima; se detiene con prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón primario",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Acción principal sobre superficies claras.",
+      "html": "<button class=\"ds-btn\">Empezar gratis</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:#2450e6;color:#fff}.ds-btn:hover{background:#1a3bb3}.ds-btn:focus-visible{outline:2px solid #2450e6;outline-offset:3px}.ds-btn:disabled{opacity:.6;cursor:not-allowed}"
+    },
+    {
+      "name": "Botón sobre noche",
+      "kind": "button",
+      "refersTo": "button-on-night",
+      "description": "Acción principal invertida sobre noche y en el plan destacado.",
+      "html": "<div class=\"ds-night-a\"><button class=\"ds-btn-night\">Empezar gratis</button></div>",
+      "css": ".ds-night-a{background:#071033;padding:2rem}.ds-btn-night{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:#fff;color:#071033}.ds-btn-night:hover{background:#dbe4ff}.ds-btn-night:focus-visible{outline:2px solid #fff;outline-offset:3px}"
+    },
+    {
+      "name": "Botón silencioso",
+      "kind": "button",
+      "refersTo": "button-quiet",
+      "description": "Acción secundaria con línea interna de 1 px.",
+      "html": "<button class=\"ds-btn-quiet\">Iniciar sesión</button>",
+      "css": ".ds-btn-quiet{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:transparent;color:#0a1330;box-shadow:inset 0 0 0 1px #d5dbea}.ds-btn-quiet:hover{background:#fff}.ds-btn-quiet:focus-visible{outline:2px solid #2450e6;outline-offset:3px}"
+    },
+    {
+      "name": "Botón silencioso sobre noche",
+      "kind": "button",
+      "refersTo": "button-quiet-on-night",
+      "description": "Acción secundaria del hero.",
+      "html": "<div class=\"ds-night-b\"><button class=\"ds-btn-quiet-night\">Necesito un desarrollo a medida</button></div>",
+      "css": ".ds-night-b{background:#071033;padding:2rem}.ds-btn-quiet-night{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:transparent;color:#fff;box-shadow:inset 0 0 0 1px #27335f}.ds-btn-quiet-night:hover{background:#121d4a}.ds-btn-quiet-night:focus-visible{outline:2px solid #fff;outline-offset:3px}"
+    },
+    {
+      "name": "Campo de texto",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Campo del formulario con etiqueta visible.",
+      "html": "<label class=\"ds-label\">Nombre<input class=\"ds-field\" placeholder=\"Tu nombre\"></label>",
+      "css": ".ds-label{display:block;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;color:#0a1330}.ds-field{display:block;width:100%;margin-top:.375rem;padding:.8rem 1rem;border:1px solid #d5dbea;border-radius:.875rem;background:#fff;color:#0a1330;font:400 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif}.ds-field::placeholder{color:#5b6684}.ds-field:focus{outline:2px solid #2450e6;outline-offset:0;border-color:transparent}"
+    },
+    {
+      "name": "Navegación flotante",
+      "kind": "nav",
+      "refersTo": "nav-floating",
+      "description": "Píldora blanca fija sobre toda la página.",
+      "html": "<nav class=\"ds-nav\"><strong class=\"ds-word\">CUARZO</strong><span class=\"ds-links\"><a href=\"#\">Servicios</a><a href=\"#\">Precios</a><a href=\"#\">Contacto</a></span></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:3.5rem;padding:0 1.25rem;border:1px solid #d5dbea;border-radius:2rem;background:#fff;color:#0a1330;font:400 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif}.ds-word{font:400 1.25rem/1.2 Jost,'Hanken Grotesk',sans-serif;letter-spacing:.12em}.ds-links{display:flex;gap:1.75rem}.ds-links a{color:inherit;text-decoration:none;transition:color 250ms ease-out}.ds-links a:hover{color:#2450e6}.ds-links a:focus-visible{outline:2px solid #2450e6;outline-offset:3px}"
+    },
+    {
+      "name": "Fila",
+      "kind": "custom",
+      "refersTo": "row",
+      "description": "Fila enlazada con línea de 1 px; reemplaza a las grillas de tarjetas.",
+      "html": "<a class=\"ds-row\" href=\"#\"><span class=\"ds-row-title\">Control de Stock</span><span class=\"ds-row-text\">Sabé qué tenés y qué falta.</span></a>",
+      "css": ".ds-row{display:grid;gap:.5rem;padding-block:1.75rem;border-block:1px solid #d5dbea;color:#0a1330;text-decoration:none}.ds-row-title{font:400 1.625rem/1.2 Jost,'Hanken Grotesk',sans-serif;letter-spacing:-.01em;transition:color 250ms ease-out}.ds-row-text{color:#434e6b;font:400 1.125rem/1.6 'Hanken Grotesk',system-ui,sans-serif}.ds-row:hover .ds-row-title{color:#2450e6}.ds-row:focus-visible{outline:2px solid #2450e6;outline-offset:3px}"
+    },
+    {
+      "name": "Panel de planes",
+      "kind": "card",
+      "refersTo": "plan-cell",
+      "description": "Un panel dividido por líneas de 1 px, con una celda destacada.",
+      "html": "<div class=\"ds-plans\"><div class=\"ds-plan\"><b>Free</b><span class=\"ds-price\">$0</span></div><div class=\"ds-plan ds-plan-featured\"><b>Pro</b><span class=\"ds-price\">$49</span></div></div>",
+      "css": ".ds-plans{display:grid;grid-template-columns:1fr 1fr;gap:1px;overflow:hidden;border:1px solid #d5dbea;border-radius:2rem;background:#d5dbea}.ds-plan{display:grid;gap:1.25rem;padding:1.75rem;background:#fff;color:#0a1330;font:400 1.625rem/1.2 Jost,'Hanken Grotesk',sans-serif}.ds-plan b{font-weight:400}.ds-price{font-size:clamp(2.25rem,4.2vw,3.5rem);font-weight:300;line-height:1.1;letter-spacing:-.02em}.ds-plan-featured{background:#2450e6;color:#fff}"
+    },
+    {
+      "name": "Órbita",
+      "kind": "custom",
+      "refersTo": "orbit",
+      "description": "El único ornamento de interfaz: un trazo de 1 px.",
+      "html": "<div class=\"ds-orbit-box\"><svg class=\"ds-orbit\" viewBox=\"0 0 540 540\" fill=\"none\" aria-hidden=\"true\"><ellipse cx=\"270\" cy=\"270\" rx=\"262\" ry=\"108\" transform=\"rotate(-18 270 270)\" stroke=\"currentColor\"/></svg></div>",
+      "css": ".ds-orbit-box{background:#071033;padding:1rem}.ds-orbit{display:block;width:16rem;margin:auto;color:#8fb2ff}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Una sola pieza en órbita",
+    "overview": "**Alcance:** este sistema gobierna únicamente la landing pública (`apps/web/app/(landing)/`). El panel de administración conserva su aspecto propio, con Inter y la escala navy de `apps/web/app/globals.css`; nada de este archivo se aplica a esa app ni reemplaza sus decisiones. Los tokens viven en la clase `.landing`, no en `:root`, justamente para no filtrarse.\n\nUn cristal de cuarzo en 3D gira sobre azul noche y todo lo demás se aparta: mucho aire, poco color y lectura cómoda antes que efecto. El neofuturismo acá es de geometría (curvas amplias, cápsulas, líneas de un píxel, una órbita finísima), no de luces. La página alterna bloques noche y claros, y esa alternancia es toda su profundidad.\n\nEl mundo nació de rechazar una pared de vidrio difícil de leer: la materia cristalina queda confinada a una sola pieza y las superficies de interfaz son opacas y planas. La densidad es baja, con una idea por sección y listas resueltas en filas separadas por líneas en lugar de tarjetas.",
+    "keyCharacteristics": [
+      "Azul como único color, sobre azul noche y blanco porcelana.",
+      "Títulos en Jost liviana, en mayúsculas y minúsculas; texto en Hanken Grotesk de 18 px.",
+      "Un cristal 3D y una órbita fina como únicos ornamentos.",
+      "Curvas amplias en los bloques, cápsulas en las acciones, líneas de 1 px.",
+      "Superficies opacas y planas, sin sombras."
+    ],
+    "rules": [
+      {
+        "name": "La Regla del Único Color",
+        "body": "No existe otro tono fuera de la familia azul, ni siquiera para estados: el error del formulario se comunica en Tinta y peso 600, sin rojo. La refracción propia del cristal queda exenta.",
+        "section": "colors"
+      },
+      {
+        "name": "La Regla de la Acción Invertida",
+        "body": "La acción principal es azul sobre claro y blanca sobre noche o sobre el plan destacado. Una isla clara dentro de noche vuelve a azul.",
+        "section": "colors"
+      },
+      {
+        "name": "La Regla del Peso Liviano",
+        "body": "A tamaño de título, Jost va a 300 y con escritura normal, nunca en mayúsculas sostenidas. La única palabra en mayúsculas es el logotipo CUARZO, con 0.12em de tracking.",
+        "section": "typography"
+      },
+      {
+        "name": "La Regla de los 18",
+        "body": "El texto de lectura no baja de 18 px; 16 px queda para datos auxiliares y controles.",
+        "section": "typography"
+      },
+      {
+        "name": "La Regla de la Interfaz Opaca",
+        "body": "Ninguna superficie de interfaz usa sombra difusa ni `backdrop-filter`. La transparencia y el brillo pertenecen solo al cristal.",
+        "section": "elevation"
+      },
+      {
+        "name": "La Regla del Píxel",
+        "body": "Todo trazo mide 1 px: divisores, bordes y órbita. Las listas se separan con líneas, no con cajas.",
+        "section": "shapes"
+      },
+      {
+        "name": "La Regla de la Pieza Única",
+        "body": "Hay un solo cristal 3D por página, en el hero. Más adelante puede regresar solo la órbita, como trazo de 1 px, nunca el cristal.",
+        "section": "components"
+      }
+    ],
+    "dos": [
+      "Do alternar bloques noche y claros para crear ritmo y profundidad.",
+      "Do resolver listas con filas y líneas de 1 px, y reservar el panel dividido para comparar planes.",
+      "Do mantener una acción principal clara por bloque, siguiendo La Regla de la Acción Invertida.",
+      "Do limitar las transiciones al color, en 250ms ease-out.",
+      "Do detener todo movimiento del cristal con `prefers-reduced-motion`.",
+      "Do dar al lienzo 3D el mismo Azul Noche del bloque que lo contiene.",
+      "Do usar íconos de línea en SVG, a 16 px junto al texto."
+    ],
+    "donts": [
+      "Don't aplicar este sistema al panel de administración ni llevar sus tokens a `:root`.",
+      "Don't usar neón, resplandores, gradientes decorativos ni texturas en la interfaz; los brillos del cristal son su materia y quedan exentos.",
+      "Don't usar paneles de vidrio ni `backdrop-filter`: el vidrio de esta landing es solo el cristal.",
+      "Don't repetir grillas de tarjetas sueltas.",
+      "Don't introducir otro color, ni siquiera rojo o verde para estados.",
+      "Don't agregar sombras difusas ni animaciones de elevación.",
+      "Don't colocar el cristal 3D más de una vez por página.",
+      "Don't escribir títulos en mayúsculas sostenidas ni bajar el texto de lectura de 18 px."
+    ]
+  }
+}

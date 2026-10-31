@@ -22,6 +22,7 @@ import {
   sendPasswordReset,
   sendEmailVerification,
   sendLowStockAlert,
+  sendContactMessage,
 } from "@/lib/integrations/email";
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -378,5 +379,27 @@ describe("sendLowStockAlert", () => {
     await sendLowStockAlert({ to: "x@y.com", tenantName: "T", products: PRODUCTS });
     const subject = sendMock.mock.calls[0][0].subject as string;
     expect(subject).toContain("2");
+  });
+});
+
+describe("sendContactMessage", () => {
+  const MESSAGE = { name: "Ana", email: "ana@example.com", message: "<script>x</script>" };
+
+  beforeEach(() => {
+    process.env.RESEND_API_KEY = "test-key";
+    sendMock.mockClear();
+    sendMock.mockResolvedValue({ data: { id: "e1" }, error: null });
+  });
+
+  it("escapes visitor text in the HTML", async () => {
+    await sendContactMessage(MESSAGE);
+    const { html } = sendMock.mock.calls[0][0];
+    expect(html).toContain("&lt;script&gt;");
+    expect(html).not.toContain("<script>x");
+  });
+
+  it("returns false when the provider reports an error", async () => {
+    sendMock.mockResolvedValue({ data: null, error: { message: "no" } });
+    await expect(sendContactMessage(MESSAGE)).resolves.toBe(false);
   });
 });

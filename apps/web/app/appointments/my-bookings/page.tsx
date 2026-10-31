@@ -40,7 +40,7 @@ export default function MisReservasPage() {
   const locale = useLocale();
   const tc     = t.turnera.check;
 
-  const [email,    setEmail]    = useState("");
+  const [code,     setCode]     = useState("");
   const [bookings, setBookings] = useState<Booking[] | null>(null);
   const [loading,  setLoading]  = useState(false);
   const [searched, setSearched] = useState(false);
@@ -48,15 +48,15 @@ export default function MisReservasPage() {
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim()) return;
+    if (!code.trim()) return;
     setLoading(true);
     setError(null);
     setSearched(false);
     try {
-      const res = await fetch(`/api/appointments/bookings?email=${encodeURIComponent(email.trim())}`);
-      if (!res.ok) throw new Error(tc.networkError);
-      const { bookings: list } = await res.json();
-      setBookings(list ?? []);
+      const res = await fetch(`/api/appointments/bookings?code=${encodeURIComponent(code.trim())}`);
+      if (!res.ok && res.status !== 404 && res.status !== 400) throw new Error(tc.networkError);
+      const { booking } = await res.json();
+      setBookings(booking ? [booking] : []);
       setSearched(true);
     } catch {
       setError(tc.networkError);
@@ -81,10 +81,10 @@ export default function MisReservasPage() {
 
       <form onSubmit={handleSearch} className="flex gap-2 mb-8">
         <input
-          type="email"
+          type="text"
           required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
           placeholder={tc.emailPlaceholder}
           className="flex-1 px-4 py-3 rounded-xl border border-gray-200 text-sm text-navy-900 placeholder:text-gray-300 focus:outline-none focus:border-navy-600 focus:ring-2 focus:ring-navy-600/10 transition-all"
         />

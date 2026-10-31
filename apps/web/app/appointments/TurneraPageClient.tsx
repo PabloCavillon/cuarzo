@@ -3,7 +3,7 @@
 import BookingWizard from "../components/appointments/BookingWizard";
 import { useT } from "@/lib/i18n/provider";
 
-export default function TurneraPageClient() {
+export default function TurneraPageClient({ slug }: { slug?: string }) {
   const t = useT();
 
   return (
@@ -14,7 +14,7 @@ export default function TurneraPageClient() {
         </h1>
         <p className="text-gray-400 text-sm mt-1.5">{t.turnera.page.description}</p>
       </div>
-      <BookingWizard />
+      <BookingWizard slug={slug} />
     </div>
   );
 }

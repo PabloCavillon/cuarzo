@@ -19,13 +19,20 @@ const prismaMock = vi.hoisted(() => ({
   ),
 }));
 
-vi.mock("@/auth",             () => ({ auth: authMock }));
-vi.mock("@/lib/prisma",       () => ({ prisma: prismaMock }));
-vi.mock("@/lib/plan-limits",    () => ({
+vi.mock("@/lib/auth/session", () => ({
+  requireAuth: async () => {
+    const session = await authMock();
+    if (!session?.user?.tenantId) throw Object.assign(new Error("No autorizado."), { status: 401 });
+    return session.user;
+  },
+  apiError: (e: { status: number }) => new Response("{}", { status: e.status }),
+}));
+vi.mock("@/lib/db/prisma",       () => ({ prisma: prismaMock }));
+vi.mock("@/lib/utils/plan-limits",    () => ({
   FREE_MODULE_INFO: { turnera: {}, catalog: {} },
   FREE_MODULE_MAX:  2,
 }));
-vi.mock("@/lib/module-catalog", () => ({
+vi.mock("@/lib/utils/module-catalog", () => ({
   FREE_MODULE_INFO: { turnera: {}, catalog: {} },
   FREE_MODULE_MAX:  2,
 }));

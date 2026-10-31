@@ -15,8 +15,8 @@ const emailMock = vi.hoisted(() => ({
 }));
 
 vi.mock("@/auth",       () => ({ auth: authMock }));
-vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }));
-vi.mock("@/lib/email",  () => emailMock);
+vi.mock("@/lib/db/prisma", () => ({ prisma: prismaMock }));
+vi.mock("@/lib/integrations/email",  () => emailMock);
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 

@@ -6,6 +6,12 @@ import pg from "pg";
 config();
 
 // Set SKIP_MIGRATE=1 to skip DB migration (e.g. local builds without a running DB).
+// Previews must not change the schema of a shared database.
+if (process.env.VERCEL_ENV === "preview") {
+  console.log("Vercel preview — skipping database migration.");
+  process.exit(0);
+}
+
 if (process.env.SKIP_MIGRATE === "1") {
   console.log("SKIP_MIGRATE=1 — skipping database migration.");
   process.exit(0);

@@ -2,6 +2,7 @@ import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import { randomBytes } from "crypto";
 import { prisma } from "@/lib/db/prisma";
 import { authConfig } from "./auth.config";
 
@@ -59,18 +60,23 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const existing = await prisma.user.findFirst({ where: { email } });
 
         if (!existing) {
-          const tenant = await prisma.tenant.findUnique({ where: { slug: "demo" } });
-          if (!tenant) return false;
-
-          await prisma.user.create({
+          // A new Google account owns a new business, same as /api/auth/register.
+          const name = user.name ?? email.split("@")[0];
+          await prisma.tenant.create({
             data: {
-              tenantId:      tenant.id,
-              email,
-              name:          user.name  ?? email.split("@")[0],
-              role:          "staff",
-              image:         user.image ?? null,
-              googleId:      account.providerAccountId,
-              emailVerified: new Date(),
+              name,
+              slug: `g-${randomBytes(6).toString("hex")}`,
+              plan: "free",
+              users: {
+                create: {
+                  email,
+                  name,
+                  role:          "owner",
+                  image:         user.image ?? null,
+                  googleId:      account.providerAccountId,
+                  emailVerified: new Date(),
+                },
+              },
             },
           });
         } else {
@@ -79,7 +85,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           if (!existing.googleId) {
             await prisma.user.update({
               where: { id: existing.id },
-              data:  { googleId: account.providerAccountId, image: user.image ?? undefined },
+              data: {
+                googleId: account.providerAccountId,
+                image:    user.image ?? undefined,
+                // Google proved the mailbox: a password set before verification may be someone else's.
+                ...(existing.emailVerified ? {} : { password: null, emailVerified: new Date() }),
+              },
             });
           }
         }
@@ -96,12 +107,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (email) {
           const dbUser = await prisma.user.findFirst({
             where:  { email },
-            select: { id: true, role: true, tenantId: true },
+            select: { id: true, role: true, tenantId: true, sessionVersion: true },
           });
           if (dbUser) {
             token.userId   = dbUser.id;
             token.role     = dbUser.role;
             token.tenantId = dbUser.tenantId;
+            token.sessionVersion = dbUser.sessionVersion;
           }
         }
       }
@@ -113,6 +125,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       session.user.id       = (token.userId   as string) ?? "";
       session.user.role     = (token.role     as string) ?? "staff";
       session.user.tenantId = (token.tenantId as string) ?? "";
+      session.user.sessionVersion = Number(token.sessionVersion ?? 0);
       return session;
     },
   },

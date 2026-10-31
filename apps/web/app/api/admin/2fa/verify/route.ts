@@ -1,18 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAuth, apiError } from "@/lib/auth/session";
+import { requireAuth, apiError, signProof, TWO_FA_COOKIE } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { verifyTotp } from "@/lib/auth/totp";
 
 export async function POST(req: NextRequest) {
   let user;
-  try { user = await requireAuth(); } catch (e) { return apiError(e); }
+  try { user = await requireAuth(undefined, { pending: true }); } catch (e) { return apiError(e); }
 
   const { code } = await req.json().catch(() => ({})) as { code?: string };
   if (!code?.trim()) return NextResponse.json({ error: "Código requerido." }, { status: 400 });
 
   const dbUser = await prisma.user.findUnique({
     where:  { id: user.id },
-    select: { totpEnabled: true, twoFaMethod: true, totpSecret: true, emailOtpCode: true, emailOtpExpiry: true },
+    select: { totpEnabled: true, twoFaMethod: true, totpSecret: true, emailOtpCode: true, emailOtpExpiry: true, otpAttempts: true },
   });
 
   if (!dbUser?.totpEnabled) {
@@ -26,18 +26,19 @@ export async function POST(req: NextRequest) {
   } else if (dbUser.twoFaMethod === "email") {
     const expired = !dbUser.emailOtpExpiry || dbUser.emailOtpExpiry < new Date();
     valid = !expired && dbUser.emailOtpCode === code.trim();
-    if (valid) {
-      await prisma.user.update({
-        where: { id: user.id },
-        data:  { emailOtpCode: null, emailOtpExpiry: null },
-      });
-    }
+    const burned = !valid && dbUser.otpAttempts >= 4;
+    await prisma.user.update({
+      where: { id: user.id },
+      data:  valid || burned
+        ? { emailOtpCode: null, emailOtpExpiry: null, otpAttempts: 0 }
+        : { otpAttempts: { increment: 1 } },
+    });
   }
 
   if (!valid) return NextResponse.json({ error: "Código incorrecto o expirado." }, { status: 401 });
 
   const res = NextResponse.json({ ok: true });
-  res.cookies.set("x-2fa-auth", user.id, {
+  res.cookies.set(TWO_FA_COOKIE, signProof("2fa", user.id, user.sessionVersion), {
     httpOnly: true,
     secure:   process.env.NODE_ENV === "production",
     sameSite: "strict",

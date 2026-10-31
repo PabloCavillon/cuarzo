@@ -14,8 +14,8 @@ const prismaMock = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@/lib/session", () => sessionMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/auth/session", () => sessionMock);
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -69,7 +69,7 @@ describe("createMovimiento", () => {
   it("returns error for invalid tipo", async () => {
     const fd = makeFormData({ tipo: "otro", monto: "100", descripcion: "Test" });
     const result = await createMovimiento(fd);
-    expect(result).toEqual({ ok: false, error: "Tipo inválido" });
+    expect(result).toEqual({ ok: false, error: "Invalid type" });
     expect(prismaMock.cajaMovimiento.create).not.toHaveBeenCalled();
   });
 
@@ -88,7 +88,7 @@ describe("createMovimiento", () => {
   it("returns error when descripcion is missing", async () => {
     const fd = makeFormData({ tipo: "ingreso", monto: "100", descripcion: "" });
     const result = await createMovimiento(fd);
-    expect(result).toEqual({ ok: false, error: "Descripción requerida" });
+    expect(result).toEqual({ ok: false, error: "Description required" });
   });
 
   it("defaults metodoPago to 'efectivo' when not provided", async () => {
@@ -113,10 +113,10 @@ describe("createMovimiento", () => {
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(new Error("No autorizado."));
+    sessionMock.requireAuth.mockRejectedValue(new Error("Unauthorized."));
     const fd = makeFormData({ tipo: "ingreso", monto: "100", descripcion: "Test" });
     const result = await createMovimiento(fd);
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 });
 
@@ -169,7 +169,7 @@ describe("updateMovimiento", () => {
     prismaMock.cajaMovimiento.findUnique.mockResolvedValue(EXISTING);
     const fd = makeFormData({ tipo: "invalido", monto: "100", descripcion: "T" });
     const result = await updateMovimiento("m1", fd);
-    expect(result).toEqual({ ok: false, error: "Tipo inválido" });
+    expect(result).toEqual({ ok: false, error: "Invalid type" });
   });
 });
 
@@ -203,9 +203,9 @@ describe("deleteMovimiento", () => {
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(new Error("No autorizado."));
+    sessionMock.requireAuth.mockRejectedValue(new Error("Unauthorized."));
     const result = await deleteMovimiento("m1");
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 
   it("propagates Prisma delete errors", async () => {

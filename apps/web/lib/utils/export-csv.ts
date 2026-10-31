@@ -4,7 +4,9 @@ export function toCSV(rows: Record<string, unknown>[], columns?: string[]): stri
   const keys = columns ?? Object.keys(rows[0]);
 
   const escape = (v: unknown): string => {
-    const s = v == null ? "" : String(v);
+    const raw = v == null ? "" : String(v);
+    // Spreadsheets run cells starting with these as formulas; visitors control some fields.
+    const s = /^[=+\-@\t\r]/.test(raw) && typeof v !== "number" ? `'${raw}` : raw;
     return s.includes(",") || s.includes('"') || s.includes("\n")
       ? `"${s.replace(/"/g, '""')}"`
       : s;

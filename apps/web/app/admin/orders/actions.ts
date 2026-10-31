@@ -105,65 +105,69 @@ export async function updateOrderStatus(id: string, status: string): Promise<Act
       return { ok: false, error: `No se puede cambiar de ${order.status} a ${status}` };
     }
 
-    await prisma.order.update({ where: { id }, data: { status: status as never } });
+    await prisma.$transaction(async (tx) => {
+      // Guarded on the old status so two clicks cannot apply the stock change twice.
+      const moved = await tx.order.updateMany({
+        where: { id, status: order.status },
+        data:  { status: status as never },
+      });
+      if (moved.count === 0) throw new Error("El pedido cambió de estado. Recargá la página.");
 
-    // On confirm → create stock movements (sale) — single transaction, no N+1
-    if (status === "confirmed") {
-      const [items, warehouses] = await Promise.all([
-        prisma.orderItem.findMany({ where: { orderId: id } }),
-        prisma.stockWarehouse.findMany({
-          where: { tenantId: tid, active: true },
-          take: 1,
-          orderBy: { name: "asc" },
-        }),
-      ]);
-      const warehouseId = warehouses[0]?.id;
+      if (status === "confirmed") {
+        const [items, warehouse] = await Promise.all([
+          tx.orderItem.findMany({ where: { orderId: id } }),
+          tx.stockWarehouse.findFirst({ where: { tenantId: tid, active: true }, orderBy: { name: "asc" } }),
+        ]);
+        if (!warehouse) return;
 
-      if (warehouseId && items.length) {
-        // Batch-load all relevant stock items in one query
-        const stockItems = await prisma.stockItem.findMany({
-          where: {
-            warehouseId,
-            OR: items.map((it) => ({
-              productId: it.productId,
-              variantId: it.variantId ?? null,
-            })),
-          },
-        });
-        const stockMap = new Map(
-          stockItems.map((s) => [`${s.productId}:${s.variantId ?? ""}`, s])
-        );
-
-        // One atomic transaction for all movements + stock updates
-        await prisma.$transaction(
-          items.flatMap((item) => {
-            const key     = `${item.productId}:${item.variantId ?? ""}`;
-            const current = stockMap.get(key);
-            const newQty  = Math.max(0, (current?.qty ?? 0) - item.qty);
-
-            return [
-              prisma.stockMovement.create({
-                data: {
-                  tenantId:      tid,
-                  productId:     item.productId,
-                  variantId:     item.variantId,
-                  warehouseId,
-                  delta:         -item.qty,
-                  reason:        "sale",
-                  referenceId:   id,
-                  referenceType: "order",
-                },
-              }),
-              current
-                ? prisma.stockItem.update({ where: { id: current.id }, data: { qty: newQty } })
-                : prisma.stockItem.create({
-                    data: { tenantId: tid, productId: item.productId, variantId: item.variantId, warehouseId, qty: 0 },
-                  }),
-            ];
-          })
-        );
+        for (const item of items) {
+          const where = { warehouseId: warehouse.id, productId: item.productId, variantId: item.variantId ?? null };
+          const stock = await tx.stockItem.findFirst({ where });
+          // Only what really left the shelf, so a cancel gives back the same amount.
+          const taken = Math.min(stock?.qty ?? 0, item.qty);
+          if (stock && taken > 0) {
+            await tx.stockItem.update({ where: { id: stock.id }, data: { qty: { decrement: taken } } });
+          }
+          await tx.stockMovement.create({
+            data: {
+              tenantId:      tid,
+              productId:     item.productId,
+              variantId:     item.variantId,
+              warehouseId:   warehouse.id,
+              delta:         -taken,
+              reason:        "sale",
+              referenceId:   id,
+              referenceType: "order",
+            },
+          });
+        }
       }
-    }
+
+      if (status === "cancelled") {
+        const sold = await tx.stockMovement.findMany({
+          where: { tenantId: tid, referenceId: id, referenceType: "order", reason: "sale" },
+        });
+        for (const m of sold) {
+          if (m.delta === 0) continue;
+          await tx.stockItem.updateMany({
+            where: { warehouseId: m.warehouseId, productId: m.productId, variantId: m.variantId ?? null },
+            data:  { qty: { increment: -m.delta } },
+          });
+          await tx.stockMovement.create({
+            data: {
+              tenantId:      tid,
+              productId:     m.productId,
+              variantId:     m.variantId,
+              warehouseId:   m.warehouseId,
+              delta:         -m.delta,
+              reason:        "adjustment",
+              referenceId:   id,
+              referenceType: "order",
+            },
+          });
+        }
+      }
+    });
 
     revalidatePath("/admin/orders");
     revalidatePath(`/admin/orders/${id}`);

@@ -9,7 +9,7 @@ const prismaMock = vi.hoisted(() => ({
 }));
 
 vi.mock("@/auth",        () => authMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports (after mocks) ─────────────────────────────────────────────────────
 
@@ -25,7 +25,7 @@ function mockSession(userId: string | null) {
 
 function mockDbUser(user: ReturnType<typeof makeAuthUser> | null) {
   prismaMock.user.findUnique.mockResolvedValue(
-    user ? { ...user, active: true } : null,
+    user ? { ...user, active: true, emailVerified: new Date(), totpEnabled: false, sessionVersion: 0 } : null,
   );
 }
 
@@ -141,5 +141,35 @@ describe("apiError", () => {
     const err = Object.assign(new Error("Acceso denegado."), { status: 403 });
     const res = apiError(err);
     expect(res.status).toBe(403);
+  });
+});
+
+describe("requireAuth second steps", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+    mockSession("user-1");
+  });
+
+  const dbUser = (extra: object) =>
+    prismaMock.user.findUnique.mockResolvedValue({ ...makeAuthUser(), active: true, emailVerified: new Date(), totpEnabled: false, sessionVersion: 0, ...extra });
+
+  it("rejects an unverified email", async () => {
+    dbUser({ emailVerified: null });
+    await expect(requireAuth()).rejects.toMatchObject({ status: 403 });
+  });
+
+  it("rejects 2FA users without a signed cookie", async () => {
+    dbUser({ totpEnabled: true });
+    await expect(requireAuth()).rejects.toMatchObject({ status: 403 });
+  });
+
+  it("lets the login-finishing screens through", async () => {
+    dbUser({ totpEnabled: true, emailVerified: null });
+    await expect(requireAuth(undefined, { pending: true })).resolves.toMatchObject({ id: "user-1" });
+  });
+
+  it("rejects a token issued before a password reset", async () => {
+    dbUser({ sessionVersion: 1 });
+    await expect(requireAuth()).rejects.toMatchObject({ status: 401 });
   });
 });

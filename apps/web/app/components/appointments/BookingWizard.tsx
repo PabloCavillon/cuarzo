@@ -138,7 +138,7 @@ function downloadICS(booking: BookingResult, calendarLabel: string) {
     `DTSTART:${dtStart}`,
     `DTEND:${dtEnd}`,
     `SUMMARY:${booking.serviceName} — CUARZO`,
-    `DESCRIPTION:${calendarLabel}\\: ${booking.code}\\nContacto\\: hola@cuarzo.com`,
+    `DESCRIPTION:${calendarLabel}\\: ${booking.code}\\nContacto\\: dev@cuarzostudio.com`,
     "END:VEVENT",
     "END:VCALENDAR",
   ].join("\r\n");
@@ -540,7 +540,7 @@ const slideVariants = {
   exit:   { opacity: 0, x: -20 },
 };
 
-export default function BookingWizard() {
+export default function BookingWizard({ slug }: { slug?: string }) {
   const t = useT();
 
   const [services,    setServices]    = useState<Service[]>([]);
@@ -557,7 +557,7 @@ export default function BookingWizard() {
   const [apiError,   setApiError]   = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/appointments/services")
+    fetch(`/api/appointments/services${slug ? `?slug=${encodeURIComponent(slug)}` : ""}`)
       .then((r) => {
         if (!r.ok) throw new Error(t.turnera.wizard.errors.loadFail);
         return r.json();
@@ -590,6 +590,7 @@ export default function BookingWizard() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          slug,
           serviceId: service.id,
           date: toDateStr(date),
           time,

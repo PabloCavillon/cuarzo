@@ -41,7 +41,7 @@ export default async function BillingSettingsPage() {
               puntoVenta:   config.puntoVenta,
               production:   config.production,
               afipCert:     config.afipCert,
-              afipKey:      config.afipKey,
+              hasKey:       !!config.afipKey,
             }
           : null}
       />

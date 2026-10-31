@@ -12,8 +12,8 @@ const prismaMock = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@/lib/session", () => sessionMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/auth/session", () => sessionMock);
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -59,9 +59,9 @@ describe("confirmBooking", () => {
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(new Error("No autorizado."));
+    sessionMock.requireAuth.mockRejectedValue(new Error("Unauthorized."));
     const result = await confirmBooking("b1");
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 });
 
@@ -128,8 +128,8 @@ describe("markNoShow", () => {
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(new Error("No autorizado."));
+    sessionMock.requireAuth.mockRejectedValue(new Error("Unauthorized."));
     const result = await markNoShow("b1");
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 });

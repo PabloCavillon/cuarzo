@@ -1,11 +1,34 @@
 import "server-only";
 import { auth } from "@/auth";
 import { cookies } from "next/headers";
+import { createHmac, timingSafeEqual } from "crypto";
 import { prisma } from "@/lib/db/prisma";
 
 export type UserRole = "owner" | "admin" | "staff";
 
 export const VIEW_TENANT_COOKIE = "x-cuarzo-view-tenant";
+export const TWO_FA_COOKIE      = "x-2fa-auth";
+export const SUPER_ADMIN_COOKIE = "sa-pin";
+
+// Cookie value proving a second factor was passed. Signed so it cannot be
+// forged from the user id, and bound to sessionVersion so it dies on password reset.
+export function signProof(kind: "2fa" | "super-admin", userId: string, sessionVersion: number): string {
+  const secret = process.env.AUTH_SECRET ?? process.env.NEXTAUTH_SECRET;
+  if (!secret) throw new Error("AUTH_SECRET not configured");
+  return createHmac("sha256", secret).update(`${kind}:${userId}:${sessionVersion}`).digest("hex");
+}
+
+export function hasValidProof(
+  value: string | undefined,
+  kind: "2fa" | "super-admin",
+  userId: string,
+  sessionVersion: number,
+): boolean {
+  if (!value) return false;
+  const expected = Buffer.from(signProof(kind, userId, sessionVersion));
+  const actual   = Buffer.from(value);
+  return actual.length === expected.length && timingSafeEqual(actual, expected);
+}
 
 export interface AuthUser {
   id:            string;
@@ -15,6 +38,7 @@ export interface AuthUser {
   tenantId:      string;  // effective tenant (may differ from real tenant for super admins)
   realTenantId:  string;  // the user's own tenant
   superAdmin:    boolean;
+  sessionVersion: number;
 }
 
 const ROLE_WEIGHT: Record<UserRole, number> = { owner: 3, admin: 2, staff: 1 };
@@ -32,7 +56,8 @@ const ROLE_WEIGHT: Record<UserRole, number> = { owner: 3, admin: 2, staff: 1 };
 // Throws an Error with a `status` property on failure so callers can:
 //   catch (e) { return apiError(e) }
 
-export async function requireAuth(minRole?: UserRole): Promise<AuthUser> {
+// pending: true is only for the screens that finish a login (2FA, email check).
+export async function requireAuth(minRole?: UserRole, opts: { pending?: boolean } = {}): Promise<AuthUser> {
   const session = await auth();
   const userId  = session?.user?.id;
 
@@ -43,11 +68,28 @@ export async function requireAuth(minRole?: UserRole): Promise<AuthUser> {
   // Always verify against DB — JWT alone is not enough for revocation
   const user = await prisma.user.findUnique({
     where:  { id: userId },
-    select: { id: true, email: true, name: true, role: true, tenantId: true, active: true, superAdmin: true },
+    select: {
+      id: true, email: true, name: true, role: true, tenantId: true, active: true, superAdmin: true,
+      emailVerified: true, totpEnabled: true, sessionVersion: true,
+    },
   });
 
   if (!user || !user.active) {
     throw authError(401, "No autorizado.");
+  }
+
+  const sessionVersion = user.sessionVersion ?? 0;
+  if ((session?.user?.sessionVersion ?? 0) !== sessionVersion) {
+    throw authError(401, "No autorizado.");
+  }
+
+  const jar = await cookies();
+
+  if (!opts.pending) {
+    if (!user.emailVerified) throw authError(403, "Verificá tu email.");
+    if (user.totpEnabled && !hasValidProof(jar.get(TWO_FA_COOKIE)?.value, "2fa", user.id, sessionVersion)) {
+      throw authError(403, "Verificación en dos pasos requerida.");
+    }
   }
 
   if (minRole !== undefined) {
@@ -61,8 +103,7 @@ export async function requireAuth(minRole?: UserRole): Promise<AuthUser> {
 
   // Resolve effective tenantId — super admins can view any tenant
   let effectiveTenantId = user.tenantId;
-  if (user.superAdmin) {
-    const jar      = await cookies();
+  if (user.superAdmin && hasValidProof(jar.get(SUPER_ADMIN_COOKIE)?.value, "super-admin", user.id, sessionVersion)) {
     const viewSlug = jar.get(VIEW_TENANT_COOKIE)?.value;
     if (viewSlug) {
       const viewTenant = await prisma.tenant.findUnique({
@@ -81,15 +122,22 @@ export async function requireAuth(minRole?: UserRole): Promise<AuthUser> {
     tenantId:     effectiveTenantId,
     realTenantId: user.tenantId,
     superAdmin:   user.superAdmin,
+    sessionVersion,
   };
 }
 
 // ─── requireSuperAdmin ───────────────────────────────────────────────────────
 
-export async function requireSuperAdmin(): Promise<AuthUser> {
-  const user = await requireAuth();
+export async function requireSuperAdmin(opts: { pending?: boolean } = {}): Promise<AuthUser> {
+  const user = await requireAuth(undefined, opts);
   if (!user.superAdmin) {
     throw authError(403, "Acceso denegado.");
+  }
+  if (!opts.pending) {
+    const jar = await cookies();
+    if (!hasValidProof(jar.get(SUPER_ADMIN_COOKIE)?.value, "super-admin", user.id, user.sessionVersion)) {
+      throw authError(403, "Código de super admin requerido.");
+    }
   }
   return user;
 }

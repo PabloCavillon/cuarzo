@@ -32,7 +32,7 @@ export async function POST(req: NextRequest, { params }: Ctx) {
 
   await prisma.user.update({
     where: { id: userId },
-    data:  { password: hashed },
+    data:  { password: hashed, sessionVersion: { increment: 1 } },
   });
 
   return NextResponse.json({ ok: true, tempPassword });

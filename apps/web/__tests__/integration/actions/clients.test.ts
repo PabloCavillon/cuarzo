@@ -15,8 +15,8 @@ const prismaMock = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@/lib/session", () => sessionMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/auth/session", () => sessionMock);
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -52,15 +52,15 @@ describe("createClient", () => {
   it("returns error when name is missing", async () => {
     const fd = makeFormData({ name: "", email: "ana@example.com" });
     const result = await createClient(fd);
-    expect(result).toEqual({ ok: false, error: "El nombre es requerido." });
+    expect(result).toEqual({ ok: false, error: "Name is required." });
     expect(prismaMock.client.create).not.toHaveBeenCalled();
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(Object.assign(new Error("No autorizado."), { status: 401 }));
+    sessionMock.requireAuth.mockRejectedValue(Object.assign(new Error("Unauthorized."), { status: 401 }));
     const fd = makeFormData({ name: "Ana" });
     const result = await createClient(fd);
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 
   it("returns empty fields as null (optional fields)", async () => {
@@ -105,21 +105,21 @@ describe("updateClient", () => {
     prismaMock.client.findUnique.mockResolvedValue(null);
     const fd = makeFormData({ name: "X" });
     const result = await updateClient("missing", fd);
-    expect(result).toEqual({ ok: false, error: "Cliente no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Customer not found." });
   });
 
   it("returns error when client belongs to a different tenant", async () => {
     prismaMock.client.findUnique.mockResolvedValue({ id: "c1", tenantId: "other-tenant" });
     const fd = makeFormData({ name: "X" });
     const result = await updateClient("c1", fd);
-    expect(result).toEqual({ ok: false, error: "Cliente no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Customer not found." });
   });
 
   it("returns error when name is empty", async () => {
     prismaMock.client.findUnique.mockResolvedValue(EXISTING);
     const fd = makeFormData({ name: "" });
     const result = await updateClient("c1", fd);
-    expect(result).toEqual({ ok: false, error: "El nombre es requerido." });
+    expect(result).toEqual({ ok: false, error: "Name is required." });
   });
 
   it("trims whitespace from name and other fields", async () => {
@@ -165,18 +165,18 @@ describe("toggleClient", () => {
   it("returns error when client is not found", async () => {
     prismaMock.client.findUnique.mockResolvedValue(null);
     const result = await toggleClient("missing", false);
-    expect(result).toEqual({ ok: false, error: "Cliente no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Customer not found." });
   });
 
   it("returns error when client belongs to a different tenant", async () => {
     prismaMock.client.findUnique.mockResolvedValue({ id: "c1", tenantId: "other" });
     const result = await toggleClient("c1", false);
-    expect(result).toEqual({ ok: false, error: "Cliente no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Customer not found." });
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(new Error("No autorizado."));
+    sessionMock.requireAuth.mockRejectedValue(new Error("Unauthorized."));
     const result = await toggleClient("c1", false);
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 });

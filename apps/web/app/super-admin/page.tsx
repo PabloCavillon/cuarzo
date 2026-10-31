@@ -1,20 +1,20 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { requireSuperAdmin, apiError } from "@/lib/auth/session";
+import { requireSuperAdmin, apiError, hasValidProof, SUPER_ADMIN_COOKIE } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { SuperPanel } from "./SuperPanel";
 
 export default async function SuperAdminPage() {
   let user;
   try {
-    user = await requireSuperAdmin();
+    user = await requireSuperAdmin({ pending: true });
   } catch (e) {
     void apiError(e);
     redirect("/login");
   }
 
   const jar = await cookies();
-  if (!jar.get("sa-pin")?.value) {
+  if (!hasValidProof(jar.get(SUPER_ADMIN_COOKIE)?.value, "super-admin", user.id, user.sessionVersion)) {
     redirect("/super-admin/login");
   }
 

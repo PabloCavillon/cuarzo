@@ -1,14 +1,15 @@
-"use server";
-
+import "server-only";
 import forge from "node-forge";
 import { prisma } from "@/lib/db/prisma";
+import { decryptAfipKey } from "./key-crypto";
 
 const WSAA_PROD = "https://wsaa.afip.gov.ar/ws/services/LoginCms";
 const WSAA_TEST = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms";
 const SERVICE   = "wsfe";
 
 function buildLoginTicketRequest(ttlSeconds = 36000): string {
-  const now        = new Date();
+  // Slightly in the past: WSAA rejects a generationTime ahead of its clock.
+  const now        = new Date(Date.now() - 10 * 60 * 1000);
   const expiration = new Date(now.getTime() + ttlSeconds * 1000);
   const uniqueId   = Math.floor(Math.random() * 2_147_483_647);
 
@@ -16,8 +17,8 @@ function buildLoginTicketRequest(ttlSeconds = 36000): string {
 <loginTicketRequest version="1.0">
   <header>
     <uniqueId>${uniqueId}</uniqueId>
-    <generationTime>${now.toISOString().replace("Z", "-03:00")}</generationTime>
-    <expirationTime>${expiration.toISOString().replace("Z", "-03:00")}</expirationTime>
+    <generationTime>${now.toISOString()}</generationTime>
+    <expirationTime>${expiration.toISOString()}</expirationTime>
   </header>
   <service>${SERVICE}</service>
 </loginTicketRequest>`;
@@ -97,7 +98,7 @@ export async function getAccessTicket(tenantId: string): Promise<{ token: string
 
   // Build and sign a new TRA
   const ltr = buildLoginTicketRequest();
-  const cms = signCMS(ltr, cfg.afipCert, cfg.afipKey);
+  const cms = signCMS(ltr, cfg.afipCert, decryptAfipKey(cfg.afipKey));
   const ta  = await callWsaa(cms, cfg.production);
 
   await prisma.fiscalConfig.update({

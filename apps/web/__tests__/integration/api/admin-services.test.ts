@@ -10,8 +10,8 @@ const prismaMock = vi.hoisted(() => ({
   turneraService: { create: vi.fn(), count: vi.fn() },
 }));
 
-vi.mock("@/lib/session", () => sessionMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/auth/session", () => sessionMock);
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 

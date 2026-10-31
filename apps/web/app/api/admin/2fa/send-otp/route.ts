@@ -6,7 +6,7 @@ import { sendTwoFaOtp } from "@/lib/integrations/email";
 
 export async function POST() {
   let user;
-  try { user = await requireAuth(); } catch (e) { return apiError(e); }
+  try { user = await requireAuth(undefined, { pending: true }); } catch (e) { return apiError(e); }
 
   const dbUser = await prisma.user.findUnique({
     where:  { id: user.id },
@@ -22,7 +22,7 @@ export async function POST() {
 
   await prisma.user.update({
     where: { id: user.id },
-    data:  { emailOtpCode: code, emailOtpExpiry: expiry },
+    data:  { emailOtpCode: code, emailOtpExpiry: expiry, otpAttempts: 0 },
   });
 
   await sendTwoFaOtp({ to: dbUser.email, name: dbUser.name, code });

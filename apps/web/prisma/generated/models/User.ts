@@ -20,8 +20,20 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  otpAttempts: number | null
+  sessionVersion: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  otpAttempts: number | null
+  sessionVersion: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -43,6 +55,8 @@ export type UserMinAggregateOutputType = {
   emailOtpExpiry: Date | null
   emailVerifyCode: string | null
   emailVerifyExpiry: Date | null
+  otpAttempts: number | null
+  sessionVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -66,6 +80,8 @@ export type UserMaxAggregateOutputType = {
   emailOtpExpiry: Date | null
   emailVerifyCode: string | null
   emailVerifyExpiry: Date | null
+  otpAttempts: number | null
+  sessionVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -89,11 +105,23 @@ export type UserCountAggregateOutputType = {
   emailOtpExpiry: number
   emailVerifyCode: number
   emailVerifyExpiry: number
+  otpAttempts: number
+  sessionVersion: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  otpAttempts?: true
+  sessionVersion?: true
+}
+
+export type UserSumAggregateInputType = {
+  otpAttempts?: true
+  sessionVersion?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -114,6 +142,8 @@ export type UserMinAggregateInputType = {
   emailOtpExpiry?: true
   emailVerifyCode?: true
   emailVerifyExpiry?: true
+  otpAttempts?: true
+  sessionVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -137,6 +167,8 @@ export type UserMaxAggregateInputType = {
   emailOtpExpiry?: true
   emailVerifyCode?: true
   emailVerifyExpiry?: true
+  otpAttempts?: true
+  sessionVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -160,6 +192,8 @@ export type UserCountAggregateInputType = {
   emailOtpExpiry?: true
   emailVerifyCode?: true
   emailVerifyExpiry?: true
+  otpAttempts?: true
+  sessionVersion?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -203,6 +237,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -233,6 +279,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -256,9 +304,13 @@ export type UserGroupByOutputType = {
   emailOtpExpiry: Date | null
   emailVerifyCode: string | null
   emailVerifyExpiry: Date | null
+  otpAttempts: number
+  sessionVersion: number
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -300,6 +352,8 @@ export type UserWhereInput = {
   emailOtpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailVerifyCode?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  otpAttempts?: Prisma.IntFilter<"User"> | number
+  sessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -329,6 +383,8 @@ export type UserOrderByWithRelationInput = {
   emailOtpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifyCode?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  otpAttempts?: Prisma.SortOrder
+  sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
@@ -362,6 +418,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   emailOtpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailVerifyCode?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  otpAttempts?: Prisma.IntFilter<"User"> | number
+  sessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
@@ -391,11 +449,15 @@ export type UserOrderByWithAggregationInput = {
   emailOtpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifyCode?: Prisma.SortOrderInput | Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
+  otpAttempts?: Prisma.SortOrder
+  sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -420,6 +482,8 @@ export type UserScalarWhereWithAggregatesInput = {
   emailOtpExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   emailVerifyCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  otpAttempts?: Prisma.IntWithAggregatesFilter<"User"> | number
+  sessionVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -442,6 +506,8 @@ export type UserCreateInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
@@ -471,6 +537,8 @@ export type UserUncheckedCreateInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -498,6 +566,8 @@ export type UserUpdateInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
@@ -527,6 +597,8 @@ export type UserUncheckedUpdateInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -555,6 +627,8 @@ export type UserCreateManyInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -577,6 +651,8 @@ export type UserUpdateManyMutationInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -600,6 +676,8 @@ export type UserUncheckedUpdateManyInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -638,8 +716,15 @@ export type UserCountOrderByAggregateInput = {
   emailOtpExpiry?: Prisma.SortOrder
   emailVerifyCode?: Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrder
+  otpAttempts?: Prisma.SortOrder
+  sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  otpAttempts?: Prisma.SortOrder
+  sessionVersion?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -661,6 +746,8 @@ export type UserMaxOrderByAggregateInput = {
   emailOtpExpiry?: Prisma.SortOrder
   emailVerifyCode?: Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrder
+  otpAttempts?: Prisma.SortOrder
+  sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -684,8 +771,15 @@ export type UserMinOrderByAggregateInput = {
   emailOtpExpiry?: Prisma.SortOrder
   emailVerifyCode?: Prisma.SortOrder
   emailVerifyExpiry?: Prisma.SortOrder
+  otpAttempts?: Prisma.SortOrder
+  sessionVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  otpAttempts?: Prisma.SortOrder
+  sessionVersion?: Prisma.SortOrder
 }
 
 export type UserNullableScalarRelationFilter = {
@@ -742,6 +836,14 @@ export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
 
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type UserCreateNestedOneWithoutTasksAssignedInput = {
@@ -836,6 +938,8 @@ export type UserCreateWithoutTenantInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksCreated?: Prisma.TaskCreateNestedManyWithoutCreatedByInput
@@ -863,6 +967,8 @@ export type UserUncheckedCreateWithoutTenantInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -920,6 +1026,8 @@ export type UserScalarWhereInput = {
   emailOtpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   emailVerifyCode?: Prisma.StringNullableFilter<"User"> | string | null
   emailVerifyExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  otpAttempts?: Prisma.IntFilter<"User"> | number
+  sessionVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
 }
@@ -942,6 +1050,8 @@ export type UserCreateWithoutTasksAssignedInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
@@ -970,6 +1080,8 @@ export type UserUncheckedCreateWithoutTasksAssignedInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1001,6 +1113,8 @@ export type UserCreateWithoutTasksCreatedInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
@@ -1029,6 +1143,8 @@ export type UserUncheckedCreateWithoutTasksCreatedInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksAssigned?: Prisma.TaskUncheckedCreateNestedManyWithoutAssignedToInput
@@ -1071,6 +1187,8 @@ export type UserUpdateWithoutTasksAssignedInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
@@ -1099,6 +1217,8 @@ export type UserUncheckedUpdateWithoutTasksAssignedInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1136,6 +1256,8 @@ export type UserUpdateWithoutTasksCreatedInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
@@ -1164,6 +1286,8 @@ export type UserUncheckedUpdateWithoutTasksCreatedInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksAssigned?: Prisma.TaskUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -1190,6 +1314,8 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
@@ -1218,6 +1344,8 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1260,6 +1388,8 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
@@ -1288,6 +1418,8 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1314,6 +1446,8 @@ export type UserCreateWithoutSupportTicketsInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
@@ -1342,6 +1476,8 @@ export type UserUncheckedCreateWithoutSupportTicketsInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1384,6 +1520,8 @@ export type UserUpdateWithoutSupportTicketsInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
@@ -1412,6 +1550,8 @@ export type UserUncheckedUpdateWithoutSupportTicketsInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1438,6 +1578,8 @@ export type UserCreateWithoutTicketRepliesInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
@@ -1466,6 +1608,8 @@ export type UserUncheckedCreateWithoutTicketRepliesInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   tasksCreated?: Prisma.TaskUncheckedCreateNestedManyWithoutCreatedByInput
@@ -1508,6 +1652,8 @@ export type UserUpdateWithoutTicketRepliesInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
@@ -1536,6 +1682,8 @@ export type UserUncheckedUpdateWithoutTicketRepliesInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1562,6 +1710,8 @@ export type UserCreateManyTenantInput = {
   emailOtpExpiry?: Date | string | null
   emailVerifyCode?: string | null
   emailVerifyExpiry?: Date | string | null
+  otpAttempts?: number
+  sessionVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -1584,6 +1734,8 @@ export type UserUpdateWithoutTenantInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksCreated?: Prisma.TaskUpdateManyWithoutCreatedByNestedInput
@@ -1611,6 +1763,8 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tasksCreated?: Prisma.TaskUncheckedUpdateManyWithoutCreatedByNestedInput
@@ -1638,6 +1792,8 @@ export type UserUncheckedUpdateManyWithoutTenantInput = {
   emailOtpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   emailVerifyCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   emailVerifyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  otpAttempts?: Prisma.IntFieldUpdateOperationsInput | number
+  sessionVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1728,6 +1884,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   emailOtpExpiry?: boolean
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
+  otpAttempts?: boolean
+  sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1758,6 +1916,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailOtpExpiry?: boolean
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
+  otpAttempts?: boolean
+  sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1782,6 +1942,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   emailOtpExpiry?: boolean
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
+  otpAttempts?: boolean
+  sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1806,11 +1968,13 @@ export type UserSelectScalar = {
   emailOtpExpiry?: boolean
   emailVerifyCode?: boolean
   emailVerifyExpiry?: boolean
+  otpAttempts?: boolean
+  sessionVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "name" | "role" | "active" | "superAdmin" | "password" | "image" | "googleId" | "emailVerified" | "totpSecret" | "totpEnabled" | "twoFaMethod" | "emailOtpCode" | "emailOtpExpiry" | "emailVerifyCode" | "emailVerifyExpiry" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "name" | "role" | "active" | "superAdmin" | "password" | "image" | "googleId" | "emailVerified" | "totpSecret" | "totpEnabled" | "twoFaMethod" | "emailOtpCode" | "emailOtpExpiry" | "emailVerifyCode" | "emailVerifyExpiry" | "otpAttempts" | "sessionVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   tasksCreated?: boolean | Prisma.User$tasksCreatedArgs<ExtArgs>
@@ -1856,6 +2020,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     emailOtpExpiry: Date | null
     emailVerifyCode: string | null
     emailVerifyExpiry: Date | null
+    otpAttempts: number
+    sessionVersion: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -2305,6 +2471,8 @@ export interface UserFieldRefs {
   readonly emailOtpExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly emailVerifyCode: Prisma.FieldRef<"User", 'String'>
   readonly emailVerifyExpiry: Prisma.FieldRef<"User", 'DateTime'>
+  readonly otpAttempts: Prisma.FieldRef<"User", 'Int'>
+  readonly sessionVersion: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

@@ -8,7 +8,7 @@ const prismaMock = vi.hoisted(() => ({
   turneraService: { findMany: vi.fn() },
 }));
 
-vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }));
+vi.mock("@/lib/db/prisma", () => ({ prisma: prismaMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 

@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { requireAuth, apiError } from "@/lib/auth/session";
+import { requireAuth, apiError, hasValidProof, TWO_FA_COOKIE } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { AdminShell } from "./components/AdminShell";
 import type { ReactNode } from "react";
@@ -8,7 +8,7 @@ import type { ReactNode } from "react";
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   let user;
   try {
-    user = await requireAuth("staff");
+    user = await requireAuth("staff", { pending: true });
   } catch (e) {
     void apiError(e);
     redirect("/login");
@@ -27,9 +27,8 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   // Enforce 2FA when enabled
   if (dbUser.totpEnabled) {
     const jar     = await cookies();
-    const verified = jar.get("x-2fa-auth")?.value;
-    if (verified !== user.id) {
-      redirect("/admin/2fa");
+    if (!hasValidProof(jar.get(TWO_FA_COOKIE)?.value, "2fa", user.id, user.sessionVersion)) {
+      redirect("/2fa");
     }
   }
 

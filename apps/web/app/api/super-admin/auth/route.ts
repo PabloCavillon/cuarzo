@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireSuperAdmin, apiError } from "@/lib/auth/session";
+import { requireSuperAdmin, apiError, signProof, SUPER_ADMIN_COOKIE } from "@/lib/auth/session";
 import { verifyTotp } from "@/lib/auth/totp";
 
-const SA_COOKIE = "sa-pin";
-
 export async function POST(req: NextRequest) {
-  try { await requireSuperAdmin(); } catch (e) { return apiError(e); }
+  let user;
+  try { user = await requireSuperAdmin({ pending: true }); } catch (e) { return apiError(e); }
 
   const { code } = await req.json().catch(() => ({})) as { code?: string };
   const secret   = process.env.SUPER_ADMIN_TOTP_SECRET;
@@ -19,7 +18,7 @@ export async function POST(req: NextRequest) {
   }
 
   const res = NextResponse.json({ ok: true });
-  res.cookies.set(SA_COOKIE, "1", {
+  res.cookies.set(SUPER_ADMIN_COOKIE, signProof("super-admin", user.id, user.sessionVersion), {
     httpOnly: true,
     secure:   process.env.NODE_ENV === "production",
     sameSite: "strict",
@@ -31,6 +30,6 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE() {
   const res = NextResponse.json({ ok: true });
-  res.cookies.delete(SA_COOKIE);
+  res.cookies.delete(SUPER_ADMIN_COOKIE);
   return res;
 }

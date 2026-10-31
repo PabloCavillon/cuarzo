@@ -4,16 +4,20 @@ import { revalidatePath } from "next/cache";
 import { requireAuth } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { getAccessTicket } from "@/lib/api/afip/wsaa";
+import { encryptAfipKey } from "@/lib/api/afip/key-crypto";
 import { solicitarCAE, getUltimoAutorizado, TIPO_COMPROBANTE_AFIP } from "@/lib/api/afip/wsfe";
 import { TipoComprobante } from "@/prisma/generated/client";
 
 type ActionResult = { ok: true } | { ok: false; error: string };
 
+// AFIP's AlicIva ids
+const ALICUOTA_ID: Record<string, number> = { "0": 3, "0.105": 4, "0.21": 5, "0.27": 6 };
+
 // ─── Fiscal Config ────────────────────────────────────────────────────────────
 
 export async function saveFiscalConfig(fd: FormData): Promise<ActionResult> {
   try {
-    const user = await requireAuth("staff");
+    const user = await requireAuth("owner");
     const tid  = user.tenantId;
 
     const cuit         = (fd.get("cuit") as string)?.trim().replace(/\D/g, "");
@@ -21,7 +25,8 @@ export async function saveFiscalConfig(fd: FormData): Promise<ActionResult> {
     const puntoVenta   = parseInt(fd.get("puntoVenta") as string, 10);
     const production   = fd.get("production") === "true";
     const afipCert     = (fd.get("afipCert") as string)?.trim() || null;
-    const afipKey      = (fd.get("afipKey") as string)?.trim() || null;
+    const rawKey       = (fd.get("afipKey") as string)?.trim() || null;
+    const afipKey      = rawKey ? encryptAfipKey(rawKey) : null;
 
     if (!cuit || cuit.length !== 11) return { ok: false, error: "Invalid CUIT (must be 11 digits)" };
     if (!ivaCondition)               return { ok: false, error: "IVA condition required" };
@@ -30,7 +35,14 @@ export async function saveFiscalConfig(fd: FormData): Promise<ActionResult> {
     await prisma.fiscalConfig.upsert({
       where:  { tenantId: tid },
       create: { tenantId: tid, cuit, ivaCondition, puntoVenta, production, afipCert, afipKey },
-      update: { cuit, ivaCondition, puntoVenta, production, afipCert, afipKey },
+      update: {
+        cuit, ivaCondition, puntoVenta, production,
+        // Blank fields keep what is stored: the form never receives the key back.
+        ...(afipCert ? { afipCert } : {}),
+        ...(afipKey ? { afipKey } : {}),
+        // The cached ticket belongs to the previous environment or certificate.
+        taToken: null, taSign: null, taExpiration: null,
+      },
     });
 
     revalidatePath("/admin/billing");
@@ -43,7 +55,7 @@ export async function saveFiscalConfig(fd: FormData): Promise<ActionResult> {
 
 export async function testAfipConnection(): Promise<ActionResult> {
   try {
-    const user = await requireAuth("staff");
+    const user = await requireAuth("admin");
     await getAccessTicket(user.tenantId);
     return { ok: true };
   } catch (e) {
@@ -55,7 +67,7 @@ export async function testAfipConnection(): Promise<ActionResult> {
 
 export async function createInvoice(fd: FormData): Promise<ActionResult> {
   try {
-    const user = await requireAuth("staff");
+    const user = await requireAuth("admin");
     const tid  = user.tenantId;
 
     const cfg = await prisma.fiscalConfig.findUnique({ where: { tenantId: tid } });
@@ -65,11 +77,13 @@ export async function createInvoice(fd: FormData): Promise<ActionResult> {
     const tipoStr  = (fd.get("tipoComprobante") as string)?.trim() as TipoComprobante;
     const concepto = parseInt(fd.get("concepto") as string, 10) || 1;
     const receptorDocTipo = parseInt(fd.get("receptorDocTipo") as string, 10) || 99;
-    const receptorDocNro  = (fd.get("receptorDocNro") as string)?.trim() || "0";
+    const receptorDocNro  = (fd.get("receptorDocNro") as string)?.replace(/\D/g, "") || "0";
     const receptorNombre  = (fd.get("receptorNombre") as string)?.trim() || null;
     const importeNeto     = parseFloat(fd.get("importeNeto") as string) || 0;
-    const importeIVA      = parseFloat(fd.get("importeIVA") as string) || 0;
-    const importeTotal    = importeNeto + importeIVA;
+    // Factura C does not discriminate IVA.
+    const importeIVA      = tipoStr === "C" ? 0 : parseFloat(fd.get("importeIVA") as string) || 0;
+    const importeTotal    = Number((importeNeto + importeIVA).toFixed(2));
+    const alicuotaId      = ALICUOTA_ID[fd.get("ivaRate") as string] ?? 5;
 
     const tipoNum = TIPO_COMPROBANTE_AFIP[tipoStr];
     if (tipoNum === undefined) return { ok: false, error: "Invalid invoice type" };
@@ -84,9 +98,11 @@ export async function createInvoice(fd: FormData): Promise<ActionResult> {
       importeNeto,
       importeIVA,
       importeTotal,
+      alicuotaId,
     });
 
-    await prisma.fiscalInvoice.create({
+    // AFIP already issued this number: losing the row would leave a ghost invoice.
+    const saveInvoice = () => prisma.fiscalInvoice.create({
       data: {
         tenantId:        tid,
         tipoComprobante: tipoStr,
@@ -106,6 +122,13 @@ export async function createInvoice(fd: FormData): Promise<ActionResult> {
         metadata:    {},
       },
     });
+
+    try {
+      await saveInvoice().catch(saveInvoice);
+    } catch (e) {
+      console.error("AFIP invoice issued but not saved", { tid, tipoStr, numero: result.numero, cae: result.cae }, e);
+      return { ok: false, error: `AFIP emitió el comprobante ${result.numero} (CAE ${result.cae}) pero no se pudo guardar. No lo vuelvas a emitir y anotá estos datos.` };
+    }
 
     revalidatePath("/admin/billing");
     return { ok: true };

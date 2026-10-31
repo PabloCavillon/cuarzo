@@ -13,8 +13,8 @@ const prismaMock = vi.hoisted(() => ({
   },
 }));
 
-vi.mock("@/lib/session", () => sessionMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/auth/session", () => sessionMock);
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -59,14 +59,14 @@ describe("createProduct", () => {
   it("returns error when name is missing", async () => {
     const fd = makeFormData({ name: "", sku: "SKU", basePrice: "100" });
     const result = await createProduct(fd);
-    expect(result).toEqual({ ok: false, error: "El nombre es requerido." });
+    expect(result).toEqual({ ok: false, error: "Name is required." });
     expect(prismaMock.catalogProduct.create).not.toHaveBeenCalled();
   });
 
   it("returns error when SKU is missing", async () => {
     const fd = makeFormData({ name: "X", sku: "", basePrice: "100" });
     const result = await createProduct(fd);
-    expect(result).toEqual({ ok: false, error: "El SKU es requerido." });
+    expect(result).toEqual({ ok: false, error: "SKU is required." });
   });
 
   it("returns error when basePrice is negative", async () => {
@@ -90,10 +90,10 @@ describe("createProduct", () => {
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(new Error("No autorizado."));
+    sessionMock.requireAuth.mockRejectedValue(new Error("Unauthorized."));
     const fd = makeFormData({ name: "X", sku: "Y", basePrice: "1" });
     const result = await createProduct(fd);
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 
   it("stores categoryId when provided", async () => {
@@ -128,14 +128,14 @@ describe("updateProduct", () => {
     prismaMock.catalogProduct.findUnique.mockResolvedValue(null);
     const fd = makeFormData({ name: "X", sku: "Y", basePrice: "1" });
     const result = await updateProduct("missing", fd);
-    expect(result).toEqual({ ok: false, error: "Producto no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Product not found." });
   });
 
   it("returns error when product belongs to a different tenant", async () => {
     prismaMock.catalogProduct.findUnique.mockResolvedValue({ id: "prod-1", tenantId: "other" });
     const fd = makeFormData({ name: "X", sku: "Y", basePrice: "1" });
     const result = await updateProduct("prod-1", fd);
-    expect(result).toEqual({ ok: false, error: "Producto no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Product not found." });
   });
 
   it("returns specific error for duplicate SKU on update", async () => {
@@ -176,12 +176,12 @@ describe("toggleProduct", () => {
   it("returns error when product is not found", async () => {
     prismaMock.catalogProduct.findUnique.mockResolvedValue(null);
     const result = await toggleProduct("missing", false);
-    expect(result).toEqual({ ok: false, error: "Producto no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Product not found." });
   });
 
   it("returns error when product belongs to a different tenant", async () => {
     prismaMock.catalogProduct.findUnique.mockResolvedValue({ id: "prod-1", tenantId: "other" });
     const result = await toggleProduct("prod-1", false);
-    expect(result).toEqual({ ok: false, error: "Producto no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Product not found." });
   });
 });

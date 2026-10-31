@@ -6,11 +6,13 @@ import { Shield, Smartphone, Key, AlertTriangle, ExternalLink } from "lucide-rea
 import Link from "next/link";
 
 export default async function SuperAdminSetupPage() {
-  try { await requireSuperAdmin(); } catch (e) {
+  try { await requireSuperAdmin({ pending: true }); } catch (e) {
     void apiError(e); redirect("/login");
   }
 
   const existingSecret = process.env.SUPER_ADMIN_TOTP_SECRET;
+  // Once configured, showing the secret would hand out the second factor.
+  if (existingSecret) redirect("/super-admin/login");
   const secret = existingSecret ?? generateTotpSecret();
   const uri    = getTotpUri(secret, "Cuarzo Super Admin", "Cuarzo");
   const isNew  = !existingSecret;

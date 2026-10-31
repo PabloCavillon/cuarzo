@@ -8,12 +8,14 @@ const prismaMock = vi.hoisted(() => ({
     findFirst: vi.fn(),
     update:    vi.fn(),
   },
+  tenant: { update: vi.fn() },
+  $transaction: vi.fn(),
 }));
 
 const getMPSubscriptionMock = vi.hoisted(() => vi.fn());
 
-vi.mock("@/lib/prisma",       () => ({ prisma: prismaMock }));
-vi.mock("@/lib/mercadopago",  () => ({ getMPSubscription: getMPSubscriptionMock }));
+vi.mock("@/lib/db/prisma",       () => ({ prisma: prismaMock }));
+vi.mock("@/lib/api/mercadopago",  () => ({ getMPSubscription: getMPSubscriptionMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -44,6 +46,7 @@ const DB_SUB = {
   mpSubId:  "mp-sub-xyz",
   tenantId: "tenant-1",
   status:   "pending",
+  plan:     { slug: "pro" },
 };
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
@@ -54,6 +57,8 @@ describe("POST /api/webhooks/mercadopago", () => {
     getMPSubscriptionMock.mockResolvedValue(MP_SUB);
     prismaMock.subscription.findFirst.mockResolvedValue(DB_SUB);
     prismaMock.subscription.update.mockResolvedValue({});
+    prismaMock.tenant.update.mockResolvedValue({});
+    prismaMock.$transaction.mockImplementation((ops: Promise<unknown>[]) => Promise.all(ops));
   });
 
   // ── Non-subscription events ─────────────────────────────────────────────────
@@ -128,6 +133,8 @@ describe("POST /api/webhooks/mercadopago", () => {
       getMPSubscriptionMock.mockResolvedValue({});
       prismaMock.subscription.findFirst.mockResolvedValue(DB_SUB);
       prismaMock.subscription.update.mockResolvedValue({});
+    prismaMock.tenant.update.mockResolvedValue({});
+    prismaMock.$transaction.mockImplementation((ops: Promise<unknown>[]) => Promise.all(ops));
     });
   }
 
@@ -137,6 +144,17 @@ describe("POST /api/webhooks/mercadopago", () => {
 
     const updateData = prismaMock.subscription.update.mock.calls[0][0].data;
     expect(updateData.cancelledAt).toBeInstanceOf(Date);
+  });
+
+  it("gives the tenant the paid plan when authorized", async () => {
+    await POST(req({ type: "subscription_preapproval", data: { id: "mp-sub-xyz" } }));
+    expect(prismaMock.tenant.update).toHaveBeenCalledWith({ where: { id: "tenant-1" }, data: { plan: "pro" } });
+  });
+
+  it("returns the tenant to free when cancelled", async () => {
+    getMPSubscriptionMock.mockResolvedValue({ ...MP_SUB, status: "cancelled" });
+    await POST(req({ type: "subscription_preapproval", data: { id: "mp-sub-xyz" } }));
+    expect(prismaMock.tenant.update).toHaveBeenCalledWith({ where: { id: "tenant-1" }, data: { plan: "free" } });
   });
 
   it("does not set cancelledAt for non-cancelled statuses", async () => {

@@ -10,6 +10,7 @@ const prismaMock = vi.hoisted(() => ({
     findUnique: vi.fn(),
     create:     vi.fn(),
     update:     vi.fn(),
+    updateMany: vi.fn(),
   },
   orderClient: {
     upsert: vi.fn(),
@@ -21,15 +22,18 @@ const prismaMock = vi.hoisted(() => ({
     create: vi.fn(),
   },
   stockWarehouse: {
-    findMany: vi.fn(),
+    findMany:  vi.fn(),
+    findFirst: vi.fn(),
   },
   stockItem: {
     findFirst: vi.fn(),
     create:    vi.fn(),
     update:    vi.fn(),
+    updateMany: vi.fn(),
   },
   stockMovement: {
-    create: vi.fn(),
+    create:   vi.fn(),
+    findMany: vi.fn(),
   },
   $transaction: vi.fn(),
 }));
@@ -39,9 +43,9 @@ const emailMock = vi.hoisted(() => ({
   sendOrderStatusUpdate: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock("@/lib/session", () => sessionMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
-vi.mock("@/lib/email",   () => emailMock);
+vi.mock("@/lib/auth/session", () => sessionMock);
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/integrations/email",   () => emailMock);
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -59,9 +63,10 @@ const ITEMS = [
 beforeEach(() => {
   vi.resetAllMocks();
   sessionMock.requireAuth.mockResolvedValue(USER);
-  prismaMock.$transaction.mockImplementation(async (ops: unknown[]) => {
-    for (const op of ops) await op;
-  });
+  prismaMock.$transaction.mockImplementation((arg: unknown) =>
+    typeof arg === "function" ? arg(prismaMock) : Promise.all(arg as Promise<unknown>[]));
+  prismaMock.order.updateMany.mockResolvedValue({ count: 1 });
+  prismaMock.stockMovement.findMany.mockResolvedValue([]);
 });
 
 // ── createOrder ───────────────────────────────────────────────────────────────
@@ -177,9 +182,24 @@ describe("updateOrderStatus", () => {
     const result = await updateOrderStatus("ord-1", "confirmed");
 
     expect(result).toEqual({ ok: true });
-    expect(prismaMock.order.update).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { id: "ord-1" }, data: { status: "confirmed" } }),
+    expect(prismaMock.order.updateMany).toHaveBeenCalledWith(
+      expect.objectContaining({ where: { id: "ord-1", status: "draft" }, data: { status: "confirmed" } }),
     );
+  });
+
+  it("gives stock back when a confirmed order is cancelled", async () => {
+    prismaMock.order.findUnique.mockResolvedValue({ ...DRAFT_ORDER, status: "confirmed" });
+    prismaMock.stockMovement.findMany.mockResolvedValue([
+      { warehouseId: "w1", productId: "p1", variantId: null, delta: -3 },
+    ]);
+
+    const result = await updateOrderStatus("ord-1", "cancelled");
+
+    expect(result).toEqual({ ok: true });
+    expect(prismaMock.stockItem.updateMany).toHaveBeenCalledWith({
+      where: { warehouseId: "w1", productId: "p1", variantId: null },
+      data:  { qty: { increment: 3 } },
+    });
   });
 
   it("transitions from draft to cancelled", async () => {

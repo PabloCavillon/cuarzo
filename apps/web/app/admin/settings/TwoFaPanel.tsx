@@ -193,9 +193,17 @@ export function TwoFaPanel({
   const methodLabel = twoFaMethod === "totp" ? "App autenticadora" : twoFaMethod === "email" ? "Email" : null;
 
   async function disable() {
+    if (twoFaMethod === "email") await fetch("/api/admin/2fa/send-otp", { method: "POST" });
+    const code = window.prompt(twoFaMethod === "email" ? "Ingresá el código que te enviamos por email" : "Ingresá el código de tu app autenticadora");
+    if (!code) return;
     setLoading(true);
-    await fetch("/api/admin/2fa/setup", { method: "DELETE" });
+    const res = await fetch("/api/admin/2fa/setup", {
+      method:  "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body:    JSON.stringify({ code }),
+    });
     setLoading(false);
+    if (!res.ok) { window.alert("Código incorrecto o expirado."); return; }
     router.refresh();
   }
 

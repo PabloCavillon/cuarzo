@@ -10,7 +10,7 @@ type FiscalCfg = {
   puntoVenta: number;
   production: boolean;
   afipCert: string | null;
-  afipKey: string | null;
+  hasKey: boolean;
 };
 
 export function SettingsForm({ config }: { config: FiscalCfg | null }) {
@@ -144,8 +144,8 @@ export function SettingsForm({ config }: { config: FiscalCfg | null }) {
 
         <div>
           <label className="block text-xs font-medium text-white/50 mb-1.5">Clave privada (.key)</label>
-          <textarea name="afipKey" rows={5} defaultValue={config?.afipKey ?? ""}
-            placeholder={"-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"}
+          <textarea name="afipKey" rows={5} autoComplete="off"
+            placeholder={config?.hasKey ? "Clave cargada. Pegá una nueva solo si querés reemplazarla." : "-----BEGIN RSA PRIVATE KEY-----\n...\n-----END RSA PRIVATE KEY-----"}
             className={inputCls + " resize-none font-mono text-xs"} />
         </div>
       </div>

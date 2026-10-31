@@ -6,7 +6,7 @@ import { sendEmailVerificationCode } from "@/lib/integrations/email";
 export async function POST(req: NextRequest) {
   const { email } = await req.json().catch(() => ({})) as { email?: string };
 
-  if (!email) return Response.json({ error: "Email requerido." }, { status: 400 });
+  if (typeof email !== "string" || !email) return Response.json({ error: "Email requerido." }, { status: 400 });
 
   const user = await prisma.user.findFirst({
     where:  { email: email.trim().toLowerCase() },
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
 
   await prisma.user.update({
     where: { id: user.id },
-    data:  { emailVerifyCode: code, emailVerifyExpiry: expiry },
+    data:  { emailVerifyCode: code, emailVerifyExpiry: expiry, otpAttempts: 0 },
   });
 
   void sendEmailVerificationCode({ to: email.trim().toLowerCase(), name: user.name, code });

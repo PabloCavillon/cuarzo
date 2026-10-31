@@ -55,6 +55,7 @@ export function InvoiceForm({ puntoVenta, production }: Props) {
     if (!formRef.current) return;
     const fd = new FormData(formRef.current);
     fd.set("importeIVA",   importeIVA);
+    fd.set("ivaRate",      String(IVA_RATES[ivaIdx].factor));
     setError(null);
 
     startTransition(async () => {

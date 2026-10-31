@@ -12,7 +12,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
 export async function startSubscription(planSlug: string): Promise<CheckoutResult> {
   try {
-    const user = await requireAuth("staff");
+    const user = await requireAuth("owner");
     const tid  = user.tenantId;
 
     const plan = await prisma.subscriptionPlan.findUnique({ where: { slug: planSlug } });
@@ -24,6 +24,7 @@ export async function startSubscription(planSlug: string): Promise<CheckoutResul
         create: { tenantId: tid, planId: plan.id, status: "authorized" },
         update: { planId: plan.id, status: "authorized", cancelledAt: null, mpSubId: null, mpCheckoutUrl: null },
       });
+      await prisma.tenant.update({ where: { id: tid }, data: { plan: "free" } });
       revalidatePath("/admin/subscription");
       return { ok: true, url: "/admin/subscription" };
     }
@@ -76,7 +77,7 @@ export async function startSubscription(planSlug: string): Promise<CheckoutResul
 
 export async function cancelSubscription(): Promise<ActionResult> {
   try {
-    const user = await requireAuth("staff");
+    const user = await requireAuth("owner");
     const tid  = user.tenantId;
 
     const sub = await prisma.subscription.findUnique({ where: { tenantId: tid } });
@@ -90,6 +91,7 @@ export async function cancelSubscription(): Promise<ActionResult> {
       where: { tenantId: tid },
       data:  { status: "cancelled", cancelledAt: new Date() },
     });
+    await prisma.tenant.update({ where: { id: tid }, data: { plan: "free" } });
 
     revalidatePath("/admin/subscription");
     return { ok: true };

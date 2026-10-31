@@ -23,7 +23,13 @@ vi.mock("../../auth.config", () => ({ authConfig: {} }));
 // ── Import after mocks are registered ─────────────────────────────────────────
 
 // eslint-disable-next-line import/first
-import middleware from "../../middleware";
+import proxy from "../../proxy";
+
+// auth() is mocked to a passthrough, so the export takes only the request.
+const middleware = proxy as unknown as (req: NextRequest) => NextResponse;
+
+// The limiter only runs in production.
+vi.stubEnv("NODE_ENV", "production");
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 

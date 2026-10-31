@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { auth } from "@/auth";
+import { requireAuth, apiError } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { toCSV, csvResponse } from "@/lib/utils/export-csv";
 
@@ -7,12 +7,10 @@ const MODULES = ["clients", "suppliers", "products", "orders", "bookings", "caja
 type ExportModule = typeof MODULES[number];
 
 export async function GET(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.tenantId) {
-    return Response.json({ error: "No autenticado." }, { status: 401 });
-  }
+  let user;
+  try { user = await requireAuth("admin"); } catch (e) { return apiError(e); }
 
-  const tid = session.user.tenantId;
+  const tid = user.tenantId;
   const mod = req.nextUrl.searchParams.get("module") as ExportModule | null;
 
   if (!mod || !MODULES.includes(mod)) {

@@ -1,13 +1,11 @@
 import { NextRequest } from "next/server";
-import { auth } from "@/auth";
+import { requireAuth, apiError } from "@/lib/auth/session";
 import { prisma } from "@/lib/db/prisma";
 import { FREE_MODULE_INFO, FREE_MODULE_MAX } from "@/lib/utils/plan-limits";
 
 export async function POST(req: NextRequest) {
-  const session = await auth();
-  if (!session?.user?.tenantId) {
-    return Response.json({ error: "No autenticado." }, { status: 401 });
-  }
+  let user;
+  try { user = await requireAuth("owner"); } catch (e) { return apiError(e); }
 
   let modules: string[] = [];
   try {
@@ -18,7 +16,7 @@ export async function POST(req: NextRequest) {
   }
 
   const tenant = await prisma.tenant.findUnique({
-    where:  { id: session.user.tenantId },
+    where:  { id: user.tenantId },
     select: { plan: true },
   });
 
@@ -35,13 +33,13 @@ export async function POST(req: NextRequest) {
   await prisma.$transaction(async (tx) => {
     for (const module of modules) {
       await tx.tenantModule.upsert({
-        where:  { tenantId_module: { tenantId: session.user.tenantId, module: module as never } },
+        where:  { tenantId_module: { tenantId: user.tenantId, module: module as never } },
         update: { active: true },
-        create: { tenantId: session.user.tenantId, module: module as never, active: true },
+        create: { tenantId: user.tenantId, module: module as never, active: true },
       });
     }
     await tx.tenant.update({
-      where: { id: session.user.tenantId },
+      where: { id: user.tenantId },
       data:  { onboarded: true },
     });
   });

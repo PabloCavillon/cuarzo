@@ -30,10 +30,10 @@ const emailMock = vi.hoisted(() => ({
   sendInvitation: vi.fn().mockResolvedValue(undefined),
 }));
 
-vi.mock("@/lib/session",     () => sessionMock);
-vi.mock("@/lib/prisma",      () => ({ prisma: prismaMock }));
-vi.mock("@/lib/email",       () => emailMock);
-vi.mock("@/lib/audit",       () => ({ audit: vi.fn().mockResolvedValue(undefined) }));
+vi.mock("@/lib/auth/session",     () => sessionMock);
+vi.mock("@/lib/db/prisma",      () => ({ prisma: prismaMock }));
+vi.mock("@/lib/integrations/email",       () => emailMock);
+vi.mock("@/lib/utils/audit",       () => ({ audit: vi.fn().mockResolvedValue(undefined) }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -94,21 +94,21 @@ describe("inviteMember", () => {
   it("returns error for invalid email format", async () => {
     const fd = makeFormData({ email: "not-an-email", role: "staff" });
     const result = await inviteMember(fd);
-    expect(result).toEqual({ ok: false, error: "Email inválido" });
+    expect(result).toEqual({ ok: false, error: "Invalid email" });
     expect(prismaMock.invitation.upsert).not.toHaveBeenCalled();
   });
 
   it("returns error for empty email", async () => {
     const fd = makeFormData({ email: "", role: "staff" });
     const result = await inviteMember(fd);
-    expect(result).toEqual({ ok: false, error: "Email inválido" });
+    expect(result).toEqual({ ok: false, error: "Invalid email" });
   });
 
   it("returns error for invalid role", async () => {
     prismaMock.user.findFirst.mockResolvedValue(null);
     const fd = makeFormData({ email: "x@y.com", role: "owner" });
     const result = await inviteMember(fd);
-    expect(result).toEqual({ ok: false, error: "Rol inválido" });
+    expect(result).toEqual({ ok: false, error: "Invalid role" });
   });
 
   it("returns error when user with that email already exists", async () => {
@@ -187,7 +187,7 @@ describe("removeMember", () => {
 
   it("returns error when trying to remove self", async () => {
     const result = await removeMember(ADMIN.id); // same id as the logged-in user
-    expect(result).toEqual({ ok: false, error: "No podés eliminarte a vos mismo" });
+    expect(result).toEqual({ ok: false, error: "You cannot remove yourself" });
     expect(prismaMock.user.delete).not.toHaveBeenCalled();
   });
 
@@ -230,13 +230,13 @@ describe("updateMemberRole", () => {
 
   it("returns error for invalid role value", async () => {
     const result = await updateMemberRole("staff-1", "owner");
-    expect(result).toEqual({ ok: false, error: "Rol inválido" });
+    expect(result).toEqual({ ok: false, error: "Invalid role" });
     expect(prismaMock.user.update).not.toHaveBeenCalled();
   });
 
   it("returns error when trying to change own role", async () => {
     const result = await updateMemberRole(ADMIN.id, "staff");
-    expect(result).toEqual({ ok: false, error: "No podés cambiar tu propio rol" });
+    expect(result).toEqual({ ok: false, error: "You cannot change your own role" });
   });
 
   it("returns error when target is not found", async () => {

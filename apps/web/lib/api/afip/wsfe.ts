@@ -1,5 +1,4 @@
-"use server";
-
+import "server-only";
 import { getAccessTicket } from "./wsaa";
 import { prisma } from "@/lib/db/prisma";
 
@@ -84,6 +83,7 @@ export type InvoiceRequest = {
   importeNeto: number;
   importeIVA: number;
   importeTotal: number;
+  alicuotaId: number;
   fecha?: string;
 };
 
@@ -104,7 +104,7 @@ export async function solicitarCAE(tenantId: string, req: InvoiceRequest): Promi
   const lastNro = await getUltimoAutorizado(tenantId, req.tipoComprobante, req.puntoVenta);
   const numero  = lastNro + 1;
 
-  const today  = req.fecha ?? new Date().toISOString().slice(0, 10).replace(/-/g, "");
+  const today  = req.fecha ?? new Date().toLocaleDateString("sv-SE", { timeZone: "America/Argentina/Buenos_Aires" }).replace(/-/g, "");
   const nroStr = String(numero).padStart(8, "0");
 
   const inner = `
@@ -130,13 +130,13 @@ export async function solicitarCAE(tenantId: string, req: InvoiceRequest): Promi
       <ar:ImpTrib>0.00</ar:ImpTrib>
       <ar:MonId>PES</ar:MonId>
       <ar:MonCotiz>1</ar:MonCotiz>
-      <ar:Iva>
+      ${req.tipoComprobante === 11 ? "" : `<ar:Iva>
         <ar:AlicIva>
-          <ar:Id>5</ar:Id>
+          <ar:Id>${req.alicuotaId}</ar:Id>
           <ar:BaseImp>${req.importeNeto.toFixed(2)}</ar:BaseImp>
           <ar:Importe>${req.importeIVA.toFixed(2)}</ar:Importe>
         </ar:AlicIva>
-      </ar:Iva>
+      </ar:Iva>`}
     </ar:FECAEDetRequest>
   </ar:FeDetReq>
 </ar:FeCAEReq>`;

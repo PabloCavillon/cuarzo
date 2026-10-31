@@ -12,7 +12,7 @@ const prismaMock = vi.hoisted(() => ({
   $transaction: vi.fn(),
 }));
 
-vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }));
+vi.mock("@/lib/db/prisma", () => ({ prisma: prismaMock }));
 vi.mock("bcryptjs", () => ({ default: { hash: vi.fn() } }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
@@ -86,12 +86,6 @@ describe("POST /api/auth/register", () => {
     const tenantData = prismaMock.tenant.create.mock.calls[0][0].data;
     expect(tenantData.name).toBe("Panadería El Sol");
     expect(tenantData.plan).toBe("free");
-  });
-
-  it("creates the turnera module for the new tenant", async () => {
-    await POST(req(VALID_BODY));
-    const moduleData = prismaMock.tenantModule.create.mock.calls[0][0].data;
-    expect(moduleData.module).toBe("turnera");
   });
 
   it("trims name and businessName before storing", async () => {

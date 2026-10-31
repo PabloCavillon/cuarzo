@@ -26,8 +26,11 @@ const UUID_RE   = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}
 const DATE_RE   = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 const TIME_RE   = /^([01]\d|2[0-3]):[0-5]\d$/;
 const EMAIL_RE  = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/;
+const SLUG_RE   = /^[a-z0-9-]{1,60}$/;
+const DEMO_TENANT = "demo";
 
 interface ValidInput {
+  slug: string;
   serviceId: string;
   date: string;
   time: string;
@@ -117,7 +120,7 @@ function validate(raw: unknown): { ok: true; data: ValidInput } | { ok: false; e
 
   return {
     ok: true,
-    data: { serviceId: b.serviceId, date: b.date, time: b.time, name, email, phone, notes },
+    data: { slug: typeof b.slug === "string" && SLUG_RE.test(b.slug) ? b.slug : DEMO_TENANT, serviceId: b.serviceId, date: b.date, time: b.time, name, email, phone, notes },
   };
 }
 
@@ -161,8 +164,6 @@ function toResponse(
   };
 }
 
-const DEMO_TENANT = "demo";
-
 // ─── POST — create booking ────────────────────────────────────────────────────
 
 export async function POST(req: NextRequest) {
@@ -184,10 +185,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: result.error }, { status: 422 });
   }
 
-  const { serviceId, date, time, name, email, phone, notes } = result.data;
+  const { slug, serviceId, date, time, name, email, phone, notes } = result.data;
 
   try {
-    const tenant = await prisma.tenant.findUnique({ where: { slug: DEMO_TENANT } });
+    const tenant = await prisma.tenant.findUnique({ where: { slug } });
     if (!tenant) {
       return NextResponse.json({ error: "Servicio no disponible." }, { status: 503 });
     }
@@ -214,23 +215,38 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No se pudo generar un código único." }, { status: 500 });
     }
 
-    const booking = await prisma.turneraBooking.create({
-      data: {
-        tenantId: tenant.id,
-        serviceId: service.id,
-        code,
-        serviceNameSnap: service.name,
-        durationMinSnap: service.durationMin,
-        priceSnap: service.price,
-        date,
-        time,
-        clientName: name,
-        clientEmail: email,
-        clientPhone: phone,
-        notes,
-        status: "confirmed",
-      },
+    const booking = await prisma.$transaction(async (tx) => {
+      // Serializes bookings for one slot so two visitors cannot both pass the check.
+      await tx.$executeRaw`SELECT pg_advisory_xact_lock(hashtext(${`${service.id}:${date}:${time}`}))`;
+
+      const taken = await tx.turneraBooking.findFirst({
+        where: { serviceId: service.id, date, time, status: { not: "cancelled" } },
+        select: { id: true },
+      });
+      if (taken) return null;
+
+      return tx.turneraBooking.create({
+        data: {
+          tenantId: tenant.id,
+          serviceId: service.id,
+          code,
+          serviceNameSnap: service.name,
+          durationMinSnap: service.durationMin,
+          priceSnap: service.price,
+          date,
+          time,
+          clientName: name,
+          clientEmail: email,
+          clientPhone: phone,
+          notes,
+          status: "confirmed",
+        },
+      });
     });
+
+    if (!booking) {
+      return NextResponse.json({ error: "Ese horario ya fue reservado. Elegí otro." }, { status: 409 });
+    }
 
     void sendBookingConfirmed({
       to:          email,
@@ -249,51 +265,22 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// ─── GET — look up by code or by email ───────────────────────────────────────
-// Requires either ?code= or ?email= — never returns all bookings unauthenticated.
+// ─── GET — look up by code ─────────────────────────────────────────────────
+// The code is the only credential: an email alone would expose someone else's data.
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const code  = searchParams.get("code")?.trim().toUpperCase() ?? "";
-  const email = searchParams.get("email")?.trim().toLowerCase() ?? "";
+  const code = new URL(req.url).searchParams.get("code")?.trim().toUpperCase() ?? "";
 
-  if (!code && !email) {
-    return NextResponse.json(
-      { error: "Se requiere el parámetro 'code' o 'email'." },
-      { status: 400 }
-    );
-  }
-
-  // Basic format guards before hitting the DB
-  if (code && !/^TUR-[A-Z2-9]{6}$/.test(code)) {
+  if (!/^TUR-[A-Z2-9]{6}$/.test(code)) {
     return NextResponse.json({ error: "Código inválido." }, { status: 400 });
-  }
-  if (email && (!EMAIL_RE.test(email) || email.length > 254)) {
-    return NextResponse.json({ error: "Email inválido." }, { status: 400 });
   }
 
   try {
-    const tenant = await prisma.tenant.findUnique({ where: { slug: DEMO_TENANT } });
-    if (!tenant) {
-      return NextResponse.json({ error: "Servicio no disponible." }, { status: 503 });
+    const booking = await prisma.turneraBooking.findUnique({ where: { code } });
+    if (!booking) {
+      return NextResponse.json({ error: "Reserva no encontrada." }, { status: 404 });
     }
-
-    if (code) {
-      const booking = await prisma.turneraBooking.findUnique({ where: { code } });
-      // Constant-time-like check: always verify tenantId to avoid oracle attacks
-      if (!booking || booking.tenantId !== tenant.id) {
-        return NextResponse.json({ error: "Reserva no encontrada." }, { status: 404 });
-      }
-      return NextResponse.json({ booking: toResponse(booking) });
-    }
-
-    // email — return only that user's bookings
-    const list = await prisma.turneraBooking.findMany({
-      where: { tenantId: tenant.id, clientEmail: email },
-      orderBy: { createdAt: "desc" },
-      take: 100, // safety cap — no unbounded queries
-    });
-    return NextResponse.json({ bookings: list.map(toResponse) });
+    return NextResponse.json({ booking: toResponse(booking) });
   } catch (err) {
     console.error("[GET /api/appointments/bookings]", err);
     return NextResponse.json({ error: "Error interno del servidor." }, { status: 500 });

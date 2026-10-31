@@ -12,30 +12,28 @@ export const localeLabels: Record<Locale, string> = {
 // locking literal string values (which `as const` would do).
 
 export type T = {
-  nav: { services: string; whyUs: string; pricing: string; contact: string; start: string; login: string };
+  nav: { services: string; custom: string; whyUs: string; pricing: string; contact: string; start: string; login: string };
   hero: {
-    badge: string; heading1: string; heading2: string; heading3: string;
-    description: string; ctaPrimary: string; ctaSecondary: string; scroll: string;
-    stats: { uptime: string; onboarding: string; arca: string };
+    heading1: string; heading2: string; heading3: string;
+    description: string; ctaPrimary: string; ctaSecondary: string;
   };
   services: {
-    eyebrow: string; heading: string; description: string; cta: string;
-    items: { tag: string; title: string; description: string }[];
+    heading: string; description: string; cta: string;
+    items: { title: string; description: string }[];
   };
   values: {
-    eyebrow: string; heading: string; description: string;
+    heading: string; description: string;
     items: { title: string; description: string }[];
-    stats: { value: string; label: string }[];
   };
   contact: {
-    eyebrow: string; heading: string; description: string;
+    heading: string; description: string;
     emailLabel: string; locationLabel: string; locationValue: string;
     fields: {
       name: string; email: string; company: string; message: string;
       namePlaceholder: string; emailPlaceholder: string;
       companyPlaceholder: string; messagePlaceholder: string;
     };
-    submit: string; sending: string;
+    submit: string; sending: string; error: string;
     success: { heading: string; description: string };
   };
   footer: {
@@ -43,23 +41,9 @@ export type T = {
     productLinks: string[]; companyLinks: string[];
     copyright: (year: number) => string; location: string;
   };
-  portfolio: {
-    eyebrow: string;
-    heading: string;
-    description: string;
-    cases: {
-      industry: string;
-      title: string;
-      challenge: string;
-      solution: string;
-      metrics: { value: string; label: string }[];
-    }[];
-  };
   pricing: {
-    eyebrow: string;
     heading: string;
     description: string;
-    monthly: string;
     cta: string;
     ctaFree: string;
     popular: string;
@@ -72,19 +56,16 @@ export type T = {
     }[];
   };
   customWork: {
-    eyebrow: string;
     heading: string;
     description: string;
     cta: string;
-    items: { icon: string; title: string; description: string; tags: string[] }[];
+    items: { title: string; description: string; tags: string[] }[];
   };
   whyCuarzo: {
-    eyebrow: string;
     heading: string;
     body1: string;
     body2: string;
     closing: string;
-    pillars: { value: string; label: string }[];
   };
   auth: {
     login: {
@@ -155,6 +136,7 @@ export type T = {
 const es: T = {
   nav: {
     services: "Servicios",
+    custom: "A medida",
     whyUs: "Por qué elegirnos",
     pricing: "Precios",
     contact: "Contacto",
@@ -162,92 +144,72 @@ const es: T = {
     login: "Iniciar sesión",
   },
   hero: {
-    badge: "Soluciones Digitales Inteligentes",
-    heading1: "Escala tu negocio",
-    heading2: "con tecnología",
-    heading3: "de precisión",
+    heading1: "Stock, turnos",
+    heading2: "y facturación",
+    heading3: "en un solo lugar",
     description:
-      "Potenciamos PYMEs y startups argentinas con herramientas de nivel enterprise. Control de stock, turneras, facturación ARCA y e-commerce, todo en un ecosistema único.",
-    ctaPrimary: "Comenzar ahora",
-    ctaSecondary: "Ver servicios",
-    scroll: "Descubrir",
-    stats: {
-      uptime: "Uptime",
-      onboarding: "Onboarding",
-      arca: "ARCA/AFIP",
-    },
+      "La plataforma para PYMEs argentinas: controlá tu stock, recibí reservas online, facturá con ARCA y vendé por internet.",
+    ctaPrimary: "Empezar gratis",
+    ctaSecondary: "Necesito un desarrollo a medida",
   },
   services: {
-    eyebrow: "El Ecosistema Cuarzo",
     heading: "Una suite completa de herramientas digitales",
     description:
       "Cada módulo funciona de forma independiente o integrada, adaptándose al ritmo de crecimiento de tu empresa.",
     cta: "Acceder al módulo",
     items: [
       {
-        tag: "Inventario",
         title: "Control de Stock",
         description:
-          "Gestión de inventario en tiempo real con trazabilidad completa. Alertas automáticas, reportes avanzados y sincronización multi-depósito.",
+          "Sabé qué tenés en cada depósito, en tiempo real. Alertas automáticas cuando algo se está por acabar y reportes claros.",
       },
       {
-        tag: "Scheduling",
         title: "Turnera Digital",
         description:
           "Sistema de agenda inteligente para clientes y proveedores. Reservas online, recordatorios automáticos y optimización de horarios.",
       },
       {
-        tag: "Fiscal",
         title: "Facturación con ARCA",
         description:
-          "Integración nativa con ARCA/AFIP para facturación electrónica sin fricciones. Comprobantes A, B y C, libro IVA digital y más.",
+          "Facturá electrónicamente desde Cuarzo, conectado con ARCA/AFIP. Comprobantes A, B y C, libro IVA digital y más.",
       },
       {
-        tag: "E-commerce",
         title: "Tienda & Catálogos",
         description:
-          "Tiendas online y catálogos digitales de alto rendimiento. Integración con Mercado Pago, gestión de pedidos y logística.",
+          "Tiendas online y catálogos digitales. Integración con Mercado Pago, gestión de pedidos y logística.",
       },
     ],
   },
   values: {
-    eyebrow: "Por qué elegirnos",
-    heading: "Tecnología de precisión, resultados reales",
-    description: "No vendemos software. Construimos el backbone digital de tu empresa.",
+    heading: "Pensado para trabajar en Argentina",
+    description: "Una plataforma hecha para el día a día de tu negocio.",
     items: [
       {
-        title: "Modernización sin fricciones",
+        title: "Dejá el papel atrás",
         description:
-          "Migra tus procesos analógicos al mundo digital con acompañamiento experto. Cero interrupción operativa.",
+          "Pasá a digital lo que hoy hacés a mano o en planillas, paso a paso.",
       },
       {
-        title: "Escalabilidad garantizada",
+        title: "Crece con vos",
         description:
-          "Arquitectura que crece con vos. Desde 10 hasta 10.000 transacciones diarias sin cambiar de plataforma.",
+          "Sumás usuarios y módulos cuando los necesitás, sin cambiar de plataforma.",
       },
       {
         title: "Precisión técnica",
         description:
-          "Cada integración, cada flujo, cada endpoint diseñado con estándares de producción enterprise.",
+          "Cada integración y cada flujo, pensados para funcionar todos los días.",
       },
       {
         title: "Hecho para Argentina",
         description:
-          "Integración nativa con ARCA/AFIP, Mercado Pago y el ecosistema fiscal argentino. Sin workarounds.",
+          "Conectado con ARCA/AFIP y Mercado Pago, sin trucos ni pasos extra.",
       },
-    ],
-    stats: [
-      { value: "100%", label: "Integración ARCA/AFIP" },
-      { value: "< 24h", label: "Tiempo de onboarding" },
-      { value: "99.9%", label: "Uptime garantizado" },
-      { value: "∞", label: "Escalabilidad" },
     ],
   },
   contact: {
-    eyebrow: "Contacto",
     heading: "Hablemos de tu próximo proyecto",
     description:
-      "Contanos qué necesita tu empresa y te armaremos una propuesta a medida. Sin compromisos, sin letras chicas.",
+      "Contanos qué necesita tu empresa y te armaremos una propuesta a medida. Te respondemos en 24 horas hábiles, sin compromisos.",
     emailLabel: "Email",
     locationLabel: "Ubicación",
     locationValue: "Buenos Aires, Argentina",
@@ -263,9 +225,10 @@ const es: T = {
     },
     submit: "Enviar mensaje",
     sending: "Enviando...",
+    error: "No pudimos enviar tu mensaje. Probá de nuevo o escribinos a dev@cuarzostudio.com.",
     success: {
       heading: "¡Mensaje enviado!",
-      description: "Te contactaremos en menos de 24 horas hábiles.",
+      description: "Te respondemos en 24 horas hábiles.",
     },
   },
   footer: {
@@ -273,55 +236,13 @@ const es: T = {
     productHeading: "Producto",
     companyHeading: "Empresa",
     productLinks: ["Control de Stock", "Turnera Digital", "Facturación ARCA", "E-commerce", "Precios"],
-    companyLinks: ["Sobre nosotros", "Portfolio", "CV", "Contacto"],
+    companyLinks: ["Sobre nosotros", "CV", "Contacto"],
     copyright: (year: number) => `© ${year} Cuarzo. Todos los derechos reservados.`,
     location: "Buenos Aires · Argentina",
   },
-  portfolio: {
-    eyebrow: "Casos de éxito",
-    heading: "Resultados reales para negocios reales",
-    description: "Cada implementación es única. Estos son algunos de los desafíos que resolvimos.",
-    cases: [
-      {
-        industry: "Indumentaria",
-        title: "Tienda de ropa con stock en 3 locales",
-        challenge: "Inventario desincronizado entre sucursales generaba quiebres de stock y ventas perdidas.",
-        solution: "Implementamos control de stock multi-depósito con alertas automáticas y trazabilidad completa.",
-        metrics: [
-          { value: "−40%", label: "Quiebres de stock" },
-          { value: "+28%", label: "Ventas recuperadas" },
-          { value: "3 días", label: "Tiempo de implementación" },
-        ],
-      },
-      {
-        industry: "Salud",
-        title: "Consultorio médico con gestión de turnos",
-        challenge: "Agenda manual con sobreturno frecuente y alta tasa de ausencias sin previo aviso.",
-        solution: "Turnera digital con confirmación automática por email y recordatorios 24 hs antes.",
-        metrics: [
-          { value: "−65%", label: "Ausencias sin aviso" },
-          { value: "24/7", label: "Reservas online" },
-          { value: "< 1 día", label: "Onboarding" },
-        ],
-      },
-      {
-        industry: "Distribuidora",
-        title: "Facturación electrónica ARCA sin errores",
-        challenge: "Proceso manual de facturación con AFIP con errores frecuentes y tiempo excesivo.",
-        solution: "Integración nativa con ARCA/AFIP. Comprobantes A, B y C generados en segundos.",
-        metrics: [
-          { value: "100%", label: "Comprobantes válidos" },
-          { value: "−90%", label: "Tiempo de facturación" },
-          { value: "0", label: "Errores AFIP" },
-        ],
-      },
-    ],
-  },
   pricing: {
-    eyebrow: "Planes y precios",
     heading: "Elegí el plan que se adapta a tu empresa",
     description: "Empezá gratis y crecé sin límites. Todos los planes incluyen acceso al panel de administración.",
-    monthly: "/ mes",
     cta: "Empezar ahora",
     ctaFree: "Comenzar gratis",
     disclaimer: "Precios en USD · Facturación mensual · Cancelá en cualquier momento",
@@ -349,62 +270,49 @@ const es: T = {
         name: "Enterprise",
         price: "149",
         period: "USD / mes",
-        features: ["Usuarios ilimitados", "Todo lo de Pro", "SLA 99.9%", "Onboarding dedicado", "API completa", "Factura en ARS o USD"],
+        features: ["Usuarios ilimitados", "Todo lo de Pro", "API completa", "Factura en ARS o USD"],
       },
     ],
   },
   whyCuarzo: {
-    eyebrow: "Por qué Cuarzo",
     heading: "El nombre no es casualidad",
     body1:
       "El cuarzo está en cada dispositivo que usás: en el oscilador de tu celular, en los procesadores de tu computadora, en el reloj de tu mano. Es el mineral que sincroniza la tecnología moderna — invisible, preciso, indispensable. Sin él, no hay señal de tiempo, no hay cómputo, no hay nada.",
     body2:
-      "Así pensamos nuestros servicios. El control de stock que evita quiebres, la turnera que nunca pierde un cliente, la facturación que no falla. No lo ves hasta que no está. Y cuando está, todo funciona. Tu negocio corre sobre una base que no tenés que pensar — igual que el cuarzo.",
+      "Así pensamos nuestros servicios. El control de stock que te avisa a tiempo, la turnera que ordena tu agenda, la facturación conectada con ARCA. No lo ves hasta que no está. Y cuando está, todo funciona. Tu negocio corre sobre una base que no tenés que pensar — igual que el cuarzo.",
     closing: "La base invisible que sostiene tu negocio.",
-    pillars: [
-      { value: "Precisión", label: "Cada módulo diseñado sin margen de error" },
-      { value: "Resiliencia", label: "99.9% uptime · Nada se cae" },
-      { value: "Invisibilidad", label: "Funciona en segundo plano, sin fricción" },
-      { value: "Escala", label: "Desde una PyME hasta una cadena" },
-    ],
   },
   customWork: {
-    eyebrow: "Trabajos a medida",
     heading: "¿Necesitás algo específico?",
     description:
       "Además de la plataforma, trabajamos en proyectos puntuales. Si tenés una necesidad concreta, hablemos.",
     cta: "Consultá sin compromiso",
     items: [
       {
-        icon: "📄",
         title: "CV Profesional",
         description:
           "Diseño y redacción de curriculum vitae optimizado para ATS, con estructura clara y orientado a resultados.",
         tags: ["Redacción", "Diseño", "ATS-friendly"],
       },
       {
-        icon: "💻",
         title: "Software a medida",
         description:
           "Aplicaciones web, bots, automatizaciones y scripts adaptados exactamente a tu proceso de negocio.",
         tags: ["Web app", "Bot", "Automatización"],
       },
       {
-        icon: "🔗",
         title: "Integraciones API",
         description:
           "Conectamos tus sistemas existentes entre sí: ERP, e-commerce, CRM, herramientas internas y más.",
         tags: ["API", "Webhook", "Sync"],
       },
       {
-        icon: "🧠",
         title: "Consultoría técnica",
         description:
           "Revisión de arquitectura, auditoría de código, definición de stack y acompañamiento técnico de tu equipo.",
         tags: ["Arquitectura", "Code review", "Mentoría"],
       },
       {
-        icon: "🌐",
         title: "Dominio & Mail corporativo",
         description:
           "Registramos y administramos tu dominio empresarial (.com, .com.ar y más) y configuramos tus cuentas @tuempresa.com. Como hicimos con projaska.com.",
@@ -491,9 +399,9 @@ const es: T = {
     },
     check: {
       title: "Mis reservas",
-      description: "Ingresá tu email para ver todos tus turnos.",
+      description: "Ingresá el código de tu reserva, lo encontrás en el email de confirmación.",
       newBooking: "Nueva reserva",
-      emailPlaceholder: "tu@email.com",
+      emailPlaceholder: "TUR-XXXXXX",
       submit: "Buscar",
       loading: "Buscando…",
       networkError: "No se pudo buscar. Verificá tu conexión.",
@@ -572,6 +480,7 @@ const es: T = {
 const en: T = {
   nav: {
     services: "Services",
+    custom: "Custom work",
     whyUs: "Why us",
     pricing: "Pricing",
     contact: "Contact",
@@ -579,92 +488,72 @@ const en: T = {
     login: "Log in",
   },
   hero: {
-    badge: "Intelligent Digital Solutions",
-    heading1: "Scale your business",
-    heading2: "with precision",
-    heading3: "technology",
+    heading1: "Stock, bookings",
+    heading2: "and invoicing",
+    heading3: "all in one place",
     description:
-      "We empower SMEs and startups with enterprise-grade tools. Inventory management, scheduling, e-invoicing and e-commerce — all in one ecosystem.",
-    ctaPrimary: "Get started",
-    ctaSecondary: "See services",
-    scroll: "Discover",
-    stats: {
-      uptime: "Uptime",
-      onboarding: "Onboarding",
-      arca: "ARCA/AFIP",
-    },
+      "The platform for Argentine SMEs: control your stock, take online bookings, invoice through ARCA and sell online.",
+    ctaPrimary: "Start for free",
+    ctaSecondary: "I need custom development",
   },
   services: {
-    eyebrow: "The Cuarzo Ecosystem",
     heading: "A complete suite of digital tools",
     description:
       "Each module works independently or integrated, adapting to your company's growth pace.",
     cta: "Access module",
     items: [
       {
-        tag: "Inventory",
         title: "Stock Control",
         description:
-          "Real-time inventory management with full traceability. Automatic alerts, advanced reports, and multi-warehouse sync.",
+          "Know what you have in every warehouse, in real time. Automatic alerts when something is running low, and clear reports.",
       },
       {
-        tag: "Scheduling",
         title: "Digital Booking",
         description:
           "Smart scheduling for clients and providers. Online bookings, automatic reminders, and time slot optimization.",
       },
       {
-        tag: "Fiscal",
         title: "e-Invoicing (ARCA)",
         description:
-          "Native integration with ARCA/AFIP for frictionless electronic invoicing. Type A, B and C receipts, digital VAT ledger, and more.",
+          "Issue electronic invoices connected to ARCA/AFIP. Type A, B and C receipts, digital VAT ledger, and more.",
       },
       {
-        tag: "E-commerce",
         title: "Store & Catalogs",
         description:
-          "High-performance online stores and digital catalogs. Mercado Pago integration, order management, and logistics.",
+          "Online stores and digital catalogs. Mercado Pago integration, order management, and logistics.",
       },
     ],
   },
   values: {
-    eyebrow: "Why choose us",
-    heading: "Precision technology, real results",
-    description: "We don't sell software. We build your company's digital backbone.",
+    heading: "Designed for how business works in Argentina",
+    description: "A platform made for your business's day to day.",
     items: [
       {
-        title: "Frictionless modernization",
+        title: "Leave paper behind",
         description:
-          "Migrate your analog processes to the digital world with expert guidance. Zero operational disruption.",
+          "Move what you do by hand or in spreadsheets to digital, step by step.",
       },
       {
-        title: "Guaranteed scalability",
+        title: "Grows with you",
         description:
-          "Architecture that grows with you. From 10 to 10,000 daily transactions without switching platforms.",
+          "Add users and modules when you need them, without switching platforms.",
       },
       {
         title: "Technical precision",
         description:
-          "Every integration, every flow, every endpoint designed to enterprise production standards.",
+          "Every integration and every flow, built to work every day.",
       },
       {
         title: "Built for Argentina",
         description:
-          "Native integration with ARCA/AFIP, Mercado Pago, and the Argentine fiscal ecosystem. No workarounds.",
+          "Connected to ARCA/AFIP and Mercado Pago, with no tricks or extra steps.",
       },
-    ],
-    stats: [
-      { value: "100%", label: "ARCA/AFIP Integration" },
-      { value: "< 24h", label: "Onboarding time" },
-      { value: "99.9%", label: "Guaranteed uptime" },
-      { value: "∞", label: "Scalability" },
     ],
   },
   contact: {
-    eyebrow: "Contact",
     heading: "Let's talk about your next project",
     description:
-      "Tell us what your company needs and we'll build a tailored proposal. No commitments, no fine print.",
+      "Tell us what your company needs and we'll build a tailored proposal. We reply within 24 business hours, no commitment.",
     emailLabel: "Email",
     locationLabel: "Location",
     locationValue: "Buenos Aires, Argentina",
@@ -680,9 +569,10 @@ const en: T = {
     },
     submit: "Send message",
     sending: "Sending...",
+    error: "We couldn't send your message. Try again or write to dev@cuarzostudio.com.",
     success: {
       heading: "Message sent!",
-      description: "We'll get back to you within 24 business hours.",
+      description: "We'll reply within 24 business hours.",
     },
   },
   footer: {
@@ -690,55 +580,13 @@ const en: T = {
     productHeading: "Product",
     companyHeading: "Company",
     productLinks: ["Stock Control", "Digital Booking", "e-Invoicing ARCA", "E-commerce", "Pricing"],
-    companyLinks: ["About us", "Portfolio", "CV", "Contact"],
+    companyLinks: ["About us", "CV", "Contact"],
     copyright: (year: number) => `© ${year} Cuarzo. All rights reserved.`,
     location: "Buenos Aires · Argentina",
   },
-  portfolio: {
-    eyebrow: "Case studies",
-    heading: "Real results for real businesses",
-    description: "Every implementation is unique. These are some of the challenges we solved.",
-    cases: [
-      {
-        industry: "Retail",
-        title: "Clothing store with stock across 3 locations",
-        challenge: "Unsynchronized inventory between branches caused stockouts and lost sales.",
-        solution: "Multi-warehouse stock control with automatic alerts and full traceability.",
-        metrics: [
-          { value: "−40%", label: "Stockouts" },
-          { value: "+28%", label: "Recovered sales" },
-          { value: "3 days", label: "Implementation time" },
-        ],
-      },
-      {
-        industry: "Healthcare",
-        title: "Medical clinic with appointment management",
-        challenge: "Manual scheduling with frequent double-bookings and high no-show rate.",
-        solution: "Digital booking system with automatic email confirmation and 24-hour reminders.",
-        metrics: [
-          { value: "−65%", label: "No-shows" },
-          { value: "24/7", label: "Online bookings" },
-          { value: "< 1 day", label: "Onboarding" },
-        ],
-      },
-      {
-        industry: "Distribution",
-        title: "Error-free ARCA e-invoicing",
-        challenge: "Manual AFIP invoicing with frequent errors and excessive time spent.",
-        solution: "Native ARCA/AFIP integration. Type A, B and C receipts generated in seconds.",
-        metrics: [
-          { value: "100%", label: "Valid receipts" },
-          { value: "−90%", label: "Invoicing time" },
-          { value: "0", label: "AFIP errors" },
-        ],
-      },
-    ],
-  },
   pricing: {
-    eyebrow: "Plans & Pricing",
     heading: "Choose the plan that fits your business",
     description: "Start for free and scale without limits. All plans include access to the admin dashboard.",
-    monthly: "/ mo",
     cta: "Get started",
     ctaFree: "Start for free",
     disclaimer: "Prices in USD · Monthly billing · Cancel anytime",
@@ -766,62 +614,49 @@ const en: T = {
         name: "Enterprise",
         price: "149",
         period: "USD / mo",
-        features: ["Unlimited users", "Everything in Pro", "99.9% SLA", "Dedicated onboarding", "Full API access", "ARS or USD billing"],
+        features: ["Unlimited users", "Everything in Pro", "Full API access", "ARS or USD billing"],
       },
     ],
   },
   whyCuarzo: {
-    eyebrow: "Why Cuarzo",
     heading: "The name is no coincidence",
     body1:
       "Quartz is in every device you use: in your phone's oscillator, in your computer's processors, in the watch on your wrist. It's the mineral that synchronizes modern technology — invisible, precise, indispensable. Without it, there's no timing signal, no computation, nothing.",
     body2:
-      "That's how we think about our services. Stock control that prevents shortages, a scheduler that never misses a client, invoicing that never fails. You don't notice it until it's gone. And when it's there, everything works. Your business runs on a foundation you don't have to think about — just like quartz.",
+      "That's how we think about our services. Stock control that warns you in time, a scheduler that keeps your calendar in order, invoicing connected to ARCA. You don't notice it until it's gone. And when it's there, everything works. Your business runs on a foundation you don't have to think about — just like quartz.",
     closing: "The invisible foundation holding your business together.",
-    pillars: [
-      { value: "Precision", label: "Every module engineered with zero margin for error" },
-      { value: "Resilience", label: "99.9% uptime · Nothing goes down" },
-      { value: "Invisibility", label: "Works in the background, without friction" },
-      { value: "Scale", label: "From a small business to a full chain" },
-    ],
   },
   customWork: {
-    eyebrow: "Custom projects",
     heading: "Need something specific?",
     description:
       "Beyond the platform, we take on standalone projects. If you have a concrete need, let's talk.",
     cta: "Get a free quote",
     items: [
       {
-        icon: "📄",
         title: "Professional CV",
         description:
           "CV design and writing optimized for ATS systems, with a clear structure and results-oriented content.",
         tags: ["Writing", "Design", "ATS-friendly"],
       },
       {
-        icon: "💻",
         title: "Custom software",
         description:
           "Web apps, bots, automations and scripts tailored exactly to your business process.",
         tags: ["Web app", "Bot", "Automation"],
       },
       {
-        icon: "🔗",
         title: "API integrations",
         description:
           "We connect your existing systems together: ERP, e-commerce, CRM, internal tools and more.",
         tags: ["API", "Webhook", "Sync"],
       },
       {
-        icon: "🧠",
         title: "Technical consulting",
         description:
           "Architecture review, code audits, stack definition and technical mentoring for your team.",
         tags: ["Architecture", "Code review", "Mentoring"],
       },
       {
-        icon: "🌐",
         title: "Domain & Corporate email",
         description:
           "We register and manage your business domain (.com and more) and set up your @yourbusiness.com email accounts. Like we did with projaska.com.",
@@ -908,9 +743,9 @@ const en: T = {
     },
     check: {
       title: "My bookings",
-      description: "Enter your email to see all your appointments.",
+      description: "Enter your booking code, you can find it in your confirmation email.",
       newBooking: "New booking",
-      emailPlaceholder: "you@email.com",
+      emailPlaceholder: "TUR-XXXXXX",
       submit: "Search",
       loading: "Searching…",
       networkError: "Search failed. Check your connection.",
@@ -988,6 +823,7 @@ const en: T = {
 const pt: T = {
   nav: {
     services: "Serviços",
+    custom: "Sob medida",
     whyUs: "Por que nos escolher",
     pricing: "Preços",
     contact: "Contato",
@@ -995,92 +831,72 @@ const pt: T = {
     login: "Entrar",
   },
   hero: {
-    badge: "Soluções Digitais Inteligentes",
-    heading1: "Escale seu negócio",
-    heading2: "com tecnologia",
-    heading3: "de precisão",
+    heading1: "Estoque, agenda",
+    heading2: "e faturamento",
+    heading3: "em um só lugar",
     description:
-      "Potencializamos PMEs e startups com ferramentas de nível enterprise. Controle de estoque, agendamento, faturamento e e-commerce — tudo em um ecossistema único.",
-    ctaPrimary: "Começar agora",
-    ctaSecondary: "Ver serviços",
-    scroll: "Descobrir",
-    stats: {
-      uptime: "Uptime",
-      onboarding: "Onboarding",
-      arca: "ARCA/AFIP",
-    },
+      "A plataforma para PMEs argentinas: controle seu estoque, receba reservas online, fature com ARCA e venda pela internet.",
+    ctaPrimary: "Começar grátis",
+    ctaSecondary: "Preciso de um desenvolvimento sob medida",
   },
   services: {
-    eyebrow: "O Ecossistema Cuarzo",
     heading: "Uma suite completa de ferramentas digitais",
     description:
       "Cada módulo funciona de forma independente ou integrada, adaptando-se ao ritmo de crescimento da sua empresa.",
     cta: "Acessar módulo",
     items: [
       {
-        tag: "Inventário",
         title: "Controle de Estoque",
         description:
-          "Gestão de inventário em tempo real com rastreabilidade completa. Alertas automáticos, relatórios avançados e sincronização multi-depósito.",
+          "Saiba o que você tem em cada depósito, em tempo real. Alertas automáticos quando algo está acabando e relatórios claros.",
       },
       {
-        tag: "Agendamento",
         title: "Agendamento Digital",
         description:
           "Sistema de agenda inteligente para clientes e fornecedores. Reservas online, lembretes automáticos e otimização de horários.",
       },
       {
-        tag: "Fiscal",
         title: "Faturamento com ARCA",
         description:
-          "Integração nativa com ARCA/AFIP para faturamento eletrônico sem fricções. Comprovantes A, B e C, livro de IVA digital e mais.",
+          "Emita faturas eletrônicas conectado à ARCA/AFIP. Comprovantes A, B e C, livro de IVA digital e mais.",
       },
       {
-        tag: "E-commerce",
         title: "Loja & Catálogos",
         description:
-          "Lojas online e catálogos digitais de alto desempenho. Integração com Mercado Pago, gestão de pedidos e logística.",
+          "Lojas online e catálogos digitais. Integração com Mercado Pago, gestão de pedidos e logística.",
       },
     ],
   },
   values: {
-    eyebrow: "Por que nos escolher",
-    heading: "Tecnologia de precisão, resultados reais",
-    description: "Não vendemos software. Construímos o backbone digital da sua empresa.",
+    heading: "Pensado para trabalhar na Argentina",
+    description: "Uma plataforma feita para o dia a dia do seu negócio.",
     items: [
       {
-        title: "Modernização sem fricções",
+        title: "Deixe o papel para trás",
         description:
-          "Migre seus processos analógicos para o mundo digital com acompanhamento especializado. Zero interrupção operacional.",
+          "Passe para o digital o que hoje você faz à mão ou em planilhas, passo a passo.",
       },
       {
-        title: "Escalabilidade garantida",
+        title: "Cresce com você",
         description:
-          "Arquitetura que cresce com você. De 10 a 10.000 transações diárias sem trocar de plataforma.",
+          "Adicione usuários e módulos quando precisar, sem trocar de plataforma.",
       },
       {
         title: "Precisão técnica",
         description:
-          "Cada integração, cada fluxo, cada endpoint projetado com padrões de produção enterprise.",
+          "Cada integração e cada fluxo, pensados para funcionar todos os dias.",
       },
       {
         title: "Feito para a Argentina",
         description:
-          "Integração nativa com ARCA/AFIP, Mercado Pago e o ecossistema fiscal argentino. Sem workarounds.",
+          "Conectado à ARCA/AFIP e ao Mercado Pago, sem truques nem etapas extras.",
       },
-    ],
-    stats: [
-      { value: "100%", label: "Integração ARCA/AFIP" },
-      { value: "< 24h", label: "Tempo de onboarding" },
-      { value: "99.9%", label: "Uptime garantido" },
-      { value: "∞", label: "Escalabilidade" },
     ],
   },
   contact: {
-    eyebrow: "Contato",
     heading: "Vamos falar sobre seu próximo projeto",
     description:
-      "Conte-nos o que sua empresa precisa e montaremos uma proposta personalizada. Sem compromissos, sem letras miúdas.",
+      "Conte-nos o que sua empresa precisa e montaremos uma proposta personalizada. Respondemos em 24 horas úteis, sem compromisso.",
     emailLabel: "E-mail",
     locationLabel: "Localização",
     locationValue: "Buenos Aires, Argentina",
@@ -1096,9 +912,10 @@ const pt: T = {
     },
     submit: "Enviar mensagem",
     sending: "Enviando...",
+    error: "Não foi possível enviar sua mensagem. Tente novamente ou escreva para dev@cuarzostudio.com.",
     success: {
       heading: "Mensagem enviada!",
-      description: "Entraremos em contato em menos de 24 horas úteis.",
+      description: "Respondemos em 24 horas úteis.",
     },
   },
   footer: {
@@ -1106,55 +923,13 @@ const pt: T = {
     productHeading: "Produto",
     companyHeading: "Empresa",
     productLinks: ["Controle de Estoque", "Agendamento Digital", "Faturamento ARCA", "E-commerce", "Preços"],
-    companyLinks: ["Sobre nós", "Portfolio", "CV", "Contato"],
+    companyLinks: ["Sobre nós", "CV", "Contato"],
     copyright: (year: number) => `© ${year} Cuarzo. Todos os direitos reservados.`,
     location: "Buenos Aires · Argentina",
   },
-  portfolio: {
-    eyebrow: "Casos de sucesso",
-    heading: "Resultados reais para negócios reais",
-    description: "Cada implementação é única. Estes são alguns dos desafios que resolvemos.",
-    cases: [
-      {
-        industry: "Varejo",
-        title: "Loja de roupas com estoque em 3 filiais",
-        challenge: "Inventário desincronizado entre filiais causava rupturas de estoque e vendas perdidas.",
-        solution: "Controle de estoque multi-depósito com alertas automáticos e rastreabilidade completa.",
-        metrics: [
-          { value: "−40%", label: "Rupturas de estoque" },
-          { value: "+28%", label: "Vendas recuperadas" },
-          { value: "3 dias", label: "Tempo de implementação" },
-        ],
-      },
-      {
-        industry: "Saúde",
-        title: "Clínica médica com gestão de agendamentos",
-        challenge: "Agenda manual com excesso frequente de reservas e alta taxa de ausências.",
-        solution: "Sistema de agendamento digital com confirmação automática por e-mail e lembretes.",
-        metrics: [
-          { value: "−65%", label: "Ausências sem aviso" },
-          { value: "24/7", label: "Agendamentos online" },
-          { value: "< 1 dia", label: "Onboarding" },
-        ],
-      },
-      {
-        industry: "Distribuição",
-        title: "Faturamento eletrônico ARCA sem erros",
-        challenge: "Processo manual de faturamento com erros frequentes e tempo excessivo.",
-        solution: "Integração nativa com ARCA/AFIP. Comprovantes A, B e C gerados em segundos.",
-        metrics: [
-          { value: "100%", label: "Comprovantes válidos" },
-          { value: "−90%", label: "Tempo de faturamento" },
-          { value: "0", label: "Erros AFIP" },
-        ],
-      },
-    ],
-  },
   pricing: {
-    eyebrow: "Planos e preços",
     heading: "Escolha o plano que se adapta à sua empresa",
     description: "Comece gratuitamente e cresça sem limites. Todos os planos incluem acesso ao painel de administração.",
-    monthly: "/ mês",
     cta: "Começar agora",
     ctaFree: "Começar grátis",
     disclaimer: "Preços em USD · Cobrança mensal · Cancele quando quiser",
@@ -1182,62 +957,49 @@ const pt: T = {
         name: "Enterprise",
         price: "149",
         period: "USD / mês",
-        features: ["Usuários ilimitados", "Tudo do Pro", "SLA 99,9%", "Onboarding dedicado", "API completa", "Fatura em ARS ou USD"],
+        features: ["Usuários ilimitados", "Tudo do Pro", "API completa", "Fatura em ARS ou USD"],
       },
     ],
   },
   whyCuarzo: {
-    eyebrow: "Por que Cuarzo",
     heading: "O nome não é coincidência",
     body1:
       "O quartzo está em cada dispositivo que você usa: no oscilador do seu celular, nos processadores do seu computador, no relógio no seu pulso. É o mineral que sincroniza a tecnologia moderna — invisível, preciso, indispensável. Sem ele, não há sinal de tempo, não há computação, não há nada.",
     body2:
-      "É assim que pensamos nossos serviços. O controle de estoque que evita rupturas, a agenda que nunca perde um cliente, o faturamento que não falha. Você não percebe até que não está. E quando está, tudo funciona. Seu negócio roda sobre uma base que você não precisa pensar — assim como o quartzo.",
+      "É assim que pensamos nossos serviços. O controle de estoque que avisa a tempo, a agenda que organiza seus horários, o faturamento conectado à ARCA. Você não percebe até que não está. E quando está, tudo funciona. Seu negócio roda sobre uma base que você não precisa pensar — assim como o quartzo.",
     closing: "A base invisível que sustenta o seu negócio.",
-    pillars: [
-      { value: "Precisão", label: "Cada módulo projetado sem margem de erro" },
-      { value: "Resiliência", label: "99,9% uptime · Nada cai" },
-      { value: "Invisibilidade", label: "Funciona em segundo plano, sem fricção" },
-      { value: "Escala", label: "De uma PME a uma rede de lojas" },
-    ],
   },
   customWork: {
-    eyebrow: "Projetos sob medida",
     heading: "Precisa de algo específico?",
     description:
       "Além da plataforma, trabalhamos em projetos pontuais. Se tiver uma necessidade concreta, vamos conversar.",
     cta: "Consulte sem compromisso",
     items: [
       {
-        icon: "📄",
         title: "CV Profissional",
         description:
           "Design e redação de currículo otimizado para ATS, com estrutura clara e orientado a resultados.",
         tags: ["Redação", "Design", "ATS-friendly"],
       },
       {
-        icon: "💻",
         title: "Software sob medida",
         description:
           "Aplicativos web, bots, automações e scripts adaptados exatamente ao seu processo de negócio.",
         tags: ["Web app", "Bot", "Automação"],
       },
       {
-        icon: "🔗",
         title: "Integrações API",
         description:
           "Conectamos seus sistemas existentes entre si: ERP, e-commerce, CRM, ferramentas internas e mais.",
         tags: ["API", "Webhook", "Sync"],
       },
       {
-        icon: "🧠",
         title: "Consultoria técnica",
         description:
           "Revisão de arquitetura, auditoria de código, definição de stack e mentoria técnica para sua equipe.",
         tags: ["Arquitetura", "Code review", "Mentoria"],
       },
       {
-        icon: "🌐",
         title: "Domínio & E-mail corporativo",
         description:
           "Registramos e administramos seu domínio empresarial (.com e mais) e configuramos suas contas @suaempresa.com. Como fizemos com projaska.com.",
@@ -1324,9 +1086,9 @@ const pt: T = {
     },
     check: {
       title: "Meus agendamentos",
-      description: "Digite seu e-mail para ver todos os seus horários.",
+      description: "Digite o código da sua reserva, ele está no e-mail de confirmação.",
       newBooking: "Novo agendamento",
-      emailPlaceholder: "voce@email.com",
+      emailPlaceholder: "TUR-XXXXXX",
       submit: "Buscar",
       loading: "Buscando…",
       networkError: "Não foi possível buscar. Verifique sua conexão.",

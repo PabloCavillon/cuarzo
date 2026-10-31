@@ -1,4 +1,5 @@
-import { generateSecret as _generateSecret, generateSync, verifySync, generateURI } from "otplib";
+import { randomInt } from "crypto";
+import { generateSecret as _generateSecret, verifySync, generateURI } from "otplib";
 
 export function generateTotpSecret(): string {
   return _generateSecret();
@@ -17,11 +18,6 @@ export function verifyTotp(token: string, secret: string): boolean {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function generateTotpToken(secret: string): string {
-  return generateSync({ secret });
-}
-
 export function generateEmailOtp(): string {
-  return Math.floor(100000 + Math.random() * 900000).toString();
+  return randomInt(100000, 1000000).toString();
 }

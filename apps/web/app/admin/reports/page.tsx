@@ -57,7 +57,9 @@ function groupWeekly(
     if (m.tipo === "ingreso") map[key].ingresos += v;
     else                      map[key].egresos  += v;
   }
-  return Object.values(map).sort((a, b) => a.label.localeCompare(b.label));
+  return Object.entries(map)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([, v]) => v);
 }
 
 function groupMonthly(

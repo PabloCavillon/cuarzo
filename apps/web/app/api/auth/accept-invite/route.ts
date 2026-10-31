@@ -42,6 +42,8 @@ export async function POST(req: NextRequest) {
         name:     name.trim(),
         role:     inv.role,
         password: hashed,
+        // The token arrived by email, so the mailbox is already proven.
+        emailVerified: new Date(),
       },
     }),
     prisma.invitation.update({

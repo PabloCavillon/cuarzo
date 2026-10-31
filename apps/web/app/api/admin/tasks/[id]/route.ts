@@ -82,6 +82,29 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     },
   });
 
+  // A finished recurring task spawns its next occurrence.
+  if (data.status === "done" && existing.status !== "done" && task.recurrence !== "none") {
+    const next = new Date(task.dueDate ?? Date.now());
+    if (task.recurrence === "daily")   next.setDate(next.getDate() + 1);
+    if (task.recurrence === "weekly")  next.setDate(next.getDate() + 7);
+    if (task.recurrence === "monthly") next.setMonth(next.getMonth() + 1);
+    if (task.recurrence === "yearly")  next.setFullYear(next.getFullYear() + 1);
+
+    await prisma.task.create({
+      data: {
+        tenantId:         task.tenantId,
+        createdById:      task.createdById,
+        assignedToId:     task.assignedToId,
+        title:            task.title,
+        description:      task.description,
+        priority:         task.priority,
+        recurrence:       task.recurrence,
+        recurrenceConfig: task.recurrenceConfig ?? undefined,
+        dueDate:          next,
+      },
+    });
+  }
+
   // Notify new assignee when reassigned
   const newAssignee = data.assignedToId as string | null | undefined;
   if (newAssignee && newAssignee !== existing.assignedToId && newAssignee !== user.id) {

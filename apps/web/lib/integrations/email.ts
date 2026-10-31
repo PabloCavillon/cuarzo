@@ -98,8 +98,8 @@ function itemsTable(items: EmailItem[], total: number): string {
       (it) => `
     <tr>
       <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#1e293b;">
-        ${it.nameSnap}
-        <span style="display:block;font-size:12px;color:#94a3b8;margin-top:2px;">${it.skuSnap}</span>
+        ${escapeHtml(it.nameSnap)}
+        <span style="display:block;font-size:12px;color:#94a3b8;margin-top:2px;">${escapeHtml(it.skuSnap)}</span>
       </td>
       <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#64748b;text-align:center;white-space:nowrap;">
         × ${it.qty}
@@ -146,7 +146,7 @@ export async function sendOrderCreated(payload: OrderEmailPayload): Promise<void
   const shortId = payload.orderId.slice(0, 8).toUpperCase();
 
   const body = `
-    ${heading(`Recibimos tu pedido, ${payload.name.split(" ")[0]}!`)}
+    ${heading(`Recibimos tu pedido, ${escapeHtml(payload.name.split(" ")[0])}!`)}
     ${badge("Recibido", "#64748b")}
     ${subtext("Tu pedido fue registrado correctamente. En breve nos ponemos en contacto para coordinar los detalles.")}
     ${divider()}
@@ -262,9 +262,9 @@ export async function sendInvitation({
   const roleLabel = role === "admin" ? "Admin" : "Staff";
 
   const emailBody = `
-    ${heading(`Fuiste invitado a ${tenantName}`)}
+    ${heading(`Fuiste invitado a ${escapeHtml(tenantName)}`)}
     ${badge("Invitación pendiente", "#6366f1")}
-    ${subtext(`<strong>${invitedBy}</strong> te invitó a unirte al equipo de <strong>${tenantName}</strong> en Cuarzo con el rol de <strong>${roleLabel}</strong>.`)}
+    ${subtext(`<strong>${escapeHtml(invitedBy)}</strong> te invitó a unirte al equipo de <strong>${escapeHtml(tenantName)}</strong> en Cuarzo con el rol de <strong>${roleLabel}</strong>.`)}
     ${ctaButton("Aceptar invitación", acceptUrl)}
     ${divider()}
     <p style="margin:0;font-size:12px;color:#94a3b8;">Este enlace expira en 7 días. Si no reconocés esta invitación, ignorá este mensaje.</p>
@@ -274,7 +274,7 @@ export async function sendInvitation({
     from:    FROM,
     to:      [to],
     subject: `Invitación a ${tenantName} en Cuarzo`,
-    html:    shell(emailBody, `${invitedBy} te invitó a unirse a ${tenantName}.`),
+    html:    shell(emailBody, `${escapeHtml(invitedBy)} te invitó a unirse a ${escapeHtml(tenantName)}.`),
   });
 }
 
@@ -287,7 +287,7 @@ export async function sendPasswordReset({
 
   const emailBody = `
     ${heading(`Restablecer contraseña`)}
-    ${subtext(`Hola ${name.split(" ")[0]}, recibimos una solicitud para restablecer la contraseña de tu cuenta Cuarzo.`)}
+    ${subtext(`Hola ${escapeHtml(name.split(" ")[0])}, recibimos una solicitud para restablecer la contraseña de tu cuenta Cuarzo.`)}
     ${ctaButton("Restablecer contraseña", resetUrl)}
     ${divider()}
     <p style="margin:0;font-size:12px;color:#94a3b8;">Este enlace expira en 1 hora. Si no solicitaste el restablecimiento, ignorá este mensaje — tu cuenta está segura.</p>
@@ -309,7 +309,7 @@ export async function sendEmailVerification({
   if (!process.env.RESEND_API_KEY) return;
 
   const emailBody = `
-    ${heading(`Verificá tu email, ${name.split(" ")[0]}!`)}
+    ${heading(`Verificá tu email, ${escapeHtml(name.split(" ")[0])}!`)}
     ${badge("Pendiente de verificación", "#6366f1")}
     ${subtext("Para activar todas las funciones de tu cuenta Cuarzo, verificá tu dirección de email.")}
     ${ctaButton("Verificar email", verifyUrl)}
@@ -341,8 +341,8 @@ export async function sendLowStockAlert({
       (p) => `
     <tr>
       <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#1e293b;">
-        ${p.name}
-        <span style="display:block;font-size:12px;color:#94a3b8;">${p.sku} · ${p.warehouse}</span>
+        ${escapeHtml(p.name)}
+        <span style="display:block;font-size:12px;color:#94a3b8;">${escapeHtml(p.sku)} · ${escapeHtml(p.warehouse)}</span>
       </td>
       <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#ef4444;text-align:right;font-weight:700;">${p.qty}</td>
       <td style="padding:10px 0;border-bottom:1px solid #f1f5f9;font-size:14px;color:#94a3b8;text-align:right;">mín. ${p.minStock}</td>
@@ -365,7 +365,7 @@ export async function sendLowStockAlert({
   const emailBody = `
     ${heading("Alerta de stock bajo")}
     ${badge(`${products.length} producto${products.length > 1 ? "s" : ""} con stock bajo`, "#ef4444")}
-    ${subtext(`Los siguientes productos de <strong>${tenantName}</strong> están por debajo de su stock mínimo:`)}
+    ${subtext(`Los siguientes productos de <strong>${escapeHtml(tenantName)}</strong> están por debajo de su stock mínimo:`)}
     ${table}
     <a href="${process.env.NEXTAUTH_URL ?? "http://localhost:3000"}/admin/stock"
        style="color:#0a1628;font-size:13px;font-weight:600;">Ver stock →</a>
@@ -388,7 +388,7 @@ export async function sendTwoFaOtp({
 
   const emailBody = `
     ${heading(`Tu código de verificación`)}
-    ${subtext(`Hola ${name.split(" ")[0]}, usá este código para verificar tu identidad. Expira en 10 minutos.`)}
+    ${subtext(`Hola ${escapeHtml(name.split(" ")[0])}, usá este código para verificar tu identidad. Expira en 10 minutos.`)}
     <div style="background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:24px;text-align:center;margin:24px 0;">
       <span style="font-size:36px;font-weight:800;letter-spacing:0.3em;color:#0a1628;font-family:monospace;">${code}</span>
     </div>
@@ -412,7 +412,7 @@ export async function sendEmailVerificationCode({
   if (!process.env.RESEND_API_KEY) return;
 
   const emailBody = `
-    ${heading(`Verificá tu email, ${name.split(" ")[0]}!`)}
+    ${heading(`Verificá tu email, ${escapeHtml(name.split(" ")[0])}!`)}
     ${badge("Verificación pendiente", "#6366f1")}
     ${subtext("Ingresá este código en la pantalla de registro para activar tu cuenta Cuarzo. Expira en 15 minutos.")}
     <div style="background:#f8fafc;border:2px solid #e2e8f0;border-radius:12px;padding:24px;text-align:center;margin:24px 0;">
@@ -441,13 +441,13 @@ export async function sendBookingConfirmed(payload: BookingEmailPayload): Promis
   });
 
   const emailBody = `
-    ${heading(`Tu turno está confirmado, ${payload.name.split(" ")[0]}!`)}
+    ${heading(`Tu turno está confirmado, ${escapeHtml(payload.name.split(" ")[0])}!`)}
     ${badge("Confirmado", "#10b981")}
     <table width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;border-radius:10px;padding:20px 24px;margin-bottom:24px;">
       <tr>
         <td>
           <p style="margin:0 0 10px 0;font-size:14px;color:#64748b;">
-            <strong style="color:#1e293b;display:inline-block;width:100px;">Servicio</strong>${payload.serviceName}
+            <strong style="color:#1e293b;display:inline-block;width:100px;">Servicio</strong>${escapeHtml(payload.serviceName)}
           </p>
           <p style="margin:0 0 10px 0;font-size:14px;color:#64748b;">
             <strong style="color:#1e293b;display:inline-block;width:100px;">Fecha</strong>${dateFormatted}
@@ -473,4 +473,37 @@ export async function sendBookingConfirmed(payload: BookingEmailPayload): Promis
     subject: `Turno confirmado ${payload.code} — Cuarzo`,
     html:    shell(emailBody, `Tu turno del ${dateFormatted} a las ${payload.time} hs está confirmado.`),
   });
+}
+
+// ─── Landing contact form ─────────────────────────────────────────────────────
+
+export type ContactMessage = { name: string; email: string; company?: string; message: string };
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+// Returns false instead of throwing so the form can tell the visitor nothing was sent.
+export async function sendContactMessage({ name, email, company, message }: ContactMessage): Promise<boolean> {
+  if (!process.env.RESEND_API_KEY) return false;
+
+  const emailBody = `
+    ${heading("Nueva consulta desde la web")}
+    ${subtext(`${escapeHtml(name)} (${escapeHtml(email)})${company ? ` · ${escapeHtml(company)}` : ""}`)}
+    ${divider()}
+    <p style="margin:0;font-size:14px;line-height:1.6;color:#334155;white-space:pre-wrap;">${escapeHtml(message)}</p>
+  `;
+
+  const { error } = await getResend().emails.send({
+    from:    FROM,
+    to:      ["dev@cuarzostudio.com"],
+    replyTo: email,
+    subject: `Consulta de ${name}`,
+    html:    shell(emailBody, `Consulta de ${escapeHtml(name)}`),
+  });
+  return !error;
 }

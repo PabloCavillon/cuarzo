@@ -23,8 +23,8 @@ const prismaMock = vi.hoisted(() => ({
   $transaction: vi.fn(),
 }));
 
-vi.mock("@/lib/session", () => sessionMock);
-vi.mock("@/lib/prisma",  () => ({ prisma: prismaMock }));
+vi.mock("@/lib/auth/session", () => sessionMock);
+vi.mock("@/lib/db/prisma",  () => ({ prisma: prismaMock }));
 
 // ── Imports ───────────────────────────────────────────────────────────────────
 
@@ -121,7 +121,7 @@ describe("adjustStock", () => {
     prismaMock.stockWarehouse.findUnique.mockResolvedValue(WAREHOUSE);
     const fd = makeFormData({ productId: "missing", warehouseId: "wh-1", newQty: "5" });
     const result = await adjustStock(fd);
-    expect(result).toEqual({ ok: false, error: "Producto no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Product not found." });
   });
 
   it("returns error when product belongs to a different tenant", async () => {
@@ -129,7 +129,7 @@ describe("adjustStock", () => {
     prismaMock.stockWarehouse.findUnique.mockResolvedValue(WAREHOUSE);
     const fd = makeFormData({ productId: "prod-1", warehouseId: "wh-1", newQty: "5" });
     const result = await adjustStock(fd);
-    expect(result).toEqual({ ok: false, error: "Producto no encontrado." });
+    expect(result).toEqual({ ok: false, error: "Product not found." });
   });
 
   it("returns error when warehouse is not found", async () => {
@@ -182,9 +182,9 @@ describe("adjustStock", () => {
   });
 
   it("returns error when unauthenticated", async () => {
-    sessionMock.requireAuth.mockRejectedValue(new Error("No autorizado."));
+    sessionMock.requireAuth.mockRejectedValue(new Error("Unauthorized."));
     const fd = makeFormData({ productId: "p1", warehouseId: "w1", newQty: "5" });
     const result = await adjustStock(fd);
-    expect(result).toEqual({ ok: false, error: "No autorizado." });
+    expect(result).toEqual({ ok: false, error: "Unauthorized." });
   });
 });
