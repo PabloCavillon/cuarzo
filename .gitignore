@@ -16,12 +16,9 @@ node_modules
 # next.js
 /.next/
 /out/
-/apps/web/.next/
-/apps/web/out/
 
 # production
 /build
-/apps/web/build
 
 # misc
 .DS_Store
@@ -43,8 +40,13 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/app/generated/prisma
-/prisma/generated
 
 # personal drafts
 RESUME-IMPROVED*.md
+CV-*.pdf
+
+# local tool state
+**/.impeccable/review/
+**/.impeccable/hook.cache.json
+**/.impeccable/config.local.json
+.claude/settings.local.json

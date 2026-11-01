@@ -1,0 +1,517 @@
+/* Crystalline Precision: obsidiana, paneles de cuarzo translúcido y un cian óptico para lo activo. */
+html:has(.landing) { scrollbar-color: var(--wire) var(--canvas); }
+
+.landing {
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  line-height: 1.375rem;
+  color: var(--ink);
+  background: var(--canvas);
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Con el texto agrandado, una palabra larga no puede ensanchar la columna ni la página. */
+.landing .grid > * { min-width: 0; }
+
+.landing ::selection {
+  background: var(--accent);
+  color: var(--canvas);
+}
+
+.landing :focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ink { color: var(--ink); }
+.ink-2 { color: var(--ink-2); text-wrap: pretty; }
+.accent { color: var(--accent); }
+
+/* Estrato de base elevado, para alternar secciones sin sombras. */
+.layer {
+  background: var(--surface);
+  border-block: 1px solid var(--line);
+}
+
+/* Panel de cristal: translúcido, con borde de un píxel. */
+.glass {
+  background: rgba(19, 24, 34, 0.7);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 0.5rem;
+}
+
+.section {
+  max-width: 90rem;
+  margin-inline: auto;
+  padding: 4rem 1rem;
+  scroll-margin-top: 4.5rem;
+}
+
+@media (min-width: 1024px) {
+  .section { padding: 6rem 2rem; }
+}
+
+.display,
+.title,
+.subtitle {
+  font-family: var(--font-display), var(--font-body), sans-serif;
+  text-wrap: balance;
+}
+
+.display {
+  font-weight: 600;
+  font-size: clamp(3rem, 7.1vw, 7rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.title {
+  font-weight: 500;
+  font-size: clamp(2.25rem, 4.6vw, 4.25rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+@layer components {
+  .subtitle {
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 1.875rem;
+    letter-spacing: -0.015em;
+  }
+}
+
+.mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.25rem;
+  background: var(--ink);
+  color: var(--canvas);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: background-color 150ms ease-out, color 150ms ease-out, box-shadow 150ms ease-out;
+}
+
+.btn:hover { box-shadow: 0 0 12px rgb(var(--accent-rgb) / 0.4); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.skip-link {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 1;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus { transform: none; }
+
+.btn-quiet {
+  background: rgba(255, 255, 255, 0.04);
+  color: #cbd5e1;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.btn-quiet:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.row {
+  display: grid;
+  gap: 0.25rem;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.row:last-child { border-bottom: 1px solid var(--line); }
+
+.field {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.25rem;
+  background: rgba(9, 11, 16, 0.6);
+  color: var(--ink);
+  font-size: 0.9375rem;
+}
+
+.field::placeholder { color: var(--ink-2); }
+
+/* El navegador pinta su propio fondo al autocompletar: esa transición lo posterga. */
+.field:autofill {
+  -webkit-text-fill-color: var(--ink);
+  caret-color: var(--ink);
+  transition: background-color 100000s;
+}
+
+.field:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 0 8px rgb(var(--accent-rgb) / 0.25);
+}
+
+.field[aria-invalid="true"] { border-color: var(--error); }
+
+.field-error {
+  margin-top: 0.25rem;
+  color: var(--error);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+
+/* iOS amplía la página al enfocar un campo de menos de 16 px. */
+@media (pointer: coarse) {
+  .field { font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.landing) { scroll-behavior: auto; }
+  .btn { transition: none; }
+}
+
+/* Punch: la luz atraviesa el cristal y se dispersa. Todo el movimiento es transform, opacity o trazo. */
+.hero::before,
+.glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(38rem 30rem at 76% 46%, rgb(var(--accent-rgb) / 0.2), transparent 70%),
+    radial-gradient(30rem 24rem at 92% 74%, rgba(129, 140, 248, 0.18), transparent 70%);
+}
+
+.glow::before {
+  background: radial-gradient(40rem 26rem at 18% 30%, rgb(var(--accent-rgb) / 0.13), transparent 70%);
+}
+
+.hairgrid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  -webkit-mask-image: radial-gradient(ellipse at 70% 45%, #000 20%, transparent 72%);
+  mask-image: radial-gradient(ellipse at 70% 45%, #000 20%, transparent 72%);
+}
+
+.btn-lg { min-height: 3.25rem; padding-inline: 1.75rem; font-size: 1rem; }
+
+/* Títulos que suben línea por línea detrás de una máscara. */
+.rise > span {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.14em;
+  margin-bottom: -0.14em;
+}
+
+.rise > span > span {
+  display: block;
+  animation: rise 900ms var(--ease-expo) both;
+}
+
+.fade-in { animation: fade-in 700ms 350ms ease-out both; }
+
+@keyframes rise { from { transform: translateY(105%); } }
+@keyframes fade-in { from { opacity: 0; } }
+
+.prism::before {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(var(--accent-rgb) / 0.22), transparent);
+  animation: breathe 5s ease-in-out infinite;
+}
+
+@keyframes breathe { 50% { opacity: 0.5; } }
+
+.beam,
+.beam-pulse {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1px;
+}
+
+.beam { opacity: 0.45; stroke-dasharray: 1000; animation: draw 1200ms 200ms var(--ease-expo) both; }
+
+.beam-pulse {
+  stroke-width: 2px;
+  stroke-dasharray: 90 1910;
+  stroke-dashoffset: 90;
+  animation: flow 3.2s 1s linear infinite;
+}
+
+@keyframes draw { from { stroke-dashoffset: 1000; } }
+@keyframes flow { to { stroke-dashoffset: -1000; } }
+
+.crystal-float { animation: float 6s ease-in-out infinite; }
+@keyframes float { 50% { transform: translateY(-3%); } }
+
+.log-line { animation: fade-in 200ms ease-out both; }
+
+.beacon {
+  flex: none;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--beacon);
+  box-shadow: 0 0 0 0 rgba(0, 240, 255, 0.5);
+  animation: ping 2s ease-out infinite;
+}
+
+@keyframes ping { to { box-shadow: 0 0 0 0.5rem rgba(0, 240, 255, 0); } }
+
+.ticker {
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: slide 40s linear infinite;
+}
+
+.ticker-item {
+  padding: 1.25rem 2rem;
+  white-space: nowrap;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.5rem, 3vw, 2.5rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink-2);
+}
+
+@keyframes slide { to { transform: translateX(-50%); } }
+
+/* Borde iluminado desde arriba y brillo mínimo en el panel activo. */
+.lit { position: relative; transition: border-color 200ms ease-out, box-shadow 200ms ease-out; }
+
+.lit::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(var(--accent-rgb) / 0.5), transparent);
+  opacity: 0.45;
+  transition: opacity 200ms ease-out;
+}
+
+a.lit:hover, a.lit:focus-visible {
+  border-color: rgb(var(--accent-rgb) / 0.35);
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.7), 0 0 16px -2px rgb(var(--accent-rgb) / 0.14);
+}
+
+a.lit:hover::before { opacity: 1; }
+
+.track { height: 2px; background: #1e293b; overflow: hidden; }
+
+.track-fill {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  animation: fill 3s var(--ease-expo) infinite;
+}
+
+@keyframes fill { 0% { transform: scaleX(0); } 55%, 100% { transform: scaleX(1); } }
+
+.bar {
+  flex: 1;
+  border-radius: 1px 1px 0 0;
+  background: linear-gradient(var(--accent), rgb(var(--accent-rgb) / 0.15));
+  transform-origin: bottom;
+  animation: bar 3.2s ease-in-out infinite alternate;
+}
+
+@keyframes bar { from { transform: scaleY(0.45); } to { transform: scaleY(1); } }
+
+.wire-pulse {
+  stroke-dasharray: 120 880;
+  animation: wire 2.6s linear infinite;
+}
+
+@keyframes wire { to { stroke-dashoffset: -1000; } }
+
+.task-ok { animation: task 3.6s ease-out infinite; }
+@keyframes task { 0%, 12% { opacity: 0; } 22%, 100% { opacity: 1; } }
+
+.curve { stroke-dasharray: 1000; animation: curve 5s ease-in-out infinite alternate; }
+@keyframes curve { from { stroke-dashoffset: 1000; } 60%, 100% { stroke-dashoffset: 0; } }
+
+/* Pipeline: un pulso recorre las etapas de punta a punta. */
+.pipeline {
+  position: relative;
+  display: grid;
+  gap: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.pipeline::before,
+.pipeline::after {
+  content: "";
+  position: absolute;
+  left: 0.3125rem;
+  top: 0.75rem;
+  bottom: 0.75rem;
+  width: 1px;
+  background: var(--wire);
+}
+
+.pipeline::after {
+  width: 2px;
+  background: var(--accent);
+  transform-origin: top;
+  animation: run-y 3s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+.pipeline-step { position: relative; }
+
+.pipeline-node {
+  position: absolute;
+  left: -1.5rem;
+  top: 0.5rem;
+  z-index: 1;
+  width: 0.6875rem;
+  height: 0.6875rem;
+  border: 1px solid var(--accent);
+  background: var(--surface);
+  transform: rotate(45deg);
+  animation: node 3s linear infinite;
+}
+
+@keyframes node { 0%, 30%, 100% { background: var(--surface); } 8%, 22% { background: var(--accent); } }
+@keyframes run-y { from { transform: scaleY(0); } 80%, to { transform: scaleY(1); } }
+@keyframes run-x { from { transform: scaleX(0); } 80%, to { transform: scaleX(1); } }
+
+@media (min-width: 768px) {
+  .pipeline {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    padding: 1.75rem 0 0;
+  }
+
+  .pipeline::before,
+  .pipeline::after {
+    inset: 0.3125rem 0 auto;
+    width: auto;
+    height: 1px;
+  }
+
+  .pipeline::after { height: 2px; transform-origin: left; animation-name: run-x; }
+  .pipeline-node { left: 0; top: -1.75rem; }
+}
+
+/* Oscilador: la onda del cuarzo corre de lado a lado. */
+.wave {
+  position: relative;
+  height: 5rem;
+  overflow: hidden;
+}
+
+.wave svg {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 400%;
+  height: 100%;
+  animation: slide 14s linear infinite;
+}
+
+.wave .wave-slow { opacity: 0.7; animation-duration: 22s; }
+
+.chip {
+  padding: 0.125rem 0.5rem;
+  border: 1px solid rgb(var(--accent-rgb) / 0.16);
+  border-radius: 0.25rem;
+  background: rgb(var(--accent-rgb) / 0.08);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+}
+
+.wordmark {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 600;
+  font-size: 23vw;
+  line-height: 0.8;
+  letter-spacing: -0.03em;
+  text-align: center;
+  white-space: nowrap;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--wire);
+}
+
+/* Lo que entra al hacer scroll: solo se oculta si el script ya corrió. */
+html.reveal [data-reveal] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition: opacity 700ms ease-out, transform 800ms var(--ease-expo);
+}
+
+html.reveal [data-reveal].in { opacity: 1; transform: none; }
+
+html.reveal a.lit[data-reveal].in {
+  transition: opacity 700ms ease-out, transform 800ms var(--ease-expo), border-color 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+/* Las animaciones en bucle descansan fuera de pantalla. */
+html.reveal .loops:not(.on),
+html.reveal .loops:not(.on) *,
+html.reveal .loops:not(.on)::after,
+html.reveal .loops:not(.on) *::before {
+  animation-play-state: paused;
+}
+
+/* El desenfoque pesa en celulares modestos: ahí el panel va opaco. */
+@media (max-width: 767px) {
+  .glass {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: var(--raised);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rise > span > span,
+  .fade-in,
+  .beam,
+  .beam-pulse,
+  .log-line,
+  .beacon,
+  .prism::before,
+  .crystal-float,
+  .ticker-track,
+  .track-fill,
+  .bar,
+  .wire-pulse,
+  .task-ok,
+  .curve,
+  .pipeline::after,
+  .pipeline-node,
+  .wave svg {
+    animation: none;
+  }
+
+  .beam-pulse { display: none; }
+}

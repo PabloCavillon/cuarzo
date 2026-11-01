@@ -1,275 +1,261 @@
 ---
-name: Cuarzo Landing
-description: Neofuturismo sobrio para la landing pública de Cuarzo.
+name: Crystalline Precision
 colors:
-  blue: "#2450e6"
-  field-line: "#8390ac"
-  blue-deep: "#1a3bb3"
-  blue-pale: "#dbe4ff"
-  orbit: "#8fb2ff"
-  night: "#071033"
-  night-raised: "#121d4a"
-  night-line: "#27335f"
-  night-ink-2: "#c6d0ec"
-  ground: "#f4f6fb"
-  surface: "#ffffff"
-  ink: "#0a1330"
-  ink-2: "#434e6b"
-  placeholder: "#5b6684"
-  line: "#d5dbea"
+  surface: '#090B10'
+  surface-dim: '#090B10'
+  surface-bright: '#2c3a4c'
+  surface-container-lowest: '#010f1f'
+  surface-container-low: '#0d1c2d'
+  surface-container: '#122131'
+  surface-container-high: '#1c2b3c'
+  surface-container-highest: '#273647'
+  on-surface: '#d4e4fa'
+  on-surface-variant: '#bdc8d1'
+  inverse-surface: '#d4e4fa'
+  inverse-on-surface: '#233143'
+  outline: '#87929a'
+  outline-variant: '#3e484f'
+  surface-tint: '#7bd0ff'
+  primary: '#38BDF8'
+  on-primary: '#00354a'
+  primary-container: '#38bdf8'
+  on-primary-container: '#004965'
+  inverse-primary: '#00668a'
+  secondary: '#bdc2ff'
+  on-secondary: '#131e8c'
+  secondary-container: '#2f3aa3'
+  on-secondary-container: '#a8afff'
+  tertiary: '#00e2f0'
+  on-tertiary: '#00363a'
+  tertiary-container: '#00c4d0'
+  on-tertiary-container: '#004c51'
+  error: '#ffb4ab'
+  on-error: '#690005'
+  error-container: '#93000a'
+  on-error-container: '#ffdad6'
+  primary-fixed: '#c4e7ff'
+  primary-fixed-dim: '#7bd0ff'
+  on-primary-fixed: '#001e2c'
+  on-primary-fixed-variant: '#004c69'
+  secondary-fixed: '#e0e0ff'
+  secondary-fixed-dim: '#bdc2ff'
+  on-secondary-fixed: '#000767'
+  on-secondary-fixed-variant: '#2f3aa3'
+  tertiary-fixed: '#7df4ff'
+  tertiary-fixed-dim: '#00dbe9'
+  on-tertiary-fixed: '#002022'
+  on-tertiary-fixed-variant: '#004f54'
+  background: '#090B10'
+  on-background: '#d4e4fa'
+  surface-variant: '#273647'
 typography:
-  display:
-    fontFamily: "Jost, Hanken Grotesk, sans-serif"
-    fontSize: "clamp(2.5rem, 5.6vw, 5rem)"
-    fontWeight: 300
+  display-lg:
+    fontFamily: Space Grotesk
+    fontSize: clamp(3rem, 7.1vw, 7rem)
+    fontWeight: '600'
+    lineHeight: 1
+    letterSpacing: -0.035em
+  headline-lg:
+    fontFamily: Space Grotesk
+    fontSize: clamp(2.25rem, 4.6vw, 4.25rem)
+    fontWeight: '500'
+    lineHeight: 1.05
+    letterSpacing: -0.03em
+  headline-md:
+    fontFamily: Space Grotesk
+    fontSize: 24px
+    fontWeight: '500'
+    lineHeight: 30px
+    letterSpacing: -0.015em
+  headline-sm:
+    fontFamily: Space Grotesk
+    fontSize: 18px
+    fontWeight: '500'
+    lineHeight: 24px
+    letterSpacing: -0.01em
+  title-md:
+    fontFamily: Geist
+    fontSize: 16px
+    fontWeight: '500'
+    lineHeight: 22px
+    letterSpacing: -0.01em
+  body-lg:
+    fontFamily: Geist
+    fontSize: 15px
+    fontWeight: '400'
+    lineHeight: 22px
+    letterSpacing: 0em
+  body-md:
+    fontFamily: Geist
+    fontSize: 13px
+    fontWeight: '400'
+    lineHeight: 18px
+    letterSpacing: 0em
+  body-sm:
+    fontFamily: Geist
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 16px
+    letterSpacing: 0.01em
+  label-code-md:
+    fontFamily: JetBrains Mono
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 16px
+    letterSpacing: 0.02em
+  label-code-sm:
+    fontFamily: JetBrains Mono
+    fontSize: 11px
+    fontWeight: '500'
+    lineHeight: 14px
+    letterSpacing: 0.04em
+  caption:
+    fontFamily: Geist
+    fontSize: 10px
+    fontWeight: '500'
+    lineHeight: 14px
+    letterSpacing: 0.05em
+  cv-display:
+    fontFamily: Sora
+    fontSize: clamp(2.75rem, 6vw, 4.75rem)
+    fontWeight: '800'
     lineHeight: 1.1
-    letterSpacing: "-0.02em"
-  headline:
-    fontFamily: "Jost, Hanken Grotesk, sans-serif"
-    fontSize: "clamp(2.25rem, 4.2vw, 3.5rem)"
-    fontWeight: 300
-    lineHeight: 1.1
-    letterSpacing: "-0.02em"
-  title:
-    fontFamily: "Jost, Hanken Grotesk, sans-serif"
-    fontSize: "1.625rem"
-    fontWeight: 400
+    letterSpacing: -0.04em
+  cv-title:
+    fontFamily: Sora
+    fontSize: clamp(2rem, 3.4vw, 3rem)
+    fontWeight: '700'
     lineHeight: 1.2
-    letterSpacing: "-0.01em"
-  lead:
-    fontFamily: "Hanken Grotesk, system-ui, sans-serif"
-    fontSize: "1.25rem"
-    fontWeight: 400
-    lineHeight: 1.4
-  body:
-    fontFamily: "Hanken Grotesk, system-ui, sans-serif"
-    fontSize: "1.125rem"
-    fontWeight: 400
-    lineHeight: 1.6
-  body-small:
-    fontFamily: "Hanken Grotesk, system-ui, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 400
-    lineHeight: 1.5
-  label:
-    fontFamily: "Hanken Grotesk, system-ui, sans-serif"
-    fontSize: "1rem"
-    fontWeight: 600
-    lineHeight: 1.5
+    letterSpacing: -0.02em
+  cv-subtitle:
+    fontFamily: Sora
+    fontSize: 1.25rem
+    fontWeight: '600'
+    lineHeight: 1.75rem
 rounded:
-  field: "0.875rem"
-  menu: "1rem"
-  panel: "2rem"
-  block: "2.5rem"
-  block-lg: "5rem"
-  pill: "999px"
+  sm: 0.125rem
+  DEFAULT: 0.25rem
+  md: 0.375rem
+  lg: 0.5rem
+  xl: 0.75rem
+  full: 9999px
+  cv-control: 0.75rem
+  cv-field: 1rem
+  cv-panel: 1.5rem
 spacing:
-  gutter: "1.5rem"
-  gutter-lg: "2.5rem"
-  row: "1.75rem"
-  section: "5rem"
-  section-lg: "8rem"
-  container: "80rem"
-components:
-  button-primary:
-    backgroundColor: "{colors.blue}"
-    textColor: "{colors.surface}"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "0.75rem 1.75rem"
-    height: "3.25rem"
-  button-primary-hover:
-    backgroundColor: "{colors.blue-deep}"
-  button-on-night:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.night}"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "0.75rem 1.75rem"
-    height: "3.25rem"
-  button-on-night-hover:
-    backgroundColor: "{colors.blue-pale}"
-  button-quiet:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "0.75rem 1.75rem"
-    height: "3.25rem"
-  button-quiet-hover:
-    backgroundColor: "{colors.surface}"
-  button-quiet-on-night:
-    backgroundColor: "transparent"
-    textColor: "{colors.surface}"
-    typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "0.75rem 1.75rem"
-    height: "3.25rem"
-  button-quiet-on-night-hover:
-    backgroundColor: "{colors.night-raised}"
-  input-field:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-small}"
-    rounded: "{rounded.field}"
-    padding: "0.8rem 1rem"
-  nav-floating:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    typography: "{typography.body-small}"
-    rounded: "{rounded.panel}"
-    height: "3.5rem"
-  form-panel:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    rounded: "{rounded.panel}"
-    padding: "2.5rem"
+  gutter: 1rem
+  gutter-desktop: 1.5rem
+  margin: 1rem
+  margin-desktop: 2rem
+  space-xs: 0.25rem
+  space-sm: 0.5rem
+  space-md: 0.75rem
+  space-lg: 1.25rem
+  space-xl: 2rem
 ---
 
-# Design System: Cuarzo Landing
+## Brand & Style
+The design system operates at the intersection of haute horlogerie, high-performance software engineering, and crystalline optical physics. Built specifically for elite engineering studios and precision desktop environments, it eschews noisy digital maximalism in favor of architectural quietude, strict optical alignment, and surgical clarity.
 
-## Overview
-
-**Creative North Star: "Una sola pieza en órbita"**
-
-**Alcance:** este sistema gobierna la landing pública (`apps/web/app/(landing)/`).
-
-Un cristal de cuarzo en 3D gira sobre azul noche y todo lo demás se aparta: mucho aire, poco color y lectura cómoda antes que efecto. El neofuturismo acá es de geometría (curvas amplias, cápsulas, líneas de un píxel), no de luces. La página alterna bloques noche y claros, y esa alternancia es toda su profundidad.
-
-El mundo nació de rechazar una pared de vidrio difícil de leer: la materia cristalina queda confinada a una sola pieza y las superficies de interfaz son opacas y planas. La densidad es baja, con una idea por sección y listas resueltas en filas separadas por líneas en lugar de tarjetas.
-
-**Key Characteristics:**
-- Azul como único color, sobre azul noche y blanco porcelana.
-- Títulos en Jost liviana, en mayúsculas y minúsculas; texto en Hanken Grotesk de 18 px.
-- Un cristal 3D en el hero y una órbita fina en SVG más adelante como únicos ornamentos.
-- Curvas amplias en los bloques, cápsulas en las acciones, líneas de 1 px.
-- Superficies opacas y planas, sin sombras.
+The aesthetic fuses **Hyper-Minimalist Technical Rigor** with **Refined Crystalline Glassmorphism**. Interfaces mimic precision-milled obsidian substrates layered with calibrated sapphire glass panels. Translucencies serve strict structural hierarchy rather than decorative vanity—guiding the engineer's eye through deep data hierarchies without fatigue. Every surface conveys quiet authority: weightless yet structural, uncompromisingly clean, and meticulously engineered.
 
 ## Colors
+The palette is calibrated strictly for dark-field computing, referencing mineral obsidian and chromatic light dispersion through crystalline quartz:
 
-Una sola familia azul en tres alturas: noche para el suelo oscuro, eléctrico para la acción y pálido para los estados sobre fondos saturados.
+- **Void Surfaces (Substrates):** 
+  - Canvas Root: `#090B10` (Abyssal Obsidian)
+  - Primary Surface Layer: `#0D1117` (Deep Basalt)
+  - Elevated Container / Toolbars: `#131822` (Graphite Quartz)
+- **Crystalline Accents:**
+  - Primary Optical Cyan (`#38BDF8`): Reserved for active states, high-priority nodes, and key focal interactions.
+  - Prism Violet / Indigo (`#818CF8`): Secondary chromatic harmonic, indicating system intelligence, compilation stages, and background telemetry.
+  - Refractive Pure Cyan (`#00F0FF`): Laser-sharp tertiary beacon used in hairline indicators, tiny status pings, and sub-pixel selection carats.
+- **Titanium Neutrals:**
+  - High-Contrast White (`#F8FAFC`): Primary data readouts, code displays, and primary typography.
+  - Subdued Titanium (`#CBD5E1` and `#94A3B8`): Structural labels, secondary metrics, and metadata.
+  - Ghost Slates (`#334155` and `#1E293B`): Sub-pixel borders, structural dividers, and resting track boundaries.
 
-### Primary
-- **Azul Eléctrico** (#2450e6): acción principal sobre superficies claras, enlaces de fila, hover de navegación, selección de texto y fondo del plan destacado.
-- **Azul Profundo** (#1a3bb3): solo hover del botón primario.
-- **Azul Pálido** (#dbe4ff): hover del botón blanco.
-- **Azul Órbita** (#8fb2ff): trazo de la órbita en SVG. Nunca texto de interfaz.
-
-### Neutral
-- **Azul Noche** (#071033): fondo de bloques oscuros, del pie y del lienzo 3D, que debe coincidir exactamente con el bloque para que el vidrio refracte la página.
-- **Noche Elevada** (#121d4a): hover del botón silencioso sobre noche.
-- **Línea Noche** (#27335f): divisores sobre noche.
-- **Bruma** (#c6d0ec): texto secundario sobre noche.
-- **Blanco Porcelana** (#f4f6fb): fondo claro general.
-- **Blanco** (#ffffff): navegación, panel de formulario y texto principal sobre noche.
-- **Tinta** (#0a1330): texto principal sobre claro.
-- **Tinta Media** (#434e6b): texto secundario sobre claro.
-- **Marcador** (#5b6684): solo placeholders de campos.
-- **Línea** (#d5dbea): divisores y bordes sobre claro.
-
-### Named Rules
-**La Regla del Único Color.** No existe otro tono fuera de la familia azul, ni siquiera para estados: el error del formulario se comunica en Tinta y peso 600, sin rojo. La refracción propia del cristal queda exenta.
-
-**La Regla de la Acción Invertida.** La acción principal es azul sobre claro y blanca sobre noche o sobre el plan destacado. Una isla clara dentro de noche vuelve a azul.
+Los tokens en código viven en `:root` de `app/globals.css` y sirven para toda la web, incluidas la 404 y la página de error: `--canvas`, `--surface`, `--raised`, `--accent`, `--violet`, `--beacon`, `--ink`, `--ink-2`, `--line`, `--wire` (trazos de las demos) y `--error` (errores de formulario). Las transparencias del cian se escriben `rgb(var(--accent-rgb) / 0.2)` y las entradas animadas usan `--ease-expo`. Los colores propios del cristal (`CrystalSvg`, `CrystalScene`) son material, no tokens. El sitio es solo oscuro y lo declara con `color-scheme: dark`, para que los controles nativos, las barras de desplazamiento y el autocompletado acompañen.
 
 ## Typography
+Typography is treated with watchmaker precision. The typographic hierarchy utilizes three specialized type families:
 
-**Display Font:** Jost (con Hanken Grotesk, sans-serif)
-**Body Font:** Hanken Grotesk (con system-ui, sans-serif)
+1. **Space Grotesk (Display & Section Headers):** Delivers geometric modernism and sharp editorial architecture without distracting stylistic oddities.
+2. **Geist (Body & Controls):** Designed specifically for engineering dashboards and high-density application canvases. Neutral, mathematically balanced, and invisible in dense utility screens.
+3. **JetBrains Mono (Metadata, Keybindings, Metrics & Terminal Streams):** Provides tabular alignment, strict columnar readability, and raw engineering authenticity for numbers, timestamps, and parameters.
 
-**Character:** Jost, geométrica y fina, da la silueta futurista a gran tamaño; Hanken Grotesk, abierta y cálida, sostiene la lectura.
+The public landing and CVs are persuasion surfaces, so display and headline sizes are fluid and much larger than the dense-tool sizes used elsewhere in this system.
 
-### Hierarchy
-- **Display** (300, clamp(2.5rem, 5.6vw, 5rem), 1.1): solo el título del hero. Equilibrado con `text-wrap: balance`.
-- **Headline** (300, clamp(2.25rem, 4.2vw, 3.5rem), 1.1): títulos de sección, precios y confirmación del formulario.
-- **Title** (400, 1.625rem, 1.2): nombres de servicios; cierres de sección.
-- **Lead** (400, 1.25rem, 1.4): descripción del hero, hasta 46ch.
-- **Body** (400, 1.125rem, 1.6): texto corrido, entre 42ch y 56ch.
-- **Body Small** (400, 1rem, 1.5): navegación, pie, listas de características y datos auxiliares.
-- **Label** (600, 1rem): botones, etiquetas de campo y encabezados del pie.
+All text elements are rendered with antialiasing enabled (`-webkit-font-smoothing: antialiased`). Headings utilize negative tracking to pack visual punch into dark surfaces.
 
-### Named Rules
-**La Regla del Peso Liviano.** A tamaño de título, Jost va a 300 y con escritura normal, nunca en mayúsculas sostenidas. La única palabra en mayúsculas es el logotipo CUARZO, con 0.12em de tracking.
+## Layout & Spacing
+The layout relies on a **Compact Fluid Grid** structured around an 8px base rhythm, adapted for dense desktop workflows. Toolbars, canvas sidebars, inspector docks, and workbenches anchor to fixed technical boundaries with fluid internal canvas panes.
 
-**La Regla de los 18.** El texto de lectura no baja de 18 px; 16 px queda para datos auxiliares y controles.
+- **Breakpoints:**
+  - Desktop / Pro Displays (`>= 1440px`): Full multi-column inspector layout (up to 4 paned columns, 24px gutters, 32px canvas edge margins).
+  - Laptop / Compact (`1024px - 1439px`): Standard 12-column workspace, secondary panes auto-collapse into flyouts.
+  - Tablet / Mobile (`< 1024px`): Single column vertical stream, bottom sheet inspectors, compact 16px margins.
 
-## Layout
+Spacing inside components adheres to compact technical density: inputs and list items prioritize a 28px to 36px height profile, maximizing viewport data density while maintaining micro-whitespace clarity.
 
-Columna central de hasta 80rem con márgenes de 1.5rem, que pasan a 2.5rem desde 1024 px. Las secciones respiran 5rem verticales, y 8rem desde 1024 px. Las secciones contiguas sobre el mismo fondo anulan su padding superior para no duplicar el aire.
-
-El patrón editorial es asimétrico: título a la izquierda y contenido a la derecha en `2fr 3fr`, con separación de 5rem en escritorio. En una sola columna, el título apila sobre su contenido. El bloque "A medida" fija su título con sticky en escritorio mientras la lista avanza.
-
-El hero ocupa la altura completa desde 1024 px, con texto hasta 56% del ancho y el cristal en el 52% derecho, de modo que cristal y título pueden acercarse. Por debajo, el cristal baja a un bloque de 24rem, o 32rem desde 640 px. La navegación completa aparece recién en 1280 px; por debajo se colapsa en menú.
+En las superficies públicas (landing y CV) manda el uso táctil: todo control mide al menos 44 px de alto con puntero grueso, y puede achicarse con `pointer-fine:`. Las barras superiores usan alto mínimo y pueden pasar a dos líneas, y los hijos de cada grilla admiten achicarse: con el texto al 200% nada ensancha la página.
 
 ## Elevation & Depth
+Depth in the design system is established through **Physical Quartz Stratification**:
 
-El sistema es plano y sin sombras. La profundidad sale de la alternancia tonal entre noche y claro, de las islas blancas sobre noche y del único objeto realmente tridimensional: el cristal. Incluso la navegación flotante se separa solo por color y una línea de 1 px, sin blur.
-
-### Shadow Vocabulary
-- **Línea interna** (`box-shadow: inset 0 0 0 1px var(--line)`): borde del botón silencioso. Es un trazo, no una elevación.
-
-### Named Rules
-**La Regla de la Interfaz Opaca.** Ninguna superficie de interfaz usa sombra difusa ni `backdrop-filter`. La transparencia y el brillo pertenecen solo al cristal.
+1. **Base Layer (Substrate):** Solid, light-absorbent obsidian background (`#090B10`).
+2. **Crystalline Paneling (Glassmorphism):** Floating panels and cards are formed by translucent glass sheets (`background: rgba(19, 24, 34, 0.65)` with `backdrop-filter: blur(20px)`). 
+3. **Hairline Precision Borders:** Instead of diffuse drop shadows, boundaries are framed with razor-thin 1px borders (`rgba(255, 255, 255, 0.08)` to `rgba(255, 255, 255, 0.12)`). Active panels receive a top-lit 1px border gradient transitioning from `rgba(56, 189, 248, 0.4)` to `rgba(255, 255, 255, 0.05)`.
+4. **Prismatic Luminescence:** Hero stages and the contact close may carry large soft radial cyan and indigo fields; they stay behind the content and never sit on text. Floating overlays, contextual menus, and focus rings rely on micro-glow diffusions: an ambient shadow tinted with faint chromatic blue (`box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.7), 0 0 16px -2px rgba(56, 189, 248, 0.1)`).
 
 ## Shapes
+Shapes are defined by clean architectural lines with subtle edge softening. Using `roundedness: 1` (`4px` base radius), elements present crisp, precision-machined silhouettes reminiscent of high-end hardware enclosures.
 
-Las curvas crecen con la escala del elemento: campos de 0.875rem, menús de 1rem, paneles de 2rem y bloques de página de 2.5rem, o 5rem desde 1024 px. Las acciones son cápsulas completas (999px). El hero curva solo su borde inferior; el contacto, solo el superior, y continúa en el pie noche; el bloque "Por qué Cuarzo" flota con las cuatro esquinas curvas y un margen lateral.
-
-### Named Rules
-**La Regla del Píxel.** Todo trazo mide 1 px: divisores, bordes y órbita. Las listas se separan con líneas, no con cajas.
+- Buttons, inputs, and chips: `4px` corner radius.
+- Cards, modal windows, and flyout inspectors: `8px` corner radius (`rounded-lg`).
+- Floating utility toolbars and floating dock pills: `12px` corner radius (`rounded-xl`).
+- Never use fully circular pills for primary workflow controls; reserve full roundness (`rounded-full`) exclusively for micro-avatars and system status dots.
 
 ## Components
 
-Todos los estados interactivos cambian solo de color, en 250ms ease-out. Nada se eleva, escala ni desplaza.
-
 ### Buttons
-- **Shape:** cápsula completa (999px), altura mínima de 3.25rem; 2.5rem dentro de la navegación.
-- **Primary:** Azul Eléctrico con texto blanco. Sobre noche, blanco con texto Azul Noche.
-- **Hover / Focus:** pasa a Azul Profundo, o a Azul Pálido en la variante blanca. El foco es un anillo de 2 px a 3 px de distancia, que debe contrastar con su superficie: azul sobre claro, blanco sobre noche.
-- **Silencioso:** transparente con línea interna de 1 px; hover a Blanco, o a Noche Elevada sobre noche.
-- **Disabled:** opacidad de 0.6.
+- **Primary:** Solid titanium white fill (`#F8FAFC`) with abyssal black text (`#090B10`), semi-bold. On hover, receives a subtle cyan perimeter glow (`0 0 12px rgba(56, 189, 248, 0.4)`).
+- **Secondary (Crystalline Glass):** Translucent surface (`rgba(255, 255, 255, 0.04)`), crisp 1px ghost border (`rgba(255, 255, 255, 0.1)`), titanium text (`#CBD5E1`). Hover shifts background to `rgba(255, 255, 255, 0.08)` with text transitioning to white.
+- **Ghost / Tool:** Zero default border or background; text in titanium gray; hovers light up to `rgba(255, 255, 255, 0.06)`.
 
-### Cards / Containers
-- **Plan destacado:** celda Azul Eléctrico con texto blanco, botón blanco y etiqueta de texto, sin insignia.
-- **Panel de formulario:** isla blanca de 2rem de radio sobre noche; restaura los colores claros. Padding de 1.5rem, o 2.5rem desde 640 px.
+### Cards & Panels
+- Constructed with frosted glass panels (`rgba(19, 24, 34, 0.7)`, `backdrop-filter: blur(16px)`).
+- Outlined with 1px border (`rgba(255, 255, 255, 0.07)`).
+- On phones (`< 768px`) panels are opaque `#131822` without blur, so scrolling stays smooth on modest devices.
+- Headers feature a bottom border divider (`rgba(255, 255, 255, 0.05)`) with monospace category identifiers.
 
-### Inputs / Fields
-- **Style:** fondo blanco, línea de 1 px en `field-line` (3:1 sobre blanco) y radio de 0.875rem. Etiqueta visible arriba, nunca solo placeholder.
-- **Focus:** anillo azul de 2 px sin distancia, que reemplaza al borde.
-- **Error:** mensaje en Tinta y peso 600 sobre el botón, con `role="alert"`.
-- **Éxito:** ícono, título y descripción ocupan el lugar del formulario.
+### Input Fields & Controls
+- **Inputs:** Dark recessed base (`rgba(9, 11, 16, 0.6)`) with subtle inset shadow. 1px border in `rgba(255, 255, 255, 0.1)`. Focus states trigger an instant crystalline cyan border (`#38BDF8`) with an outer hairline bloom (`0 0 0 1px #38BDF8, 0 0 8px rgba(56, 189, 248, 0.25)`).
+- **Checkboxes & Radios:** Compact 14px square/circle boxes with titanium borders. Checked state illuminates with `#38BDF8` fill and pitch-black check icon.
 
-### Navigation
-- **Style:** píldora blanca flotante, fija a 0.75rem de los bordes, con radio de 2rem, altura de 3.5rem y línea de 1 px. Se mantiene blanca sobre todas las secciones.
-- **States:** enlaces en Tinta, hover a Azul Eléctrico; el idioma activo se marca con peso 600.
-- **Mobile:** por debajo de 1280 px el menú se despliega dentro de la misma píldora, con enlaces, idiomas y dos cápsulas apiladas.
+### Chips & Badges
+- Ultra-compact monospace pills (height: 20px, font: `JetBrains Mono` 11px).
+- Translucent tinted backgrounds (`rgba(56, 189, 248, 0.08)` for primary status) paired with micro-dot pulse indicators.
 
-### Filas
-- **Style:** título, descripción y dato auxiliar, con 1.75rem de padding vertical y línea superior de 1 px; la última fila también cierra abajo. Reemplazan a las grillas de tarjetas.
-- **Hover:** en filas enlazadas, el título pasa a Azul Eléctrico.
+### Inspector Lists & Tables
+- Dense tabular rows with height 32px.
+- Row separators use hairline dividers (`rgba(255, 255, 255, 0.04)`).
+- Hover state highlights the entire row with translucent quartz sheen (`rgba(255, 255, 255, 0.03)`).
 
-### Cristal
-Pieza firma del mundo: cuarzo hexagonal biterminado con facetas duras, material de transmisión total (índice de refracción 1.52, rugosidad 0.04) tintado en azul e iluminado con un entorno sintético, sin recursos externos. Va solo, sin anillo alrededor. Gira solo, flota apenas y se arrastra en escritorio, sin zoom ni desplazamiento; en táctil no captura el gesto para no bloquear el scroll. Con `prefers-reduced-motion` queda quieto. Mientras carga muestra el isotipo, sin salto de layout.
+### Specialized Studio Components
+- **Prism Status Beacon:** Pulsing 6px dot surrounded by a chromatic refractive halo to signal compiler, engine, or sync states.
+- **Command Palette (Spotlight K):** Floating glass slab centered on screen with 32px backdrop blur, titanium search field, and keyboard shortcut glyphs rendered in monospace ghost badges.
 
-### Named Rules
-**La Regla de la Pieza Única.** Hay un solo cristal 3D por página, en el hero. Más adelante solo aparece la órbita, como trazo de 1 px, nunca el cristal.
+### Dialecto de los CV
+Los CV (`/cv`, `/cv/laura`) son documentos personales: siguen la composición de Stitch con la paleta de la landing. Sus reglas viven en `app/(landing)/cv/cv.css` y valen solo bajo `.cv`.
 
-## Do's and Don'ts
+**La regla del dialecto acotado.** Lo que sigue es una excepción de los CV. Nada de esto se traslada a la landing, y los CV no agregan colores propios.
 
-### Do:
-- **Do** alternar bloques noche y claros para crear ritmo y profundidad.
-- **Do** resolver listas con filas y líneas de 1 px.
-- **Do** mantener una acción principal clara por bloque, siguiendo La Regla de la Acción Invertida.
-- **Do** limitar las transiciones al color, en 250ms ease-out.
-- **Do** detener todo movimiento del cristal con `prefers-reduced-motion`.
-- **Do** dar al lienzo 3D el mismo Azul Noche del bloque que lo contiene.
-- **Do** usar íconos de línea en SVG, a 16 px junto al texto.
-
-### Don't:
-- **Don't** usar neón, resplandores, gradientes decorativos ni texturas en la interfaz; los brillos del cristal son su materia y quedan exentos.
-- **Don't** usar paneles de vidrio ni `backdrop-filter`: el vidrio de esta landing es solo el cristal.
-- **Don't** repetir grillas de tarjetas sueltas.
-- **Don't** introducir otro color, ni siquiera rojo o verde para estados.
-- **Don't** agregar sombras difusas ni animaciones de elevación.
-- **Don't** colocar el cristal 3D más de una vez por página.
-- **Don't** escribir títulos en mayúsculas sostenidas ni bajar el texto de lectura de 18 px.
+- **Tipografía:** Sora para títulos (`cv-display`, `cv-title`, `cv-subtitle`), Geist para el resto. El titular lleva un brillo cian con `filter: drop-shadow`, nunca `text-shadow`, que la máscara de entrada recortaría.
+- **Etiqueta sobre el título:** cada sección abre con una etiqueta cian en mayúsculas (`.eyebrow`, 12 px) sobre un `h2`. La etiqueta es un párrafo; el título es el encabezado.
+- **Botones:** relleno cian `--accent` con texto `--canvas`, 12 px en mayúsculas, radio `cv-control` y brillo tenue también en reposo. El secundario es translúcido con borde interior de 1 px.
+- **Paneles y campos:** radio `cv-panel` en paneles, marcos y cajas de trabajos; `cv-field` en campos. Los íconos de contacto usan cajas de 16 px de radio.
+- **Marco del cristal:** panel cuadrado con borde cian de 2 px y una flotación lenta, sin movimiento si se pidió reducirlo.
+- **Línea de tiempo:** trazo cian de 1 px con nodos circulares; el primero queda encendido.
+- **Etiqueta de trabajo:** la pastilla `.cv-tag` es la única pieza totalmente redonda además de los nodos, porque no es un control.
+- **Idioma:** los CV existen solo en español, sea cual sea el idioma elegido en la landing.

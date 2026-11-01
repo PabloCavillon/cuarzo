@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Sora:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=block" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        try {
+            tailwind.config = {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        "colors": {
+                            "tertiary-fixed": "#b0f0d6",
+                            "on-secondary-container": "#81cc90",
+                            "on-surface": "#dae2fd",
+                            "on-secondary-fixed": "#00210b",
+                            "on-error-container": "#ffdad6",
+                            "inverse-on-surface": "#283044",
+                            "secondary": "#8bd79b",
+                            "surface-dim": "#0b1326",
+                            "outline-variant": "#3e4a40",
+                            "secondary-fixed-dim": "#8bd79b",
+                            "surface-container-lowest": "#060e20",
+                            "surface-container-low": "#131b2e",
+                            "on-primary": "#00391d",
+                            "on-secondary-fixed-variant": "#005226",
+                            "on-primary-fixed-variant": "#00522d",
+                            "on-surface-variant": "#bdcabe",
+                            "error": "#ffb4ab",
+                            "surface-container-high": "#222a3d",
+                            "tertiary-fixed-dim": "#95d3ba",
+                            "surface-variant": "#2d3449",
+                            "on-primary-fixed": "#00210f",
+                            "surface-tint": "#73db9a",
+                            "on-tertiary-fixed": "#002117",
+                            "inverse-primary": "#006d3e",
+                            "on-background": "#dae2fd",
+                            "on-tertiary": "#003829",
+                            "on-secondary": "#003918",
+                            "on-error": "#690005",
+                            "surface-container": "#171f33",
+                            "on-tertiary-fixed-variant": "#0b513d",
+                            "primary-container": "#86efac",
+                            "surface-container-highest": "#2d3449",
+                            "tertiary-container": "#a7e7cd",
+                            "secondary-fixed": "#a6f4b5",
+                            "on-tertiary-container": "#2b6955",
+                            "secondary-container": "#005829",
+                            "primary-fixed": "#8ff8b4",
+                            "on-primary-container": "#006d3e",
+                            "background": "#0b1326",
+                            "outline": "#889489",
+                            "inverse-surface": "#dae2fd",
+                            "surface": "#0b1326",
+                            "surface-bright": "#31394d",
+                            "primary-fixed-dim": "#73db9a",
+                            "tertiary": "#d8ffed",
+                            "primary": "#dbffe2",
+                            "error-container": "#93000a"
+                        },
+                        "borderRadius": {
+                            "DEFAULT": "0.5rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "2xl": "1rem",
+                            "3xl": "1.5rem",
+                            "full": "9999px"
+                        },
+                        "spacing": {
+                            "section-gap": "80px",
+                            "container-padding-desktop": "40px",
+                            "container-padding-mobile": "20px",
+                            "base": "8px",
+                            "gutter": "24px",
+                            "margin-x": "40px",
+                            "container-max": "1280px",
+                            "stack-sm": "0.5rem",
+                            "stack-md": "1.5rem",
+                            "stack-lg": "4rem"
+                        },
+                        "fontFamily": {
+                            "label-sm": ["Inter"],
+                            "body-lg": ["Inter"],
+                            "display-lg-mobile": ["Sora"],
+                            "headline-md": ["Sora"],
+                            "display-lg": ["Sora"],
+                            "body-md": ["Inter"],
+                            "display": ["Sora"],
+                            "headline-lg": ["Sora"],
+                            "headline-lg-mobile": ["Sora"],
+                            "mono-sm": ["Inter"],
+                            "label-caps": ["Inter"]
+                        },
+                        "fontSize": {
+                            "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                            "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                            "display-lg-mobile": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                            "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                            "display": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                            "headline-lg": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "headline-lg-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                            "mono-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                            "label-caps": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "600"}]
+                        }
+                    },
+                },
+            }
+        } catch (_e) {}
+    </script>
+<style>
+        .organic-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-glow {
+            text-shadow: 0 0 30px rgba(134, 239, 172, 0.3);
+        }
+        .neon-glow {
+            box-shadow: 0 0 20px rgba(134, 239, 172, 0.2);
+        }
+        .neon-glow:hover {
+            box-shadow: 0 0 30px rgba(134, 239, 172, 0.4);
+        }
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body class="bg-surface-container-lowest text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar Shell -->
+<nav class="fixed top-0 w-full z-50 bg-surface-container-lowest/60 backdrop-blur-xl border-b border-white/5 h-20">
+<div class="max-w-container-max mx-auto px-margin-x flex justify-between items-center h-full">
+<span class="font-headline-md text-headline-md font-bold text-on-surface tracking-tighter">LAURA COREICO</span>
+<div class="hidden md:flex items-center gap-8">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#about">About</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#skills">Skills</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#portfolio">Portfolio</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#contact">Contact</a>
+<button class="bg-primary-container text-on-primary-container px-6 py-2 rounded-full font-label-caps hover:opacity-90 transition-all scale-95 active:scale-90">Resume</button>
+</div>
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-on-surface">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<main class="relative">
+<!-- Hero Section -->
+<section class="min-h-screen pt-32 pb-stack-lg px-margin-x flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute -top-24 -left-24 w-96 h-96 bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute top-1/2 -right-24 w-[500px] h-[500px] bg-secondary-container/10 rounded-full blur-[150px]"></div>
+<div class="relative z-10 max-w-container-max w-full grid grid-cols-1 md:grid-cols-2 gap-stack-lg items-center">
+<div class="text-center md:text-left">
+<h1 class="font-display text-display leading-tight mb-stack-sm text-glow">
+                        Diseñadora <span class="text-primary italic">Multimedial</span>
+</h1>
+<p class="font-headline-md text-headline-md text-on-surface-variant mb-stack-md max-w-lg">
+                        Creando experiencias digitales que fusionan arte y tecnología.
+                    </p>
+<div class="flex flex-wrap gap-4 justify-center md:justify-start">
+<button class="bg-primary-container text-on-primary-container px-8 py-4 rounded-xl font-label-caps tracking-widest neon-glow transition-all hover:scale-105 active:scale-95">EXPLORAR PROYECTOS</button>
+<button class="organic-glass px-8 py-4 rounded-xl font-label-caps tracking-widest border border-outline/30 hover:bg-white/5 transition-all text-on-surface">CONTACTO</button>
+</div>
+</div>
+<div class="flex justify-center md:justify-end">
+<div class="relative w-80 h-80 md:w-[480px] md:h-[480px]">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-[100px] animate-pulse"></div>
+<div class="relative w-full h-full rounded-3xl overflow-hidden organic-glass border-2 border-primary/20 floating">
+<img class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" data-alt="A stylized professional portrait of a multimedia designer named Laura Coreico. She is depicted with a futuristic, artistic aesthetic, surrounded by faint digital UI overlays and ethereal moss-green light trails. The color palette features deep charcoal backgrounds with vibrant moss green and electric highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq72oN5N8xrI3ULQRze_k8hx06clMIMUZE7dGJJTzN8Uu0GW0ZVj40DcsJJ2CquR4VwVsYiqa0v1JNGeeNY93lodQDCaigvDcSC_Ge3jeCkA4D7IpJRSis8fqGOfJGNybccw7bmOmR1y4DnIq3bX0dUs7pqBk6GxrWIURdcLAhHidnk5_Y1VEaDQ0e9OIdNbVtVtGqXv3oPxXMk7WKR5uxfk6_Bwa7WMpI3w6JFobFqnP6iLnDMlcbKjk_X6V_1Yx8-Al8j28-kntI"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- About Section -->
+<section class="py-section-gap px-margin-x max-w-container-max mx-auto" id="about">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<div class="md:col-span-4">
+<h2 class="font-label-caps text-primary mb-stack-sm uppercase tracking-[0.2em]">Sobre Mí</h2>
+<p class="font-headline-lg-mobile md:text-headline-lg font-bold leading-tight text-on-surface">Pasión por lo Interactivo.</p>
+</div>
+<div class="md:col-span-8 flex flex-col gap-6">
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        Soy una estudiante de 3er año de Diseño Multimedial dedicada a fusionar la estética visual con la funcionalidad técnica. Mi enfoque se centra en cómo las piezas en movimiento y las interfaces intuitivas pueden contar historias impactantes.
+                    </p>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                        Me especializo en **Motion Graphics**, **UX/UI** y **Diseño Interactivo**. Busco constantemente desafíos que me permitan experimentar con nuevas tecnologías y lenguajes visuales vanguardistas.
+                    </p>
+<div class="grid grid-cols-3 gap-stack-md mt-stack-md">
+<div class="text-center p-stack-md organic-glass rounded-2xl">
+<div class="font-headline-md text-primary font-bold">3+</div>
+<div class="font-label-caps text-on-surface-variant opacity-70">Años</div>
+</div>
+<div class="text-center p-stack-md organic-glass rounded-2xl">
+<div class="font-headline-md text-primary font-bold">15+</div>
+<div class="font-label-caps text-on-surface-variant opacity-70">Proyectos</div>
+</div>
+<div class="text-center p-stack-md organic-glass rounded-2xl">
+<div class="font-headline-md text-primary font-bold">8+</div>
+<div class="font-label-caps text-on-surface-variant opacity-70">Skills</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Skills Section -->
+<section class="py-section-gap px-margin-x bg-surface-container-low/20 relative overflow-hidden" id="skills">
+<div class="max-w-container-max mx-auto">
+<div class="mb-stack-lg">
+<h2 class="font-label-caps text-primary mb-stack-sm uppercase tracking-[0.2em]">Herramientas</h2>
+<p class="font-headline-lg-mobile md:text-headline-lg font-bold text-on-surface">Technical Proficiency</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-stack-md">
+<!-- Adobe After Effects -->
+<div class="organic-glass p-stack-md rounded-3xl flex flex-col items-center justify-center gap-3 text-center transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(134,239,172,0.2)] group">
+<span class="material-symbols-outlined text-4xl text-primary transition-transform group-hover:scale-110" data-weight="fill">animation</span>
+<span class="font-mono-sm text-mono-sm text-on-surface/90">After Effects</span>
+</div>
+<!-- Adobe Premiere -->
+<div class="organic-glass p-stack-md rounded-3xl flex flex-col items-center justify-center gap-3 text-center transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(134,239,172,0.2)] group">
+<span class="material-symbols-outlined text-4xl text-primary transition-transform group-hover:scale-110" data-weight="fill">movie</span>
+<span class="font-mono-sm text-mono-sm text-on-surface/90">Premiere Pro</span>
+</div>
+<!-- Figma -->
+<div class="organic-glass p-stack-md rounded-3xl flex flex-col items-center justify-center gap-3 text-center transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(134,239,172,0.2)] group">
+<span class="material-symbols-outlined text-4xl text-primary transition-transform group-hover:scale-110" data-weight="fill">web</span>
+<span class="font-mono-sm text-mono-sm text-on-surface/90">Figma</span>
+</div>
+<!-- Adobe Illustrator -->
+<div class="organic-glass p-stack-md rounded-3xl flex flex-col items-center justify-center gap-3 text-center transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(134,239,172,0.2)] group">
+<span class="material-symbols-outlined text-4xl text-primary transition-transform group-hover:scale-110" data-weight="fill">draw</span>
+<span class="font-mono-sm text-mono-sm text-on-surface/90">Illustrator</span>
+</div>
+<!-- Photoshop -->
+<div class="organic-glass p-stack-md rounded-3xl flex flex-col items-center justify-center gap-3 text-center transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(134,239,172,0.2)] group">
+<span class="material-symbols-outlined text-4xl text-primary transition-transform group-hover:scale-110" data-weight="fill">image</span>
+<span class="font-mono-sm text-mono-sm text-on-surface/90">Photoshop</span>
+</div>
+<!-- Multimedia Design Card -->
+<div class="col-span-2 md:col-span-3 organic-glass p-stack-md rounded-3xl flex flex-col justify-between transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(134,239,172,0.1)] group">
+<div class="flex justify-between items-start">
+<h3 class="font-headline-md text-on-surface group-hover:text-primary transition-colors">Diseño Holístico</h3>
+<span class="material-symbols-outlined text-primary text-3xl transition-transform group-hover:rotate-12">auto_awesome</span>
+</div>
+<p class="font-body-md text-on-surface-variant mt-4">Capacidad para integrar video, diseño gráfico e interacción en una sola experiencia fluida y coherente para el usuario final.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Portfolio Section -->
+<section class="py-section-gap px-margin-x max-w-container-max mx-auto" id="portfolio">
+<div class="flex flex-col md:flex-row justify-between items-end mb-stack-lg gap-4">
+<div>
+<h2 class="font-label-caps text-primary mb-stack-sm uppercase tracking-[0.2em]">Trabajos Selectos</h2>
+<p class="font-headline-lg-mobile md:text-headline-lg font-bold text-on-surface">Portafolio</p>
+</div>
+<button class="font-label-caps text-primary flex items-center gap-2 hover:translate-x-2 transition-transform py-2 px-4 rounded-lg hover:bg-primary/10">VER TODO EN BEHANCE <span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+<!-- Project 1 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-video rounded-3xl overflow-hidden organic-glass mb-stack-sm border border-white/5">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0" data-alt="A high-quality 3D render showing a futuristic brand identity motion project. The visual features smooth, fluid metal shapes swirling in a dark void with moss green neon lighting reflections. The style is ultra-modern and polished." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAD3kJAPCKC3tB19A6LRsYfBcHewCa5-ch6ase5mQSYSZkfWTZMNnlGqL2fPfwb4x2G9xnbW4i2RyfQILcrU3NslhLYxD3XA4b9Xois3ZKk0xGyAO4TWuJLbosl2OuyGlOju-wDWa74ejJ6SAfrXGwj7WeAxA_Vuco4Ll4KJpShsH8rXszjmzU1QK0zAMMoJJzRiwlwVXSc8gBPE7YlXAE_iwP4JfZD4xhGugTmMo0REeT8gXg8a4sNYBCh7wM109ldcfcboeWZ70uR"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+<span class="bg-primary-container text-on-primary-container px-5 py-1.5 rounded-full text-xs font-label-caps tracking-widest shadow-lg">MOTION DESIGN</span>
+</div>
+</div>
+<h3 class="font-headline-md text-on-surface group-hover:text-primary transition-colors flex items-center gap-2">Brand Identity Motion <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-all text-xl">north_east</span></h3>
+<p class="font-body-md text-on-surface-variant">Identidad dinámica para una startup tecnológica basada en IA.</p>
+</div>
+<!-- Project 2 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-video rounded-3xl overflow-hidden organic-glass mb-stack-sm border border-white/5">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0" data-alt="A clean and professional mobile app UI design concept for a health and wellness platform. The interface features glassmorphism cards, vibrant moss green accents, and elegant typography on a dark background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCEss1uigzspOYqb7qtOdImSyZ-ksKRVH0rxoEen2YVpWYtiGqn_PVJlxA9Ww2aqrxPzGuXf8JlVFdvbDJzJeldD1f45UIJ-8NUrws9Atj1T_NFiPGEIWqRgBq6BJLYzmdHQ_6QVefTT2WKHlrbz0_BSGwpPrCUmVpiubFUJIk0jzv8aG8fLzDgxjpqPBxYbZF9hIgVOVDyqbNcz7Kti7_unyrutFKJcatZt2AUfC6OzovJY2MVbahTpKnruDmxVdtE2s5STVxR2EGv"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+<span class="bg-primary-container text-on-primary-container px-5 py-1.5 rounded-full text-xs font-label-caps tracking-widest shadow-lg">UX / UI</span>
+</div>
+</div>
+<h3 class="font-headline-md text-on-surface group-hover:text-primary transition-colors flex items-center gap-2">UX Mobile App Concept <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-all text-xl">north_east</span></h3>
+<p class="font-body-md text-on-surface-variant">Rediseño de experiencia móvil para gestión de bienestar digital.</p>
+</div>
+<!-- Project 3 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-video rounded-3xl overflow-hidden organic-glass mb-stack-sm border border-white/5">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0" data-alt="A detailed 3D model scene of a futuristic laboratory or creative studio. The lighting is low-key with sharp moss green highlights. The scene includes abstract geometric objects and digital screens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAi4NVxJDJs6WKfmmEHMXisZy1sjQSOkYzjla8YlRWzHmwIJbEuJjRv6j4M51zg7XYcLpZZz7z2U8-iqAW82XNvCQ5zMHfpW5FIlAIcjZet6VTIBfG49EhjhqYfbNccGD-HfS1fF5BXgqee_YYlKgKBfZhGgmZLaFT_j9NlvQLtgfJ8hWJbVb2zW_Sapvy786xLISgF8_RBvKPzQZLsiInL5V2ufLC3F_3IYLdj3hH-BRovABDJkMvxJ5kzhoSTLEiRZYYe9GWonmF"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+<span class="bg-primary-container text-on-primary-container px-5 py-1.5 rounded-full text-xs font-label-caps tracking-widest shadow-lg">3D DESIGN</span>
+</div>
+</div>
+<h3 class="font-headline-md text-on-surface group-hover:text-primary transition-colors flex items-center gap-2">3D Model Scene <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-all text-xl">north_east</span></h3>
+<p class="font-body-md text-on-surface-variant">Entorno tridimensional abstracto para visualización conceptual.</p>
+</div>
+<!-- Project 4 -->
+<div class="group cursor-pointer">
+<div class="relative aspect-video rounded-3xl overflow-hidden organic-glass mb-stack-sm border border-white/5">
+<img alt="Generative Art Poster" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE2t7AwP_SXw5OOo4-qybg4zGRInz2ldEC_-TTWEfkPsRTfQqpv9UgGKhn8vj3gc70cgxA4HZVONyBEM8-TbJbyZh9F42Onm-9Zhymx-U1GeXXWiWC87IGbtjzscZs1B2wd0IJGAN7BznbwvSME6dJNrciu5lCmIgu3Qz1K9jB62ZilZrGIBaZ9GTuF5jJSj60U-130Cb1ozvq054AykVNZX4XNta5QF5a0F7M3MMaDTNsAIz7i3njH-US3N47Sjt6TanvFpF4Kb9B"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-8">
+<span class="bg-primary-container text-on-primary-container px-5 py-1.5 rounded-full text-xs font-label-caps tracking-widest shadow-lg">INTERACTIVE</span>
+</div>
+</div>
+<h3 class="font-headline-md text-on-surface group-hover:text-primary transition-colors flex items-center gap-2">Generative Art Poster <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-all text-xl">north_east</span></h3>
+<p class="font-body-md text-on-surface-variant">Serie de posters interactivos que reaccionan al sonido ambiental.</p>
+</div>
+</div>
+</section>
+<!-- Experience & Education -->
+<section class="py-section-gap px-margin-x bg-surface-container-low/30 backdrop-blur-sm">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-stack-lg">
+<!-- Education -->
+<div>
+<h2 class="font-label-caps text-primary mb-stack-md uppercase tracking-[0.2em]">Educación</h2>
+<div class="space-y-10 border-l border-primary/20 ml-2 pl-8 relative">
+<div class="relative">
+<div class="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-primary-container shadow-[0_0_15px_rgba(134,239,172,0.5)]"></div>
+<h4 class="font-headline-md text-on-surface">Lic. en Diseño Multimedial</h4>
+<p class="text-primary-container font-mono-sm font-semibold">Universidad Nacional | 2021 - Actualidad</p>
+<p class="font-body-md text-on-surface-variant mt-3">Cursando el 3er año. Especialización en narrativas transmedia y entornos interactivos.</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-surface-container-highest border-2 border-primary-container/40"></div>
+<h4 class="font-headline-md text-on-surface">Diseño Digital &amp; Animación</h4>
+<p class="text-on-surface-variant font-mono-sm">Technical Institute | 2019 - 2020</p>
+</div>
+</div>
+</div>
+<!-- Experience -->
+<div>
+<h2 class="font-label-caps text-primary mb-stack-md uppercase tracking-[0.2em]">Experiencia</h2>
+<div class="space-y-10 border-l border-primary/20 ml-2 pl-8 relative">
+<div class="relative">
+<div class="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-primary-container shadow-[0_0_15px_rgba(134,239,172,0.5)]"></div>
+<h4 class="font-headline-md text-on-surface">Freelance Designer</h4>
+<p class="text-primary-container font-mono-sm font-semibold">Remoto | 2022 - Presente</p>
+<p class="font-body-md text-on-surface-variant mt-3">Desarrollo de contenido audiovisual para redes sociales y prototipado UI para startups locales.</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[41px] top-1.5 w-4 h-4 rounded-full bg-surface-container-highest border-2 border-primary-container/40"></div>
+<h4 class="font-headline-md text-on-surface">Pasantía Creativa</h4>
+<p class="text-on-surface-variant font-mono-sm">Agencia Prisma | Verano 2022</p>
+<p class="font-body-md text-on-surface-variant mt-3">Asistente en post-producción de video y diseño de piezas gráficas para campañas digitales.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Section -->
+<section class="py-section-gap px-margin-x max-w-container-max mx-auto" id="contact">
+<div class="organic-glass overflow-hidden grid grid-cols-1 md:grid-cols-2 rounded-3xl border border-white/5">
+<div class="p-stack-lg md:p-20 flex flex-col justify-between">
+<div>
+<h2 class="font-label-caps text-primary mb-stack-sm uppercase tracking-[0.2em]">Contacto</h2>
+<p class="font-headline-lg font-bold mb-stack-md leading-tight text-on-surface">¿Tienes una idea? Hagámosla <span class="text-primary-container">realidad</span>.</p>
+<p class="font-body-lg text-on-surface-variant mb-stack-lg">Siempre estoy abierta a nuevas colaboraciones y proyectos desafiantes que me permitan crecer.</p>
+</div>
+<div class="space-y-6">
+<div class="flex items-center gap-5">
+<div class="w-14 h-14 rounded-2xl organic-glass flex items-center justify-center text-primary group hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">mail</span>
+</div>
+<span class="font-body-md font-medium text-on-surface">laura.coreico@design.com</span>
+</div>
+<div class="flex items-center gap-5">
+<div class="w-14 h-14 rounded-2xl organic-glass flex items-center justify-center text-primary group hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-3xl">location_on</span>
+</div>
+<span class="font-body-md font-medium text-on-surface">Buenos Aires, Argentina</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container/40 p-stack-lg md:p-20 backdrop-blur-md">
+<form class="space-y-6">
+<div>
+<label class="font-label-caps text-on-surface-variant block mb-3 opacity-70">NOMBRE</label>
+<input class="w-full bg-surface-container-low border-white/5 rounded-2xl py-4 px-5 focus:ring-2 focus:ring-primary-container focus:border-transparent text-on-surface transition-all placeholder:text-on-surface/20" placeholder="Tu nombre" type="text"/>
+</div>
+<div>
+<label class="font-label-caps text-on-surface-variant block mb-3 opacity-70">EMAIL</label>
+<input class="w-full bg-surface-container-low border-white/5 rounded-2xl py-4 px-5 focus:ring-2 focus:ring-primary-container focus:border-transparent text-on-surface transition-all placeholder:text-on-surface/20" placeholder="hola@ejemplo.com" type="email"/>
+</div>
+<div>
+<label class="font-label-caps text-on-surface-variant block mb-3 opacity-70">MENSAJE</label>
+<textarea class="w-full bg-surface-container-low border-white/5 rounded-2xl py-4 px-5 focus:ring-2 focus:ring-primary-container focus:border-transparent text-on-surface transition-all placeholder:text-on-surface/20" placeholder="Cuéntame sobre tu proyecto..." rows="4"></textarea>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container py-5 rounded-2xl font-label-caps tracking-widest hover:opacity-90 transition-all neon-glow flex items-center justify-center gap-3 group" type="submit">
+                            ENVIAR MENSAJE
+                            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">send</span>
+</button>
+</form>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-stack-lg border-t border-white/5 bg-surface-container-lowest/80 backdrop-blur-md">
+<div class="max-w-container-max mx-auto px-margin-x flex flex-col md:flex-row justify-between items-center gap-stack-md">
+<span class="font-headline-md text-headline-md text-on-surface font-bold tracking-tighter">LAURA COREICO</span>
+<p class="font-mono-sm text-mono-sm text-on-surface-variant text-center md:text-left opacity-60">© 2024 Multimedia Design Portfolio. Built with precision and moss-green energy.</p>
+<div class="flex gap-6">
+<a class="font-mono-sm text-mono-sm text-on-surface-variant hover:text-primary transition-all hover:-translate-y-1" href="#">Instagram</a>
+</div>
+</div>
+</footer>
+</body></html>

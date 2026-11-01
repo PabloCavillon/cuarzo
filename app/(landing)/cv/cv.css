@@ -1,0 +1,160 @@
+/* CV: composición de Stitch con los colores de la landing. */
+.cv .display,
+.cv .title,
+.cv .subtitle {
+  font-family: var(--font-cv), var(--font-body), sans-serif;
+}
+
+.cv .display {
+  font-weight: 800;
+  font-size: clamp(2.75rem, 6vw, 4.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  /* En el h1 y no como text-shadow: la máscara de .rise recortaría el brillo en un rectángulo. */
+  filter: drop-shadow(0 0 30px rgb(var(--accent-rgb) / 0.3));
+}
+
+.cv .title {
+  font-weight: 700;
+  font-size: clamp(2rem, 3.4vw, 3rem);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.cv .subtitle { font-weight: 600; font-size: 1.25rem; line-height: 1.75rem; }
+
+.eyebrow {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.cv .btn {
+  min-height: 3.25rem;
+  padding-inline: 2rem;
+  border-radius: 0.75rem;
+  background: var(--accent);
+  color: var(--canvas);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px rgb(var(--accent-rgb) / 0.2);
+}
+
+.cv .btn:hover { box-shadow: 0 0 30px rgb(var(--accent-rgb) / 0.4); }
+
+.cv .btn-quiet {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.3);
+}
+
+.cv .btn-quiet:hover {
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.3);
+}
+
+.cv .section { max-width: 80rem; }
+
+.cv .glass { border-radius: 1.5rem; }
+
+.cv .field { border-radius: 1rem; padding: 0.875rem 1.25rem; background: var(--surface); }
+
+.cv form label {
+  color: var(--ink-2);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cv-frame {
+  position: relative;
+  aspect-ratio: 1;
+  width: min(100%, 30rem);
+  border: 2px solid rgb(var(--accent-rgb) / 0.2);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: var(--surface);
+  animation: cv-float 6s ease-in-out infinite;
+}
+
+@keyframes cv-float { 50% { transform: translateY(-1.25rem); } }
+
+.cv-card { transition: box-shadow 200ms ease-out, border-color 200ms ease-out; }
+.cv-card:hover { box-shadow: 0 0 20px rgb(var(--accent-rgb) / 0.15); border-color: rgb(var(--accent-rgb) / 0.25); }
+
+.cv-media {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: radial-gradient(70% 90% at 50% 40%, rgb(var(--accent-rgb) / 0.14), transparent), var(--surface);
+}
+
+.cv-media > :first-child { width: 100%; max-width: 22rem; }
+.cv-media > svg:first-child { width: 4rem; height: 4rem; color: var(--accent); stroke-width: 1.25; }
+
+.cv-tag {
+  position: absolute;
+  left: 1rem;
+  bottom: 1rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--canvas);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.cv-timeline {
+  margin-left: 0.5rem;
+  padding-left: 2rem;
+  border-left: 1px solid rgb(var(--accent-rgb) / 0.2);
+}
+
+.cv-timeline > li { position: relative; }
+.cv-timeline > li + li { margin-top: 2.5rem; }
+
+.cv-timeline > li::before {
+  content: "";
+  position: absolute;
+  left: calc(-2rem - 0.5rem - 0.5px);
+  top: 0.375rem;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgb(var(--accent-rgb) / 0.4);
+  border-radius: 50%;
+  background: var(--raised);
+}
+
+.cv-timeline > li:first-child::before {
+  border-color: var(--accent);
+  background: var(--accent);
+  box-shadow: 0 0 15px rgb(var(--accent-rgb) / 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-frame { animation: none; }
+  .cv-card { transition: none; }
+}
+
+@media (max-width: 359px) {
+  .cv .display { font-size: 2.25rem; }
+}
+
+/* Printing never scrolls, so unseen blocks would stay hidden. */
+@media print {
+  html.reveal .cv [data-reveal] { opacity: 1; transform: none; }
+  .cv header { position: static; }
+}

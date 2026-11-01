@@ -1,287 +1,855 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-30T15:05:33.667Z",
-  "title": "Design System: Cuarzo Landing",
+  "generatedAt": "2026-11-01T07:00:28.357Z",
+  "title": "Design System: Crystalline Precision",
   "extensions": {
     "colorMeta": {
-      "blue": {
-        "role": "primary",
-        "displayName": "Azul Eléctrico",
-        "canonical": "#2450e6",
-        "tonalRamp": [
-          "oklch(15% 0.115 265.5)",
-          "oklch(26% 0.200 265.5)",
-          "oklch(37% 0.231 265.5)",
-          "oklch(49% 0.231 265.5)",
-          "oklch(61% 0.231 265.5)",
-          "oklch(72% 0.215 265.5)",
-          "oklch(84% 0.123 265.5)",
-          "oklch(95% 0.038 265.5)"
-        ]
-      },
-      "blue-deep": {
-        "role": "primary",
-        "displayName": "Azul Profundo",
-        "canonical": "#1a3bb3",
-        "tonalRamp": [
-          "oklch(15% 0.096 265.8)",
-          "oklch(26% 0.167 265.8)",
-          "oklch(37% 0.193 265.8)",
-          "oklch(49% 0.193 265.8)",
-          "oklch(61% 0.193 265.8)",
-          "oklch(72% 0.180 265.8)",
-          "oklch(84% 0.103 265.8)",
-          "oklch(95% 0.032 265.8)"
-        ]
-      },
-      "blue-pale": {
-        "role": "primary",
-        "displayName": "Azul Pálido",
-        "canonical": "#dbe4ff",
-        "tonalRamp": [
-          "oklch(15% 0.019 271.0)",
-          "oklch(26% 0.033 271.0)",
-          "oklch(37% 0.038 271.0)",
-          "oklch(49% 0.038 271.0)",
-          "oklch(61% 0.038 271.0)",
-          "oklch(72% 0.036 271.0)",
-          "oklch(84% 0.020 271.0)",
-          "oklch(95% 0.006 271.0)"
-        ]
-      },
-      "orbit": {
-        "role": "primary",
-        "displayName": "Azul Órbita",
-        "canonical": "#8fb2ff",
-        "tonalRamp": [
-          "oklch(15% 0.059 265.1)",
-          "oklch(26% 0.102 265.1)",
-          "oklch(37% 0.118 265.1)",
-          "oklch(49% 0.118 265.1)",
-          "oklch(61% 0.118 265.1)",
-          "oklch(72% 0.110 265.1)",
-          "oklch(84% 0.063 265.1)",
-          "oklch(95% 0.020 265.1)"
-        ]
-      },
-      "night": {
-        "role": "neutral",
-        "displayName": "Azul Noche",
-        "canonical": "#071033",
-        "tonalRamp": [
-          "oklch(15% 0.035 267.8)",
-          "oklch(26% 0.061 267.8)",
-          "oklch(37% 0.070 267.8)",
-          "oklch(49% 0.070 267.8)",
-          "oklch(61% 0.070 267.8)",
-          "oklch(72% 0.066 267.8)",
-          "oklch(84% 0.038 267.8)",
-          "oklch(95% 0.012 267.8)"
-        ]
-      },
-      "night-raised": {
-        "role": "neutral",
-        "displayName": "Noche Elevada",
-        "canonical": "#121d4a",
-        "tonalRamp": [
-          "oklch(15% 0.042 269.1)",
-          "oklch(26% 0.074 269.1)",
-          "oklch(37% 0.085 269.1)",
-          "oklch(49% 0.085 269.1)",
-          "oklch(61% 0.085 269.1)",
-          "oklch(72% 0.079 269.1)",
-          "oklch(84% 0.045 269.1)",
-          "oklch(95% 0.014 269.1)"
-        ]
-      },
-      "night-line": {
-        "role": "neutral",
-        "displayName": "Línea Noche",
-        "canonical": "#27335f",
-        "tonalRamp": [
-          "oklch(15% 0.040 270.2)",
-          "oklch(26% 0.069 270.2)",
-          "oklch(37% 0.079 270.2)",
-          "oklch(49% 0.079 270.2)",
-          "oklch(61% 0.079 270.2)",
-          "oklch(72% 0.074 270.2)",
-          "oklch(84% 0.042 270.2)",
-          "oklch(95% 0.013 270.2)"
-        ]
-      },
-      "night-ink-2": {
-        "role": "neutral",
-        "displayName": "Bruma",
-        "canonical": "#c6d0ec",
-        "tonalRamp": [
-          "oklch(15% 0.020 269.9)",
-          "oklch(26% 0.035 269.9)",
-          "oklch(37% 0.040 269.9)",
-          "oklch(49% 0.040 269.9)",
-          "oklch(61% 0.040 269.9)",
-          "oklch(72% 0.038 269.9)",
-          "oklch(84% 0.022 269.9)",
-          "oklch(95% 0.007 269.9)"
-        ]
-      },
-      "ground": {
-        "role": "neutral",
-        "displayName": "Blanco Porcelana",
-        "canonical": "#f4f6fb",
-        "tonalRamp": [
-          "oklch(15% 0.003 268.5)",
-          "oklch(26% 0.006 268.5)",
-          "oklch(37% 0.007 268.5)",
-          "oklch(49% 0.007 268.5)",
-          "oklch(61% 0.007 268.5)",
-          "oklch(72% 0.007 268.5)",
-          "oklch(84% 0.004 268.5)",
-          "oklch(95% 0.001 268.5)"
-        ]
-      },
       "surface": {
         "role": "neutral",
-        "displayName": "Blanco",
-        "canonical": "#ffffff",
+        "displayName": "Abyssal Obsidian",
+        "canonical": "#090B10",
         "tonalRamp": [
-          "oklch(15% 0.000 89.9)",
-          "oklch(26% 0.000 89.9)",
-          "oklch(37% 0.000 89.9)",
-          "oklch(49% 0.000 89.9)",
-          "oklch(61% 0.000 89.9)",
-          "oklch(72% 0.000 89.9)",
-          "oklch(84% 0.000 89.9)",
-          "oklch(95% 0.000 89.9)"
+          "oklch(15% 0.006 267.7)",
+          "oklch(26% 0.010 267.7)",
+          "oklch(37% 0.011 267.7)",
+          "oklch(49% 0.011 267.7)",
+          "oklch(61% 0.011 267.7)",
+          "oklch(72% 0.011 267.7)",
+          "oklch(84% 0.006 267.7)",
+          "oklch(95% 0.002 267.7)"
         ]
       },
-      "ink": {
+      "surface-dim": {
         "role": "neutral",
-        "displayName": "Tinta",
-        "canonical": "#0a1330",
+        "displayName": "Abyssal Obsidian Dim",
+        "canonical": "#090B10",
         "tonalRamp": [
-          "oklch(15% 0.030 267.7)",
-          "oklch(26% 0.051 267.7)",
-          "oklch(37% 0.059 267.7)",
-          "oklch(49% 0.059 267.7)",
-          "oklch(61% 0.059 267.7)",
-          "oklch(72% 0.055 267.7)",
-          "oklch(84% 0.032 267.7)",
-          "oklch(95% 0.010 267.7)"
+          "oklch(15% 0.006 267.7)",
+          "oklch(26% 0.010 267.7)",
+          "oklch(37% 0.011 267.7)",
+          "oklch(49% 0.011 267.7)",
+          "oklch(61% 0.011 267.7)",
+          "oklch(72% 0.011 267.7)",
+          "oklch(84% 0.006 267.7)",
+          "oklch(95% 0.002 267.7)"
         ]
       },
-      "ink-2": {
+      "surface-bright": {
         "role": "neutral",
-        "displayName": "Tinta Media",
-        "canonical": "#434e6b",
+        "displayName": "Surface Bright",
+        "canonical": "#2c3a4c",
         "tonalRamp": [
-          "oklch(15% 0.025 268.2)",
-          "oklch(26% 0.044 268.2)",
-          "oklch(37% 0.050 268.2)",
-          "oklch(49% 0.050 268.2)",
-          "oklch(61% 0.050 268.2)",
-          "oklch(72% 0.047 268.2)",
-          "oklch(84% 0.027 268.2)",
-          "oklch(95% 0.008 268.2)"
+          "oklch(15% 0.018 254.9)",
+          "oklch(26% 0.032 254.9)",
+          "oklch(37% 0.037 254.9)",
+          "oklch(49% 0.037 254.9)",
+          "oklch(61% 0.037 254.9)",
+          "oklch(72% 0.034 254.9)",
+          "oklch(84% 0.019 254.9)",
+          "oklch(95% 0.006 254.9)"
         ]
       },
-      "placeholder": {
+      "surface-container-lowest": {
         "role": "neutral",
-        "displayName": "Marcador",
-        "canonical": "#5b6684",
+        "displayName": "Surface Container Lowest",
+        "canonical": "#010f1f",
         "tonalRamp": [
-          "oklch(15% 0.025 269.0)",
-          "oklch(26% 0.043 269.0)",
-          "oklch(37% 0.050 269.0)",
-          "oklch(49% 0.050 269.0)",
-          "oklch(61% 0.050 269.0)",
-          "oklch(72% 0.046 269.0)",
-          "oklch(84% 0.026 269.0)",
-          "oklch(95% 0.008 269.0)"
+          "oklch(15% 0.021 248.6)",
+          "oklch(26% 0.036 248.6)",
+          "oklch(37% 0.041 248.6)",
+          "oklch(49% 0.041 248.6)",
+          "oklch(61% 0.041 248.6)",
+          "oklch(72% 0.038 248.6)",
+          "oklch(84% 0.022 248.6)",
+          "oklch(95% 0.007 248.6)"
         ]
       },
-      "line": {
+      "surface-container-low": {
         "role": "neutral",
-        "displayName": "Línea",
-        "canonical": "#d5dbea",
+        "displayName": "Surface Container Low",
+        "canonical": "#0d1c2d",
         "tonalRamp": [
-          "oklch(15% 0.011 268.4)",
-          "oklch(26% 0.019 268.4)",
-          "oklch(37% 0.022 268.4)",
-          "oklch(49% 0.022 268.4)",
-          "oklch(61% 0.022 268.4)",
-          "oklch(72% 0.020 268.4)",
-          "oklch(84% 0.011 268.4)",
-          "oklch(95% 0.004 268.4)"
+          "oklch(15% 0.020 252.7)",
+          "oklch(26% 0.034 252.7)",
+          "oklch(37% 0.039 252.7)",
+          "oklch(49% 0.039 252.7)",
+          "oklch(61% 0.039 252.7)",
+          "oklch(72% 0.037 252.7)",
+          "oklch(84% 0.021 252.7)",
+          "oklch(95% 0.006 252.7)"
         ]
       },
-      "field-line": {
+      "surface-container": {
+        "role": "neutral",
+        "displayName": "Surface Container",
+        "canonical": "#122131",
+        "tonalRamp": [
+          "oklch(15% 0.019 251.1)",
+          "oklch(26% 0.032 251.1)",
+          "oklch(37% 0.037 251.1)",
+          "oklch(49% 0.037 251.1)",
+          "oklch(61% 0.037 251.1)",
+          "oklch(72% 0.034 251.1)",
+          "oklch(84% 0.020 251.1)",
+          "oklch(95% 0.006 251.1)"
+        ]
+      },
+      "surface-container-high": {
+        "role": "neutral",
+        "displayName": "Surface Container High",
+        "canonical": "#1c2b3c",
+        "tonalRamp": [
+          "oklch(15% 0.019 252.2)",
+          "oklch(26% 0.032 252.2)",
+          "oklch(37% 0.037 252.2)",
+          "oklch(49% 0.037 252.2)",
+          "oklch(61% 0.037 252.2)",
+          "oklch(72% 0.035 252.2)",
+          "oklch(84% 0.020 252.2)",
+          "oklch(95% 0.006 252.2)"
+        ]
+      },
+      "surface-container-highest": {
+        "role": "neutral",
+        "displayName": "Surface Container Highest",
+        "canonical": "#273647",
+        "tonalRamp": [
+          "oklch(15% 0.018 252.0)",
+          "oklch(26% 0.031 252.0)",
+          "oklch(37% 0.036 252.0)",
+          "oklch(49% 0.036 252.0)",
+          "oklch(61% 0.036 252.0)",
+          "oklch(72% 0.034 252.0)",
+          "oklch(84% 0.019 252.0)",
+          "oklch(95% 0.006 252.0)"
+        ]
+      },
+      "on-surface": {
+        "role": "neutral",
+        "displayName": "On Surface",
+        "canonical": "#d4e4fa",
+        "tonalRamp": [
+          "oklch(15% 0.017 256.3)",
+          "oklch(26% 0.030 256.3)",
+          "oklch(37% 0.035 256.3)",
+          "oklch(49% 0.035 256.3)",
+          "oklch(61% 0.035 256.3)",
+          "oklch(72% 0.032 256.3)",
+          "oklch(84% 0.018 256.3)",
+          "oklch(95% 0.006 256.3)"
+        ]
+      },
+      "on-surface-variant": {
+        "role": "neutral",
+        "displayName": "On Surface Variant",
+        "canonical": "#bdc8d1",
+        "tonalRamp": [
+          "oklch(15% 0.009 242.5)",
+          "oklch(26% 0.015 242.5)",
+          "oklch(37% 0.017 242.5)",
+          "oklch(49% 0.017 242.5)",
+          "oklch(61% 0.017 242.5)",
+          "oklch(72% 0.016 242.5)",
+          "oklch(84% 0.009 242.5)",
+          "oklch(95% 0.003 242.5)"
+        ]
+      },
+      "inverse-surface": {
+        "role": "neutral",
+        "displayName": "Inverse Surface",
+        "canonical": "#d4e4fa",
+        "tonalRamp": [
+          "oklch(15% 0.017 256.3)",
+          "oklch(26% 0.030 256.3)",
+          "oklch(37% 0.035 256.3)",
+          "oklch(49% 0.035 256.3)",
+          "oklch(61% 0.035 256.3)",
+          "oklch(72% 0.032 256.3)",
+          "oklch(84% 0.018 256.3)",
+          "oklch(95% 0.006 256.3)"
+        ]
+      },
+      "inverse-on-surface": {
+        "role": "neutral",
+        "displayName": "Inverse On Surface",
+        "canonical": "#233143",
+        "tonalRamp": [
+          "oklch(15% 0.019 255.0)",
+          "oklch(26% 0.033 255.0)",
+          "oklch(37% 0.038 255.0)",
+          "oklch(49% 0.038 255.0)",
+          "oklch(61% 0.038 255.0)",
+          "oklch(72% 0.035 255.0)",
+          "oklch(84% 0.020 255.0)",
+          "oklch(95% 0.006 255.0)"
+        ]
+      },
+      "outline": {
+        "role": "neutral",
+        "displayName": "Outline",
+        "canonical": "#87929a",
+        "tonalRamp": [
+          "oklch(15% 0.009 239.3)",
+          "oklch(26% 0.015 239.3)",
+          "oklch(37% 0.017 239.3)",
+          "oklch(49% 0.017 239.3)",
+          "oklch(61% 0.017 239.3)",
+          "oklch(72% 0.016 239.3)",
+          "oklch(84% 0.009 239.3)",
+          "oklch(95% 0.003 239.3)"
+        ]
+      },
+      "outline-variant": {
+        "role": "neutral",
+        "displayName": "Outline Variant",
+        "canonical": "#3e484f",
+        "tonalRamp": [
+          "oklch(15% 0.009 238.5)",
+          "oklch(26% 0.015 238.5)",
+          "oklch(37% 0.018 238.5)",
+          "oklch(49% 0.018 238.5)",
+          "oklch(61% 0.018 238.5)",
+          "oklch(72% 0.016 238.5)",
+          "oklch(84% 0.009 238.5)",
+          "oklch(95% 0.003 238.5)"
+        ]
+      },
+      "surface-tint": {
         "role": "primary",
-        "displayName": "Azul Eléctrico",
-        "canonical": "#8390ac",
+        "displayName": "Surface Tint",
+        "canonical": "#7bd0ff",
         "tonalRamp": [
-          "oklch(15% 0.115 265.5)",
-          "oklch(26% 0.200 265.5)",
-          "oklch(37% 0.231 265.5)",
-          "oklch(49% 0.231 265.5)",
-          "oklch(61% 0.231 265.5)",
-          "oklch(72% 0.215 265.5)",
-          "oklch(84% 0.123 265.5)",
-          "oklch(95% 0.038 265.5)"
+          "oklch(15% 0.053 234.3)",
+          "oklch(26% 0.092 234.3)",
+          "oklch(37% 0.106 234.3)",
+          "oklch(49% 0.106 234.3)",
+          "oklch(61% 0.106 234.3)",
+          "oklch(72% 0.099 234.3)",
+          "oklch(84% 0.056 234.3)",
+          "oklch(95% 0.017 234.3)"
+        ]
+      },
+      "primary": {
+        "role": "primary",
+        "displayName": "Primary Optical Cyan",
+        "canonical": "#38BDF8",
+        "tonalRamp": [
+          "oklch(15% 0.069 232.7)",
+          "oklch(26% 0.120 232.7)",
+          "oklch(37% 0.139 232.7)",
+          "oklch(49% 0.139 232.7)",
+          "oklch(61% 0.139 232.7)",
+          "oklch(72% 0.129 232.7)",
+          "oklch(84% 0.074 232.7)",
+          "oklch(95% 0.023 232.7)"
+        ]
+      },
+      "on-primary": {
+        "role": "primary",
+        "displayName": "On Primary",
+        "canonical": "#00354a",
+        "tonalRamp": [
+          "oklch(15% 0.031 231.7)",
+          "oklch(26% 0.054 231.7)",
+          "oklch(37% 0.063 231.7)",
+          "oklch(49% 0.063 231.7)",
+          "oklch(61% 0.063 231.7)",
+          "oklch(72% 0.058 231.7)",
+          "oklch(84% 0.033 231.7)",
+          "oklch(95% 0.010 231.7)"
+        ]
+      },
+      "primary-container": {
+        "role": "primary",
+        "displayName": "Primary Container",
+        "canonical": "#38bdf8",
+        "tonalRamp": [
+          "oklch(15% 0.069 232.7)",
+          "oklch(26% 0.120 232.7)",
+          "oklch(37% 0.139 232.7)",
+          "oklch(49% 0.139 232.7)",
+          "oklch(61% 0.139 232.7)",
+          "oklch(72% 0.129 232.7)",
+          "oklch(84% 0.074 232.7)",
+          "oklch(95% 0.023 232.7)"
+        ]
+      },
+      "on-primary-container": {
+        "role": "primary",
+        "displayName": "On Primary Container",
+        "canonical": "#004965",
+        "tonalRamp": [
+          "oklch(15% 0.039 232.4)",
+          "oklch(26% 0.068 232.4)",
+          "oklch(37% 0.078 232.4)",
+          "oklch(49% 0.078 232.4)",
+          "oklch(61% 0.078 232.4)",
+          "oklch(72% 0.073 232.4)",
+          "oklch(84% 0.041 232.4)",
+          "oklch(95% 0.013 232.4)"
+        ]
+      },
+      "inverse-primary": {
+        "role": "primary",
+        "displayName": "Inverse Primary",
+        "canonical": "#00668a",
+        "tonalRamp": [
+          "oklch(15% 0.049 231.5)",
+          "oklch(26% 0.084 231.5)",
+          "oklch(37% 0.097 231.5)",
+          "oklch(49% 0.097 231.5)",
+          "oklch(61% 0.097 231.5)",
+          "oklch(72% 0.090 231.5)",
+          "oklch(84% 0.051 231.5)",
+          "oklch(95% 0.016 231.5)"
+        ]
+      },
+      "secondary": {
+        "role": "secondary",
+        "displayName": "Secondary",
+        "canonical": "#bdc2ff",
+        "tonalRamp": [
+          "oklch(15% 0.043 280.7)",
+          "oklch(26% 0.074 280.7)",
+          "oklch(37% 0.086 280.7)",
+          "oklch(49% 0.086 280.7)",
+          "oklch(61% 0.086 280.7)",
+          "oklch(72% 0.080 280.7)",
+          "oklch(84% 0.045 280.7)",
+          "oklch(95% 0.014 280.7)"
+        ]
+      },
+      "on-secondary": {
+        "role": "secondary",
+        "displayName": "On Secondary",
+        "canonical": "#131e8c",
+        "tonalRamp": [
+          "oklch(15% 0.088 268.0)",
+          "oklch(26% 0.153 268.0)",
+          "oklch(37% 0.176 268.0)",
+          "oklch(49% 0.176 268.0)",
+          "oklch(61% 0.176 268.0)",
+          "oklch(72% 0.164 268.0)",
+          "oklch(84% 0.093 268.0)",
+          "oklch(95% 0.029 268.0)"
+        ]
+      },
+      "secondary-container": {
+        "role": "secondary",
+        "displayName": "Secondary Container",
+        "canonical": "#2f3aa3",
+        "tonalRamp": [
+          "oklch(15% 0.084 272.0)",
+          "oklch(26% 0.145 272.0)",
+          "oklch(37% 0.168 272.0)",
+          "oklch(49% 0.168 272.0)",
+          "oklch(61% 0.168 272.0)",
+          "oklch(72% 0.156 272.0)",
+          "oklch(84% 0.089 272.0)",
+          "oklch(95% 0.028 272.0)"
+        ]
+      },
+      "on-secondary-container": {
+        "role": "secondary",
+        "displayName": "On Secondary Container",
+        "canonical": "#a8afff",
+        "tonalRamp": [
+          "oklch(15% 0.057 279.5)",
+          "oklch(26% 0.099 279.5)",
+          "oklch(37% 0.114 279.5)",
+          "oklch(49% 0.114 279.5)",
+          "oklch(61% 0.114 279.5)",
+          "oklch(72% 0.106 279.5)",
+          "oklch(84% 0.060 279.5)",
+          "oklch(95% 0.019 279.5)"
+        ]
+      },
+      "tertiary": {
+        "role": "tertiary",
+        "displayName": "Tertiary",
+        "canonical": "#00e2f0",
+        "tonalRamp": [
+          "oklch(15% 0.071 202.8)",
+          "oklch(26% 0.123 202.8)",
+          "oklch(37% 0.142 202.8)",
+          "oklch(49% 0.142 202.8)",
+          "oklch(61% 0.142 202.8)",
+          "oklch(72% 0.132 202.8)",
+          "oklch(84% 0.075 202.8)",
+          "oklch(95% 0.023 202.8)"
+        ]
+      },
+      "on-tertiary": {
+        "role": "tertiary",
+        "displayName": "On Tertiary",
+        "canonical": "#00363a",
+        "tonalRamp": [
+          "oklch(15% 0.026 202.8)",
+          "oklch(26% 0.045 202.8)",
+          "oklch(37% 0.052 202.8)",
+          "oklch(49% 0.052 202.8)",
+          "oklch(61% 0.052 202.8)",
+          "oklch(72% 0.048 202.8)",
+          "oklch(84% 0.027 202.8)",
+          "oklch(95% 0.009 202.8)"
+        ]
+      },
+      "tertiary-container": {
+        "role": "tertiary",
+        "displayName": "Tertiary Container",
+        "canonical": "#00c4d0",
+        "tonalRamp": [
+          "oklch(15% 0.064 202.6)",
+          "oklch(26% 0.110 202.6)",
+          "oklch(37% 0.127 202.6)",
+          "oklch(49% 0.127 202.6)",
+          "oklch(61% 0.127 202.6)",
+          "oklch(72% 0.118 202.6)",
+          "oklch(84% 0.067 202.6)",
+          "oklch(95% 0.021 202.6)"
+        ]
+      },
+      "on-tertiary-container": {
+        "role": "tertiary",
+        "displayName": "On Tertiary Container",
+        "canonical": "#004c51",
+        "tonalRamp": [
+          "oklch(15% 0.032 202.4)",
+          "oklch(26% 0.056 202.4)",
+          "oklch(37% 0.065 202.4)",
+          "oklch(49% 0.065 202.4)",
+          "oklch(61% 0.065 202.4)",
+          "oklch(72% 0.060 202.4)",
+          "oklch(84% 0.034 202.4)",
+          "oklch(95% 0.011 202.4)"
+        ]
+      },
+      "error": {
+        "role": "error",
+        "displayName": "Error",
+        "canonical": "#ffb4ab",
+        "tonalRamp": [
+          "oklch(15% 0.045 26.8)",
+          "oklch(26% 0.077 26.8)",
+          "oklch(37% 0.089 26.8)",
+          "oklch(49% 0.089 26.8)",
+          "oklch(61% 0.089 26.8)",
+          "oklch(72% 0.083 26.8)",
+          "oklch(84% 0.047 26.8)",
+          "oklch(95% 0.015 26.8)"
+        ]
+      },
+      "on-error": {
+        "role": "error",
+        "displayName": "On Error",
+        "canonical": "#690005",
+        "tonalRamp": [
+          "oklch(15% 0.067 27.3)",
+          "oklch(26% 0.116 27.3)",
+          "oklch(37% 0.134 27.3)",
+          "oklch(49% 0.134 27.3)",
+          "oklch(61% 0.134 27.3)",
+          "oklch(72% 0.124 27.3)",
+          "oklch(84% 0.071 27.3)",
+          "oklch(95% 0.022 27.3)"
+        ]
+      },
+      "error-container": {
+        "role": "error",
+        "displayName": "Error Container",
+        "canonical": "#93000a",
+        "tonalRamp": [
+          "oklch(15% 0.085 27.4)",
+          "oklch(26% 0.147 27.4)",
+          "oklch(37% 0.170 27.4)",
+          "oklch(49% 0.170 27.4)",
+          "oklch(61% 0.170 27.4)",
+          "oklch(72% 0.158 27.4)",
+          "oklch(84% 0.090 27.4)",
+          "oklch(95% 0.028 27.4)"
+        ]
+      },
+      "on-error-container": {
+        "role": "error",
+        "displayName": "On Error Container",
+        "canonical": "#ffdad6",
+        "tonalRamp": [
+          "oklch(15% 0.021 25.2)",
+          "oklch(26% 0.036 25.2)",
+          "oklch(37% 0.042 25.2)",
+          "oklch(49% 0.042 25.2)",
+          "oklch(61% 0.042 25.2)",
+          "oklch(72% 0.039 25.2)",
+          "oklch(84% 0.022 25.2)",
+          "oklch(95% 0.007 25.2)"
+        ]
+      },
+      "primary-fixed": {
+        "role": "primary",
+        "displayName": "Primary Fixed",
+        "canonical": "#c4e7ff",
+        "tonalRamp": [
+          "oklch(15% 0.025 238.1)",
+          "oklch(26% 0.043 238.1)",
+          "oklch(37% 0.049 238.1)",
+          "oklch(49% 0.049 238.1)",
+          "oklch(61% 0.049 238.1)",
+          "oklch(72% 0.046 238.1)",
+          "oklch(84% 0.026 238.1)",
+          "oklch(95% 0.008 238.1)"
+        ]
+      },
+      "primary-fixed-dim": {
+        "role": "primary",
+        "displayName": "Primary Fixed Dim",
+        "canonical": "#7bd0ff",
+        "tonalRamp": [
+          "oklch(15% 0.053 234.3)",
+          "oklch(26% 0.092 234.3)",
+          "oklch(37% 0.106 234.3)",
+          "oklch(49% 0.106 234.3)",
+          "oklch(61% 0.106 234.3)",
+          "oklch(72% 0.099 234.3)",
+          "oklch(84% 0.056 234.3)",
+          "oklch(95% 0.017 234.3)"
+        ]
+      },
+      "on-primary-fixed": {
+        "role": "primary",
+        "displayName": "On Primary Fixed",
+        "canonical": "#001e2c",
+        "tonalRamp": [
+          "oklch(15% 0.023 232.1)",
+          "oklch(26% 0.039 232.1)",
+          "oklch(37% 0.045 232.1)",
+          "oklch(49% 0.045 232.1)",
+          "oklch(61% 0.045 232.1)",
+          "oklch(72% 0.042 232.1)",
+          "oklch(84% 0.024 232.1)",
+          "oklch(95% 0.007 232.1)"
+        ]
+      },
+      "on-primary-fixed-variant": {
+        "role": "primary",
+        "displayName": "On Primary Fixed Variant",
+        "canonical": "#004c69",
+        "tonalRamp": [
+          "oklch(15% 0.040 232.5)",
+          "oklch(26% 0.070 232.5)",
+          "oklch(37% 0.080 232.5)",
+          "oklch(49% 0.080 232.5)",
+          "oklch(61% 0.080 232.5)",
+          "oklch(72% 0.075 232.5)",
+          "oklch(84% 0.043 232.5)",
+          "oklch(95% 0.013 232.5)"
+        ]
+      },
+      "secondary-fixed": {
+        "role": "secondary",
+        "displayName": "Secondary Fixed",
+        "canonical": "#e0e0ff",
+        "tonalRamp": [
+          "oklch(15% 0.021 285.5)",
+          "oklch(26% 0.036 285.5)",
+          "oklch(37% 0.042 285.5)",
+          "oklch(49% 0.042 285.5)",
+          "oklch(61% 0.042 285.5)",
+          "oklch(72% 0.039 285.5)",
+          "oklch(84% 0.022 285.5)",
+          "oklch(95% 0.007 285.5)"
+        ]
+      },
+      "secondary-fixed-dim": {
+        "role": "secondary",
+        "displayName": "Secondary Fixed Dim",
+        "canonical": "#bdc2ff",
+        "tonalRamp": [
+          "oklch(15% 0.043 280.7)",
+          "oklch(26% 0.074 280.7)",
+          "oklch(37% 0.086 280.7)",
+          "oklch(49% 0.086 280.7)",
+          "oklch(61% 0.086 280.7)",
+          "oklch(72% 0.080 280.7)",
+          "oklch(84% 0.045 280.7)",
+          "oklch(95% 0.014 280.7)"
+        ]
+      },
+      "on-secondary-fixed": {
+        "role": "secondary",
+        "displayName": "On Secondary Fixed",
+        "canonical": "#000767",
+        "tonalRamp": [
+          "oklch(15% 0.078 264.2)",
+          "oklch(26% 0.134 264.2)",
+          "oklch(37% 0.155 264.2)",
+          "oklch(49% 0.155 264.2)",
+          "oklch(61% 0.155 264.2)",
+          "oklch(72% 0.144 264.2)",
+          "oklch(84% 0.082 264.2)",
+          "oklch(95% 0.026 264.2)"
+        ]
+      },
+      "on-secondary-fixed-variant": {
+        "role": "secondary",
+        "displayName": "On Secondary Fixed Variant",
+        "canonical": "#2f3aa3",
+        "tonalRamp": [
+          "oklch(15% 0.084 272.0)",
+          "oklch(26% 0.145 272.0)",
+          "oklch(37% 0.168 272.0)",
+          "oklch(49% 0.168 272.0)",
+          "oklch(61% 0.168 272.0)",
+          "oklch(72% 0.156 272.0)",
+          "oklch(84% 0.089 272.0)",
+          "oklch(95% 0.028 272.0)"
+        ]
+      },
+      "tertiary-fixed": {
+        "role": "tertiary",
+        "displayName": "Tertiary Fixed",
+        "canonical": "#7df4ff",
+        "tonalRamp": [
+          "oklch(15% 0.054 203.4)",
+          "oklch(26% 0.094 203.4)",
+          "oklch(37% 0.108 203.4)",
+          "oklch(49% 0.108 203.4)",
+          "oklch(61% 0.108 203.4)",
+          "oklch(72% 0.101 203.4)",
+          "oklch(84% 0.057 203.4)",
+          "oklch(95% 0.018 203.4)"
+        ]
+      },
+      "tertiary-fixed-dim": {
+        "role": "tertiary",
+        "displayName": "Tertiary Fixed Dim",
+        "canonical": "#00dbe9",
+        "tonalRamp": [
+          "oklch(15% 0.069 203.0)",
+          "oklch(26% 0.120 203.0)",
+          "oklch(37% 0.138 203.0)",
+          "oklch(49% 0.138 203.0)",
+          "oklch(61% 0.138 203.0)",
+          "oklch(72% 0.129 203.0)",
+          "oklch(84% 0.073 203.0)",
+          "oklch(95% 0.023 203.0)"
+        ]
+      },
+      "on-tertiary-fixed": {
+        "role": "tertiary",
+        "displayName": "On Tertiary Fixed",
+        "canonical": "#002022",
+        "tonalRamp": [
+          "oklch(15% 0.019 200.7)",
+          "oklch(26% 0.033 200.7)",
+          "oklch(37% 0.038 200.7)",
+          "oklch(49% 0.038 200.7)",
+          "oklch(61% 0.038 200.7)",
+          "oklch(72% 0.035 200.7)",
+          "oklch(84% 0.020 200.7)",
+          "oklch(95% 0.006 200.7)"
+        ]
+      },
+      "on-tertiary-fixed-variant": {
+        "role": "tertiary",
+        "displayName": "On Tertiary Fixed Variant",
+        "canonical": "#004f54",
+        "tonalRamp": [
+          "oklch(15% 0.033 202.2)",
+          "oklch(26% 0.057 202.2)",
+          "oklch(37% 0.066 202.2)",
+          "oklch(49% 0.066 202.2)",
+          "oklch(61% 0.066 202.2)",
+          "oklch(72% 0.062 202.2)",
+          "oklch(84% 0.035 202.2)",
+          "oklch(95% 0.011 202.2)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Abyssal Obsidian Canvas",
+        "canonical": "#090B10",
+        "tonalRamp": [
+          "oklch(15% 0.006 267.7)",
+          "oklch(26% 0.010 267.7)",
+          "oklch(37% 0.011 267.7)",
+          "oklch(49% 0.011 267.7)",
+          "oklch(61% 0.011 267.7)",
+          "oklch(72% 0.011 267.7)",
+          "oklch(84% 0.006 267.7)",
+          "oklch(95% 0.002 267.7)"
+        ]
+      },
+      "on-background": {
+        "role": "neutral",
+        "displayName": "On Background",
+        "canonical": "#d4e4fa",
+        "tonalRamp": [
+          "oklch(15% 0.017 256.3)",
+          "oklch(26% 0.030 256.3)",
+          "oklch(37% 0.035 256.3)",
+          "oklch(49% 0.035 256.3)",
+          "oklch(61% 0.035 256.3)",
+          "oklch(72% 0.032 256.3)",
+          "oklch(84% 0.018 256.3)",
+          "oklch(95% 0.006 256.3)"
+        ]
+      },
+      "surface-variant": {
+        "role": "neutral",
+        "displayName": "Surface Variant",
+        "canonical": "#273647",
+        "tonalRamp": [
+          "oklch(15% 0.018 252.0)",
+          "oklch(26% 0.031 252.0)",
+          "oklch(37% 0.036 252.0)",
+          "oklch(49% 0.036 252.0)",
+          "oklch(61% 0.036 252.0)",
+          "oklch(72% 0.034 252.0)",
+          "oklch(84% 0.019 252.0)",
+          "oklch(95% 0.006 252.0)"
         ]
       }
     },
     "typographyMeta": {
-      "display": {
-        "displayName": "Display",
-        "purpose": "Solo el título del hero."
+      "display-lg": {
+        "displayName": "Display Lg",
+        "purpose": "Hero headline on the landing and CVs."
       },
-      "headline": {
-        "displayName": "Headline",
-        "purpose": "Títulos de sección, precios y confirmación del formulario."
+      "headline-lg": {
+        "displayName": "Headline Lg",
+        "purpose": "Section titles."
       },
-      "title": {
-        "displayName": "Title",
-        "purpose": "Nombres de módulos, servicios y planes; cierres de sección."
+      "headline-md": {
+        "displayName": "Headline Md",
+        "purpose": "Panel, service, and list-row titles; footer wordmark."
       },
-      "lead": {
-        "displayName": "Lead",
-        "purpose": "Descripción del hero."
+      "headline-sm": {
+        "displayName": "Headline Sm",
+        "purpose": "CUARZO wordmark in the floating nav."
       },
-      "body": {
-        "displayName": "Body",
-        "purpose": "Texto corrido de lectura, 18 px."
+      "title-md": {
+        "displayName": "Title Md",
+        "purpose": "Defined in the system; not used on the shipped landing or CVs."
       },
-      "body-small": {
-        "displayName": "Body Small",
-        "purpose": "Navegación, pie, características y datos auxiliares."
+      "body-lg": {
+        "displayName": "Body Lg",
+        "purpose": "Base text for the landing, controls, nav links, and field values."
       },
-      "label": {
-        "displayName": "Label",
-        "purpose": "Botones, etiquetas de campo y encabezados del pie."
+      "body-md": {
+        "displayName": "Body Md",
+        "purpose": "Defined in the system; not used on the shipped landing or CVs."
+      },
+      "body-sm": {
+        "displayName": "Body Sm",
+        "purpose": "Defined in the system; not used on the shipped landing or CVs."
+      },
+      "label-code-md": {
+        "displayName": "Label Code Md",
+        "purpose": "Metadata labels, footer headings, logs, and service demo readouts."
+      },
+      "label-code-sm": {
+        "displayName": "Label Code Sm",
+        "purpose": "Defined in the system; not used on the shipped landing or CVs."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Defined in the system; not used on the shipped landing or CVs."
+      },
+      "cv-display": {
+        "displayName": "CV Display",
+        "purpose": "Titular del CV, en Sora, con brillo cian."
+      },
+      "cv-title": {
+        "displayName": "CV Title",
+        "purpose": "Títulos de sección de los CV."
+      },
+      "cv-subtitle": {
+        "displayName": "CV Subtitle",
+        "purpose": "Títulos de tarjetas y entradas de los CV."
       }
     },
     "shadows": [
       {
-        "name": "inner-line",
-        "value": "inset 0 0 0 1px #d5dbea",
-        "purpose": "Borde del botón silencioso; es un trazo, no una elevación. Sobre noche usa #27335f."
+        "name": "button-glow",
+        "value": "0 0 12px rgba(56, 189, 248, 0.4)",
+        "purpose": "Cyan perimeter glow on primary button hover."
+      },
+      {
+        "name": "ghost-border",
+        "value": "inset 0 0 0 1px rgba(255, 255, 255, 0.1)",
+        "purpose": "Hairline border of the quiet button."
+      },
+      {
+        "name": "field-focus",
+        "value": "0 0 0 1px #38bdf8, 0 0 8px rgba(56, 189, 248, 0.25)",
+        "purpose": "Crystalline cyan bloom on focused fields."
+      },
+      {
+        "name": "panel-lift",
+        "value": "0 12px 32px -4px rgba(0, 0, 0, 0.7), 0 0 16px -2px rgba(56, 189, 248, 0.14)",
+        "purpose": "Ambient chromatic lift on linked lit panels during hover and focus."
+      },
+      {
+        "name": "beacon-halo",
+        "value": "0 0 0 0.5rem rgba(0, 240, 255, 0)",
+        "purpose": "End state of the beacon ping, expanding from a 50% cyan ring."
+      },
+      {
+        "name": "cv-button-glow",
+        "value": "0 0 20px rgb(var(--accent-rgb) / 0.2)",
+        "purpose": "Brillo en reposo del botón principal de los CV."
       }
     ],
     "motion": [
       {
-        "name": "color-change",
-        "value": "250ms ease-out",
-        "purpose": "Única transición de interfaz; solo color."
+        "name": "ease-out-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Shared easing for line rises, scroll reveals, beam draws, and progress fills."
       },
       {
-        "name": "crystal-rotate",
-        "value": "OrbitControls autoRotateSpeed 1.0",
-        "purpose": "Giro continuo del cristal; se detiene con prefers-reduced-motion."
+        "name": "state-control",
+        "value": "150ms ease-out",
+        "purpose": "Button color and glow changes."
+      },
+      {
+        "name": "state-panel",
+        "value": "200ms ease-out",
+        "purpose": "Lit panel border, shadow, and top edge changes."
+      },
+      {
+        "name": "headline-rise",
+        "value": "900ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Masked headline lines rising into place."
+      },
+      {
+        "name": "fade-in",
+        "value": "700ms ease-out 350ms",
+        "purpose": "Delayed entrance of hero supporting content."
+      },
+      {
+        "name": "scroll-reveal",
+        "value": "opacity 700ms ease-out, transform 800ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Content entering on scroll with a 1.5rem rise."
+      },
+      {
+        "name": "beacon-ping",
+        "value": "2s ease-out infinite",
+        "purpose": "Status beacon pulse."
       },
       {
         "name": "crystal-float",
-        "value": "sin(t * 0.55) * 0.07",
-        "purpose": "Flotación vertical mínima; se detiene con prefers-reduced-motion."
+        "value": "6s ease-in-out infinite",
+        "purpose": "Slow vertical float of the crystal."
+      },
+      {
+        "name": "ticker-slide",
+        "value": "40s linear infinite",
+        "purpose": "Continuous ticker movement."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Stops looping and entrance animations and removes button transitions."
       }
     ],
     "breakpoints": [
@@ -290,154 +858,123 @@
         "value": "640px"
       },
       {
+        "name": "md",
+        "value": "768px"
+      },
+      {
         "name": "lg",
         "value": "1024px"
       },
       {
         "name": "xl",
         "value": "1280px"
+      },
+      {
+        "name": "container",
+        "value": "1440px"
       }
     ]
   },
   "components": [
     {
-      "name": "Botón primario",
+      "name": "Primary Button",
       "kind": "button",
-      "refersTo": "button-primary",
-      "description": "Acción principal sobre superficies claras.",
-      "html": "<button class=\"ds-btn\">Empezar gratis</button>",
-      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:#2450e6;color:#fff}.ds-btn:hover{background:#1a3bb3}.ds-btn:focus-visible{outline:2px solid #2450e6;outline-offset:3px}.ds-btn:disabled{opacity:.6;cursor:not-allowed}"
+      "refersTo": "btn",
+      "description": "The main action: solid titanium white with a cyan perimeter glow on hover.",
+      "html": "<div class=\"ds-btn-stage\"><a class=\"ds-btn\" href=\"#\">Contanos tu proyecto</a></div>",
+      "css": ".ds-btn-stage{padding:1.5rem;background:#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem 1.25rem;border:0;border-radius:.25rem;background:#f8fafc;color:#090b10;font:600 .9375rem/1.375rem Geist,system-ui,sans-serif;text-decoration:none;cursor:pointer;transition:background-color 150ms ease-out,color 150ms ease-out,box-shadow 150ms ease-out}.ds-btn:hover{box-shadow:0 0 12px rgba(56,189,248,.4)}.ds-btn:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}.ds-btn:disabled{opacity:.6;cursor:not-allowed}@media (prefers-reduced-motion:reduce){.ds-btn{transition:none}}"
     },
     {
-      "name": "Botón sobre noche",
+      "name": "Quiet Button",
       "kind": "button",
-      "refersTo": "button-on-night",
-      "description": "Acción principal invertida sobre noche y en el plan destacado.",
-      "html": "<div class=\"ds-night-a\"><button class=\"ds-btn-night\">Empezar gratis</button></div>",
-      "css": ".ds-night-a{background:#071033;padding:2rem}.ds-btn-night{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:#fff;color:#071033}.ds-btn-night:hover{background:#dbe4ff}.ds-btn-night:focus-visible{outline:2px solid #fff;outline-offset:3px}"
+      "refersTo": "btn-quiet",
+      "description": "Secondary crystalline glass action beside or in place of the primary button.",
+      "html": "<div class=\"ds-btn-quiet-stage\"><a class=\"ds-btn-quiet\" href=\"#\">Ver servicios</a></div>",
+      "css": ".ds-btn-quiet-stage{padding:1.5rem;background:#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-btn-quiet{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem 1.25rem;border:0;border-radius:.25rem;background:#f8fafc;color:#090b10;font:600 .9375rem/1.375rem Geist,system-ui,sans-serif;text-decoration:none;cursor:pointer;transition:background-color 150ms ease-out,color 150ms ease-out,box-shadow 150ms ease-out;background:rgba(255,255,255,.04);color:#cbd5e1;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}.ds-btn-quiet:hover{background:rgba(255,255,255,.08);color:#fff}.ds-btn-quiet:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}@media (prefers-reduced-motion:reduce){.ds-btn-quiet{transition:none}}"
     },
     {
-      "name": "Botón silencioso",
-      "kind": "button",
-      "refersTo": "button-quiet",
-      "description": "Acción secundaria con línea interna de 1 px.",
-      "html": "<button class=\"ds-btn-quiet\">Iniciar sesión</button>",
-      "css": ".ds-btn-quiet{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:transparent;color:#0a1330;box-shadow:inset 0 0 0 1px #d5dbea}.ds-btn-quiet:hover{background:#fff}.ds-btn-quiet:focus-visible{outline:2px solid #2450e6;outline-offset:3px}"
+      "name": "Glass Panel",
+      "kind": "card",
+      "refersTo": "glass",
+      "description": "Frosted quartz panel with a hairline border; opaque Graphite Quartz below 768px.",
+      "html": "<div class=\"ds-glass-stage\"><div class=\"ds-glass\"><h3 class=\"ds-glass-title\">Sistemas de gestión</h3><p class=\"ds-glass-text\">Hechos a medida para tu negocio.</p></div></div>",
+      "css": ".ds-glass-stage{padding:1.5rem;background:radial-gradient(18rem 12rem at 70% 40%,rgba(56,189,248,.2),transparent 70%),#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-glass{padding:1.25rem;background:rgba(19,24,34,.7);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.07);border-radius:.5rem}@media (max-width:767px){.ds-glass{-webkit-backdrop-filter:none;backdrop-filter:none;background:#131822}}.ds-glass-title{margin:0;font:500 1.5rem/1.875rem 'Space Grotesk',Geist,sans-serif;letter-spacing:-.015em}.ds-glass-text{margin:.5rem 0 0;color:#94a3b8}"
     },
     {
-      "name": "Botón silencioso sobre noche",
-      "kind": "button",
-      "refersTo": "button-quiet-on-night",
-      "description": "Acción secundaria del hero.",
-      "html": "<div class=\"ds-night-b\"><button class=\"ds-btn-quiet-night\">Necesito un desarrollo a medida</button></div>",
-      "css": ".ds-night-b{background:#071033;padding:2rem}.ds-btn-quiet-night{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:3.25rem;padding:.75rem 1.75rem;border:0;border-radius:999px;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;transition:background-color 250ms ease-out;cursor:pointer;background:transparent;color:#fff;box-shadow:inset 0 0 0 1px #27335f}.ds-btn-quiet-night:hover{background:#121d4a}.ds-btn-quiet-night:focus-visible{outline:2px solid #fff;outline-offset:3px}"
+      "name": "Lit Glass Panel",
+      "kind": "card",
+      "refersTo": "lit",
+      "description": "Top-lit edge added to a glass panel; linked panels brighten and lift on hover and focus.",
+      "html": "<div class=\"ds-lit-stage\"><a class=\"ds-lit\" href=\"#\"><h3 class=\"ds-lit-title\">E-commerce</h3><p class=\"ds-lit-text\">Con Mercado Pago y Andreani.</p></a></div>",
+      "css": ".ds-lit-stage{padding:1.5rem;background:radial-gradient(18rem 12rem at 70% 40%,rgba(56,189,248,.2),transparent 70%),#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-lit{position:relative;display:block;padding:1.25rem;color:inherit;text-decoration:none;background:rgba(19,24,34,.7);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.07);border-radius:.5rem;transition:border-color 200ms ease-out,box-shadow 200ms ease-out}@media (max-width:767px){.ds-lit{-webkit-backdrop-filter:none;backdrop-filter:none;background:#131822}}.ds-lit::before{content:\"\";position:absolute;inset-inline:0;top:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(56,189,248,.5),transparent);opacity:.45;transition:opacity 200ms ease-out}.ds-lit:hover,.ds-lit:focus-visible{border-color:rgba(56,189,248,.35);box-shadow:0 12px 32px -4px rgba(0,0,0,.7),0 0 16px -2px rgba(56,189,248,.14)}.ds-lit:hover::before{opacity:1}.ds-lit:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}.ds-lit-title{margin:0;font:500 1.5rem/1.875rem 'Space Grotesk',Geist,sans-serif;letter-spacing:-.015em}.ds-lit-text{margin:.5rem 0 0;color:#94a3b8}"
     },
     {
-      "name": "Campo de texto",
+      "name": "Text Field",
       "kind": "input",
-      "refersTo": "input-field",
-      "description": "Campo del formulario con etiqueta visible.",
-      "html": "<label class=\"ds-label\">Nombre<input class=\"ds-field\" placeholder=\"Tu nombre\"></label>",
-      "css": ".ds-label{display:block;font:600 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif;color:#0a1330}.ds-field{display:block;width:100%;margin-top:.375rem;padding:.8rem 1rem;border:1px solid #d5dbea;border-radius:.875rem;background:#fff;color:#0a1330;font:400 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif}.ds-field::placeholder{color:#5b6684}.ds-field:focus{outline:2px solid #2450e6;outline-offset:0;border-color:transparent}"
+      "refersTo": "field",
+      "description": "Recessed contact form field with a visible label and an instant cyan focus bloom.",
+      "html": "<div class=\"ds-field-stage\"><label class=\"ds-field-label\" for=\"ds-field-name\">Nombre *</label><input class=\"ds-field\" id=\"ds-field-name\" type=\"text\" placeholder=\"Tu nombre\"></div>",
+      "css": ".ds-field-stage{padding:1.5rem;background:#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-field-label{display:block;margin-bottom:.25rem;font-weight:500}.ds-field{width:100%;min-height:2.25rem;padding:.5rem .75rem;border:1px solid rgba(255,255,255,.1);border-radius:.25rem;background:rgba(9,11,16,.6);color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-field::placeholder{color:#94a3b8}.ds-field:focus{outline:none;border-color:#38bdf8;box-shadow:0 0 0 1px #38bdf8,0 0 8px rgba(56,189,248,.25)}"
     },
     {
-      "name": "Navegación flotante",
-      "kind": "nav",
-      "refersTo": "nav-floating",
-      "description": "Píldora blanca fija sobre toda la página.",
-      "html": "<nav class=\"ds-nav\"><strong class=\"ds-word\">CUARZO</strong><span class=\"ds-links\"><a href=\"#\">Servicios</a><a href=\"#\">Precios</a><a href=\"#\">Contacto</a></span></nav>",
-      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:3.5rem;padding:0 1.25rem;border:1px solid #d5dbea;border-radius:2rem;background:#fff;color:#0a1330;font:400 1rem/1.5 'Hanken Grotesk',system-ui,sans-serif}.ds-word{font:400 1.25rem/1.2 Jost,'Hanken Grotesk',sans-serif;letter-spacing:.12em}.ds-links{display:flex;gap:1.75rem}.ds-links a{color:inherit;text-decoration:none;transition:color 250ms ease-out}.ds-links a:hover{color:#2450e6}.ds-links a:focus-visible{outline:2px solid #2450e6;outline-offset:3px}"
+      "name": "Chip",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Compact monospace tag with a faint cyan tint for tags and skills.",
+      "html": "<div class=\"ds-chip-stage\"><ul class=\"ds-chips\"><li class=\"ds-chip\">Dominio</li><li class=\"ds-chip\">Mail corporativo</li></ul></div>",
+      "css": ".ds-chip-stage{padding:1.5rem;background:#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-chips{display:flex;flex-wrap:wrap;gap:.375rem;margin:0;padding:0;list-style:none}.ds-chip{padding:.125rem .5rem;border:1px solid rgba(56,189,248,.16);border-radius:.25rem;background:rgba(56,189,248,.08);font:400 .75rem/1.25rem 'JetBrains Mono',ui-monospace,monospace}"
     },
     {
-      "name": "Fila",
+      "name": "Prism Status Beacon",
+      "kind": "custom",
+      "refersTo": "beacon",
+      "description": "Pulsing 6px Refractive Pure Cyan dot that marks live status.",
+      "html": "<div class=\"ds-beacon-stage\"><span class=\"ds-beacon\"></span><span>Desarrollo</span></div>",
+      "css": ".ds-beacon-stage{padding:1.5rem;background:#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-beacon-stage{display:flex;align-items:center;gap:.5rem;color:#38bdf8;font:400 .75rem/1rem 'JetBrains Mono',ui-monospace,monospace;letter-spacing:.02em}.ds-beacon{display:block;flex:none;width:.375rem;height:.375rem;border-radius:50%;background:#00f0ff;box-shadow:0 0 0 0 rgba(0,240,255,.5);animation:ds-ping 2s ease-out infinite}@keyframes ds-ping{to{box-shadow:0 0 0 .5rem rgba(0,240,255,0)}}@media (prefers-reduced-motion:reduce){.ds-beacon{animation:none}}"
+    },
+    {
+      "name": "List Row",
       "kind": "custom",
       "refersTo": "row",
-      "description": "Fila enlazada con línea de 1 px; reemplaza a las grillas de tarjetas.",
-      "html": "<a class=\"ds-row\" href=\"#\"><span class=\"ds-row-title\">Control de Stock</span><span class=\"ds-row-text\">Sabé qué tenés y qué falta.</span></a>",
-      "css": ".ds-row{display:grid;gap:.5rem;padding-block:1.75rem;border-block:1px solid #d5dbea;color:#0a1330;text-decoration:none}.ds-row-title{font:400 1.625rem/1.2 Jost,'Hanken Grotesk',sans-serif;letter-spacing:-.01em;transition:color 250ms ease-out}.ds-row-text{color:#434e6b;font:400 1.125rem/1.6 'Hanken Grotesk',system-ui,sans-serif}.ds-row:hover .ds-row-title{color:#2450e6}.ds-row:focus-visible{outline:2px solid #2450e6;outline-offset:3px}"
+      "description": "Hairline-separated list item used for other work and CV entries.",
+      "html": "<div class=\"ds-row-stage\"><ul class=\"ds-rows\"><li class=\"ds-row\"><h3 class=\"ds-row-title\">Dominio y mail corporativo</h3><p class=\"ds-row-text\">Dominio y mail de projaska.com.</p></li><li class=\"ds-row\"><h3 class=\"ds-row-title\">CV profesional</h3><p class=\"ds-row-text\">Tu trayectoria, clara y lista para enviar.</p></li></ul></div>",
+      "css": ".ds-row-stage{padding:1.5rem;background:#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-rows{margin:0;padding:0;list-style:none}.ds-row{display:grid;gap:.25rem;padding-block:1.25rem;border-top:1px solid rgba(255,255,255,.08)}.ds-row:last-child{border-bottom:1px solid rgba(255,255,255,.08)}.ds-row-title{margin:0;font:500 1.5rem/1.875rem 'Space Grotesk',Geist,sans-serif;letter-spacing:-.015em}.ds-row-text{margin:0;color:#94a3b8}"
     },
     {
-      "name": "Panel de planes",
-      "kind": "card",
-      "refersTo": "plan-cell",
-      "description": "Un panel dividido por líneas de 1 px, con una celda destacada.",
-      "html": "<div class=\"ds-plans\"><div class=\"ds-plan\"><b>Free</b><span class=\"ds-price\">$0</span></div><div class=\"ds-plan ds-plan-featured\"><b>Pro</b><span class=\"ds-price\">$49</span></div></div>",
-      "css": ".ds-plans{display:grid;grid-template-columns:1fr 1fr;gap:1px;overflow:hidden;border:1px solid #d5dbea;border-radius:2rem;background:#d5dbea}.ds-plan{display:grid;gap:1.25rem;padding:1.75rem;background:#fff;color:#0a1330;font:400 1.625rem/1.2 Jost,'Hanken Grotesk',sans-serif}.ds-plan b{font-weight:400}.ds-price{font-size:clamp(2.25rem,4.2vw,3.5rem);font-weight:300;line-height:1.1;letter-spacing:-.02em}.ds-plan-featured{background:#2450e6;color:#fff}"
+      "name": "Floating Glass Nav",
+      "kind": "nav",
+      "refersTo": "nav-floating",
+      "description": "Fixed 56px glass bar with a 12px radius, inset 12px from the viewport; links collapse into a menu below 1280px.",
+      "html": "<div class=\"ds-nav-stage\"><header class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><svg width=\"11.8\" height=\"28\" viewBox=\"0 0 48 114\" fill=\"none\" stroke=\"#38bdf8\" stroke-width=\"3\" stroke-linejoin=\"bevel\" aria-hidden=\"true\"><path d=\"M24 2 46 30 41 104 24 112 7 104 2 30Z\"/><path d=\"M2 30 24 24 46 30M24 2V112M7 74 24 68 41 74\"/></svg><span>CUARZO</span></a><nav class=\"ds-nav-links\" aria-label=\"Principal\"><a href=\"#\">Servicios</a><a href=\"#\">Cómo trabajamos</a><a href=\"#\">Otros trabajos</a></nav><a class=\"ds-nav-cta\" href=\"#\">Hablemos</a></header></div>",
+      "css": ".ds-nav-stage{padding:.75rem;background:radial-gradient(18rem 12rem at 70% 40%,rgba(56,189,248,.2),transparent 70%),#090b10;color:#f8fafc;font:400 .9375rem/1.375rem Geist,system-ui,sans-serif}.ds-nav{display:flex;align-items:center;justify-content:space-between;gap:1rem;max-width:90rem;height:3.5rem;margin-inline:auto;padding-inline:1rem .5rem;background:rgba(19,24,34,.7);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.07);border-radius:.5rem;border-radius:.75rem}@media (max-width:767px){.ds-nav{-webkit-backdrop-filter:none;backdrop-filter:none;background:#131822}}.ds-nav a{color:inherit;text-decoration:none}.ds-nav-brand{display:flex;align-items:center;gap:.625rem;font:500 1.125rem/1.875rem 'Space Grotesk',Geist,sans-serif;letter-spacing:.14em}.ds-nav-links{display:flex;align-items:center;gap:1.75rem;white-space:nowrap}.ds-nav-links a{transition:color 150ms ease-out}.ds-nav-links a:hover{color:#38bdf8}.ds-nav a:focus-visible{outline:2px solid #38bdf8;outline-offset:2px}.ds-nav .ds-nav-cta{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;min-height:2.75rem;padding:.5rem 1.25rem;border:0;border-radius:.25rem;background:#f8fafc;color:#090b10;font:600 .9375rem/1.375rem Geist,system-ui,sans-serif;text-decoration:none;cursor:pointer;transition:background-color 150ms ease-out,color 150ms ease-out,box-shadow 150ms ease-out;min-height:2.5rem;white-space:nowrap}.ds-nav .ds-nav-cta:hover{box-shadow:0 0 12px rgba(56,189,248,.4)}@media (max-width:1279px){.ds-nav-links{display:none}}@media (prefers-reduced-motion:reduce){.ds-nav-links a,.ds-nav .ds-nav-cta{transition:none}}"
     },
     {
-      "name": "Órbita",
+      "name": "CV Primary Button",
+      "kind": "button",
+      "description": "Acción principal de los CV: relleno cian, mayúsculas y brillo tenue.",
+      "html": "<button class=\"ds-cv-btn\">Escribir por WhatsApp</button>",
+      "css": ".ds-cv-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 3.25rem; padding-inline: 2rem; border: none; border-radius: 0.75rem; background: var(--accent); color: var(--canvas); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; box-shadow: 0 0 20px rgb(var(--accent-rgb) / 0.2); transition: box-shadow 150ms ease-out; } .ds-cv-btn:hover { box-shadow: 0 0 30px rgb(var(--accent-rgb) / 0.4); } .ds-cv-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }"
+    },
+    {
+      "name": "CV Section Heading",
       "kind": "custom",
-      "refersTo": "orbit",
-      "description": "El único ornamento de interfaz: un trazo de 1 px.",
-      "html": "<div class=\"ds-orbit-box\"><svg class=\"ds-orbit\" viewBox=\"0 0 540 540\" fill=\"none\" aria-hidden=\"true\"><ellipse cx=\"270\" cy=\"270\" rx=\"262\" ry=\"108\" transform=\"rotate(-18 270 270)\" stroke=\"currentColor\"/></svg></div>",
-      "css": ".ds-orbit-box{background:#071033;padding:1rem}.ds-orbit{display:block;width:16rem;margin:auto;color:#8fb2ff}"
+      "description": "Etiqueta cian sobre un título en Sora, solo en los CV.",
+      "html": "<div><p class=\"ds-cv-eyebrow\">Herramientas</p><h2 class=\"ds-cv-title\">Tecnologías</h2></div>",
+      "css": ".ds-cv-eyebrow { margin: 0 0 0.5rem; color: var(--accent); font-size: 0.75rem; font-weight: 600; line-height: 1; letter-spacing: 0.2em; text-transform: uppercase; } .ds-cv-title { margin: 0; color: var(--ink); font-weight: 700; font-size: 3rem; line-height: 1.2; letter-spacing: -0.02em; }"
     }
   ],
   "narrative": {
-    "northStar": "Una sola pieza en órbita",
-    "overview": "**Alcance:** este sistema gobierna únicamente la landing pública (`apps/web/app/(landing)/`). El panel de administración conserva su aspecto propio, con Inter y la escala navy de `apps/web/app/globals.css`; nada de este archivo se aplica a esa app ni reemplaza sus decisiones. Los tokens viven en la clase `.landing`, no en `:root`, justamente para no filtrarse.\n\nUn cristal de cuarzo en 3D gira sobre azul noche y todo lo demás se aparta: mucho aire, poco color y lectura cómoda antes que efecto. El neofuturismo acá es de geometría (curvas amplias, cápsulas, líneas de un píxel, una órbita finísima), no de luces. La página alterna bloques noche y claros, y esa alternancia es toda su profundidad.\n\nEl mundo nació de rechazar una pared de vidrio difícil de leer: la materia cristalina queda confinada a una sola pieza y las superficies de interfaz son opacas y planas. La densidad es baja, con una idea por sección y listas resueltas en filas separadas por líneas en lugar de tarjetas.",
-    "keyCharacteristics": [
-      "Azul como único color, sobre azul noche y blanco porcelana.",
-      "Títulos en Jost liviana, en mayúsculas y minúsculas; texto en Hanken Grotesk de 18 px.",
-      "Un cristal 3D y una órbita fina como únicos ornamentos.",
-      "Curvas amplias en los bloques, cápsulas en las acciones, líneas de 1 px.",
-      "Superficies opacas y planas, sin sombras."
-    ],
+    "northStar": "Crystalline Precision",
+    "overview": "The design system operates at the intersection of haute horlogerie, high-performance software engineering, and crystalline optical physics. Built specifically for elite engineering studios and precision desktop environments, it eschews noisy digital maximalism in favor of architectural quietude, strict optical alignment, and surgical clarity.\n\nThe aesthetic fuses **Hyper-Minimalist Technical Rigor** with **Refined Crystalline Glassmorphism**. Interfaces mimic precision-milled obsidian substrates layered with calibrated sapphire glass panels. Translucencies serve strict structural hierarchy rather than decorative vanity—guiding the engineer's eye through deep data hierarchies without fatigue. Every surface conveys quiet authority: weightless yet structural, uncompromisingly clean, and meticulously engineered.",
+    "keyCharacteristics": [],
     "rules": [
       {
-        "name": "La Regla del Único Color",
-        "body": "No existe otro tono fuera de la familia azul, ni siquiera para estados: el error del formulario se comunica en Tinta y peso 600, sin rojo. La refracción propia del cristal queda exenta.",
-        "section": "colors"
-      },
-      {
-        "name": "La Regla de la Acción Invertida",
-        "body": "La acción principal es azul sobre claro y blanca sobre noche o sobre el plan destacado. Una isla clara dentro de noche vuelve a azul.",
-        "section": "colors"
-      },
-      {
-        "name": "La Regla del Peso Liviano",
-        "body": "A tamaño de título, Jost va a 300 y con escritura normal, nunca en mayúsculas sostenidas. La única palabra en mayúsculas es el logotipo CUARZO, con 0.12em de tracking.",
-        "section": "typography"
-      },
-      {
-        "name": "La Regla de los 18",
-        "body": "El texto de lectura no baja de 18 px; 16 px queda para datos auxiliares y controles.",
-        "section": "typography"
-      },
-      {
-        "name": "La Regla de la Interfaz Opaca",
-        "body": "Ninguna superficie de interfaz usa sombra difusa ni `backdrop-filter`. La transparencia y el brillo pertenecen solo al cristal.",
-        "section": "elevation"
-      },
-      {
-        "name": "La Regla del Píxel",
-        "body": "Todo trazo mide 1 px: divisores, bordes y órbita. Las listas se separan con líneas, no con cajas.",
-        "section": "shapes"
-      },
-      {
-        "name": "La Regla de la Pieza Única",
-        "body": "Hay un solo cristal 3D por página, en el hero. Más adelante puede regresar solo la órbita, como trazo de 1 px, nunca el cristal.",
+        "name": "La regla del dialecto acotado",
+        "body": "Lo que sigue es una excepción de los CV. Nada de esto se traslada a la landing, y los CV no agregan colores propios.",
         "section": "components"
       }
     ],
-    "dos": [
-      "Do alternar bloques noche y claros para crear ritmo y profundidad.",
-      "Do resolver listas con filas y líneas de 1 px, y reservar el panel dividido para comparar planes.",
-      "Do mantener una acción principal clara por bloque, siguiendo La Regla de la Acción Invertida.",
-      "Do limitar las transiciones al color, en 250ms ease-out.",
-      "Do detener todo movimiento del cristal con `prefers-reduced-motion`.",
-      "Do dar al lienzo 3D el mismo Azul Noche del bloque que lo contiene.",
-      "Do usar íconos de línea en SVG, a 16 px junto al texto."
-    ],
-    "donts": [
-      "Don't aplicar este sistema al panel de administración ni llevar sus tokens a `:root`.",
-      "Don't usar neón, resplandores, gradientes decorativos ni texturas en la interfaz; los brillos del cristal son su materia y quedan exentos.",
-      "Don't usar paneles de vidrio ni `backdrop-filter`: el vidrio de esta landing es solo el cristal.",
-      "Don't repetir grillas de tarjetas sueltas.",
-      "Don't introducir otro color, ni siquiera rojo o verde para estados.",
-      "Don't agregar sombras difusas ni animaciones de elevación.",
-      "Don't colocar el cristal 3D más de una vez por página.",
-      "Don't escribir títulos en mayúsculas sostenidas ni bajar el texto de lectura de 18 px."
-    ]
+    "dos": [],
+    "donts": []
   }
 }

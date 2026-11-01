@@ -2,14 +2,14 @@
 
 Landing de Cuarzo: desarrollo de software a medida para PYMEs argentinas.
 
-Next.js en Vercel. El código está en `apps/web`.
+Next.js en Vercel.
 
 ## Desarrollo
 
 ```bash
 npm install
 npm run dev
-npm run test:run --workspace=apps/web
+npm run test:run
 ```
 
 ## Variables de entorno

@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@source not "../stitch";
+@source not "../.claude";
+
+@theme inline {
+  --font-sans: var(--font-body);
+}
+
+/* Crystalline Precision: tokens for every page, including 404 and error. */
+:root {
+  color-scheme: dark;
+  --canvas: #090b10;
+  --surface: #0d1117;
+  --raised: #131822;
+  --accent-rgb: 56 189 248;
+  --accent: #38bdf8;
+  --violet: #818cf8;
+  --beacon: #00f0ff;
+  --ink: #f8fafc;
+  --ink-2: #94a3b8;
+  --line: rgba(255, 255, 255, 0.08);
+  --wire: #334155;
+  --error: #ffb4ab;
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
