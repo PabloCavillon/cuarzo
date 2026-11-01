@@ -47,4 +47,4 @@ next-env.d.ts
 /prisma/generated
 
 # personal drafts
-RESUME-IMPROVED.md
+RESUME-IMPROVED*.md

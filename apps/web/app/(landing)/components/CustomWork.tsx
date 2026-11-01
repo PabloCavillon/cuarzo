@@ -7,7 +7,7 @@ export default function CustomWork() {
   const t = useT();
 
   return (
-    <section id="a-medida" className="section pt-0! lg:pt-0! grid lg:grid-cols-[2fr_3fr] gap-10 lg:gap-20">
+    <section id="a-medida" className="section grid lg:grid-cols-[2fr_3fr] gap-10 lg:gap-20">
       <div className="lg:sticky lg:top-28 lg:self-start">
         <h2 className="title">{t.customWork.heading}</h2>
         <p className="ink-2 mt-5 max-w-[42ch] text-pretty">{t.customWork.description}</p>

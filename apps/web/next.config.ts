@@ -28,22 +28,6 @@ const securityHeaders = [
   { key: "Content-Security-Policy",    value: CSP },
 ];
 
-// Permanent redirects from old Spanish route names to English equivalents.
-// Keeps external links, bookmarks, and API clients working after the rename.
-const legacyRedirects = [
-  { source: "/admin/bookings/:path*", destination: "/admin/appointments/:path*", permanent: true },
-  { source: "/admin/caja/:path*",     destination: "/admin/finance/:path*",      permanent: true },
-  { source: "/admin/caja",            destination: "/admin/finance",             permanent: true },
-  { source: "/admin/clients/:path*",  destination: "/admin/customers/:path*",    permanent: true },
-  { source: "/admin/clients",         destination: "/admin/customers",           permanent: true },
-  { source: "/admin/soporte/:path*",  destination: "/admin/tickets/:path*",      permanent: true },
-  { source: "/admin/soporte",         destination: "/admin/tickets",             permanent: true },
-  { source: "/tienda/:path*",         destination: "/store/:path*",              permanent: true },
-  { source: "/turnera/:path*",        destination: "/appointments/:path*",       permanent: true },
-  { source: "/turnera",               destination: "/appointments",              permanent: true },
-  { source: "/api/turnera/:path*",    destination: "/api/appointments/:path*",   permanent: true },
-];
-
 const nextConfig: NextConfig = {
   // Turbopack workspace root = monorepo root so it can resolve hoisted node_modules
   turbopack: {
@@ -57,10 +41,6 @@ const nextConfig: NextConfig = {
         headers: securityHeaders,
       },
     ];
-  },
-
-  async redirects() {
-    return legacyRedirects;
   },
 };
 

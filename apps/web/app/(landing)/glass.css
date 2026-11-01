@@ -90,14 +90,12 @@ html:has(.landing) { scrollbar-color: #2450e6 #f4f6fb; }
 .btn:hover { background: var(--blue-deep); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-.night .btn,
-.plan-featured .btn {
+.night .btn {
   background: #fff;
   color: var(--night);
 }
 
-.night .btn:hover,
-.plan-featured .btn:hover { background: #dbe4ff; }
+.night .btn:hover { background: #dbe4ff; }
 
 .btn-quiet {
   background: transparent;
@@ -122,15 +120,6 @@ html:has(.landing) { scrollbar-color: #2450e6 #f4f6fb; }
 }
 
 .row:last-child { border-bottom: 1px solid var(--line); }
-
-a.row .subtitle { transition: color 250ms ease-out; }
-a.row:hover .subtitle { color: var(--blue); }
-
-.plan-featured {
-  --ink: #ffffff;
-  --ink-2: #dbe4ff;
-  background: var(--blue);
-}
 
 /* Isla clara dentro de .night: restaura los colores de la superficie clara. */
 .form-panel {
@@ -162,7 +151,6 @@ a.row:hover .subtitle { color: var(--blue); }
 .field:focus { outline: 2px solid var(--blue); outline-offset: 0; border-color: transparent; }
 
 .form-panel :focus-visible { outline-color: var(--blue); }
-.plan-featured :focus-visible { outline-color: #fff; }
 
 @media (prefers-reduced-motion: reduce) {
   html:has(.landing) { scroll-behavior: auto; }

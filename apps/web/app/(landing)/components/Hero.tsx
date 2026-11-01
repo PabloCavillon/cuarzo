@@ -1,7 +1,6 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
 import dynamic from "next/dynamic";
 import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { useT } from "@/lib/i18n/provider";
@@ -34,11 +33,11 @@ export default function Hero() {
           </h1>
           <p className="ink-2 text-xl mt-6 max-w-[46ch] text-pretty">{t.hero.description}</p>
           <div className="flex flex-col sm:flex-row gap-3 mt-10">
-            <Link href="/register" className="btn">
+            <a href="#contacto" className="btn">
               {t.hero.ctaPrimary}
               <ArrowRight className="w-4 h-4" aria-hidden />
-            </Link>
-            <a href="#a-medida" className="btn btn-quiet">{t.hero.ctaSecondary}</a>
+            </a>
+            <a href="#servicios" className="btn btn-quiet">{t.hero.ctaSecondary}</a>
           </div>
         </div>
       </div>

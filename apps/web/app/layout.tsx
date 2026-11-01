@@ -5,7 +5,6 @@ import "./globals.css";
 import { Providers } from "./components/Providers";
 import type { Locale } from "@/lib/i18n";
 import { locales } from "@/lib/i18n";
-import { Analytics } from "@vercel/analytics/next"
 
 const inter = Inter({
   variable: "--font-inter",
@@ -15,16 +14,16 @@ const inter = Inter({
 
 const META: Record<Locale, { title: string; description: string }> = {
   es: {
-    title:       "CUARZO — Soluciones Digitales Inteligentes para Emprendedores",
-    description: "Potenciamos PYMEs y startups argentinas con tecnología de vanguardia. Control de stock, turneras, facturación ARCA, e-commerce y más.",
+    title:       "CUARZO — Software a medida para tu negocio",
+    description: "Tiendas online, sistemas de gestión, integraciones y automatizaciones para PYMEs argentinas.",
   },
   en: {
-    title:       "CUARZO — Intelligent Digital Solutions for Entrepreneurs",
-    description: "We empower SMEs and startups with enterprise-grade tools. Inventory, scheduling, e-invoicing and e-commerce — all in one ecosystem.",
+    title:       "CUARZO — Custom software for your business",
+    description: "Online stores, management systems, integrations and automation for small businesses in Argentina.",
   },
   pt: {
-    title:       "CUARZO — Soluções Digitais Inteligentes para Empreendedores",
-    description: "Potencializamos PMEs e startups com ferramentas de nível enterprise. Estoque, agendamento, faturamento e e-commerce — tudo em um ecossistema.",
+    title:       "CUARZO — Software sob medida para o seu negócio",
+    description: "Lojas online, sistemas de gestão, integrações e automações para pequenas empresas na Argentina.",
   },
 };
 

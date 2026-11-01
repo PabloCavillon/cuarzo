@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Menu, X, Globe } from "lucide-react";
-import Link from "next/link";
 import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { useT, useLocale, useSetLocale } from "@/lib/i18n/provider";
 import { locales, localeLabels } from "@/lib/i18n";
@@ -26,9 +25,7 @@ export default function Navbar() {
   const navLinks = [
     { label: t.nav.services, href: "#servicios" },
     { label: t.nav.whyUs,    href: "#propuesta" },
-    { label: t.nav.pricing,  href: "#precios"   },
     { label: t.nav.custom,   href: "#a-medida"  },
-    { label: t.nav.contact,  href: "#contacto"  },
   ];
 
   return (
@@ -73,8 +70,7 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            <Link href="/login" className="px-3 py-2 text-base whitespace-nowrap hover:text-(--blue) transition-colors">{t.nav.login}</Link>
-            <Link href="/register" className="btn min-h-10! py-2! px-5! whitespace-nowrap">{t.nav.start}</Link>
+            <a href="#contacto" className="btn min-h-10! py-2! px-5! whitespace-nowrap">{t.nav.start}</a>
           </div>
 
           <button
@@ -108,8 +104,7 @@ export default function Navbar() {
             </div>
 
             <div className="grid gap-2 mt-4">
-              <Link href="/login" onClick={() => setOpen(false)} className="btn btn-quiet">{t.nav.login}</Link>
-              <Link href="/register" onClick={() => setOpen(false)} className="btn">{t.nav.start}</Link>
+              <a href="#contacto" onClick={() => setOpen(false)} className="btn">{t.nav.start}</a>
             </div>
           </div>
         )}

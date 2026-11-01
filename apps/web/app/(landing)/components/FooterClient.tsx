@@ -6,9 +6,9 @@ import { useT } from "@/lib/i18n/provider";
 
 const COMPANY_HREFS: Record<string, string> = {
   "CV":        "/cv",
-  "Sobre nosotros": "#propuesta",
-  "About us":  "#propuesta",
-  "Sobre nós": "#propuesta",
+  "Sobre nosotros": "#equipo",
+  "About us":  "#equipo",
+  "Sobre nós": "#equipo",
   "Contato":   "#contacto",
   "Contact":   "#contacto",
   "Contacto":  "#contacto",
@@ -33,9 +33,9 @@ export default function FooterClient() {
       <div>
         <h4 className="font-semibold text-base mb-3">{t.footer.productHeading}</h4>
         <ul className="space-y-2">
-          {t.footer.productLinks.map((item, i) => (
+          {t.footer.productLinks.map((item) => (
             <li key={item}>
-              <a href={i === t.footer.productLinks.length - 1 ? "#precios" : "#servicios"} className={linkClass}>{item}</a>
+              <a href="#servicios" className={linkClass}>{item}</a>
             </li>
           ))}
         </ul>

@@ -1,6 +1,6 @@
 ---
 name: Cuarzo Landing
-description: Neofuturismo sobrio para la landing pública de Cuarzo; no aplica al panel de administración.
+description: Neofuturismo sobrio para la landing pública de Cuarzo.
 colors:
   blue: "#2450e6"
   field-line: "#8390ac"
@@ -119,14 +119,6 @@ components:
     typography: "{typography.body-small}"
     rounded: "{rounded.panel}"
     height: "3.5rem"
-  plan-cell:
-    backgroundColor: "{colors.surface}"
-    textColor: "{colors.ink}"
-    padding: "1.75rem"
-  plan-cell-featured:
-    backgroundColor: "{colors.blue}"
-    textColor: "{colors.surface}"
-    padding: "1.75rem"
   form-panel:
     backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
@@ -140,7 +132,7 @@ components:
 
 **Creative North Star: "Una sola pieza en órbita"**
 
-**Alcance:** este sistema gobierna únicamente la landing pública (`apps/web/app/(landing)/`). El panel de administración conserva su aspecto propio, con Inter y la escala navy de `apps/web/app/globals.css`; nada de este archivo se aplica a esa app ni reemplaza sus decisiones. Los tokens viven en la clase `.landing`, no en `:root`, justamente para no filtrarse.
+**Alcance:** este sistema gobierna la landing pública (`apps/web/app/(landing)/`).
 
 Un cristal de cuarzo en 3D gira sobre azul noche y todo lo demás se aparta: mucho aire, poco color y lectura cómoda antes que efecto. El neofuturismo acá es de geometría (curvas amplias, cápsulas, líneas de un píxel), no de luces. La página alterna bloques noche y claros, y esa alternancia es toda su profundidad.
 
@@ -160,7 +152,7 @@ Una sola familia azul en tres alturas: noche para el suelo oscuro, eléctrico pa
 ### Primary
 - **Azul Eléctrico** (#2450e6): acción principal sobre superficies claras, enlaces de fila, hover de navegación, selección de texto y fondo del plan destacado.
 - **Azul Profundo** (#1a3bb3): solo hover del botón primario.
-- **Azul Pálido** (#dbe4ff): hover del botón blanco y texto secundario dentro del plan destacado.
+- **Azul Pálido** (#dbe4ff): hover del botón blanco.
 - **Azul Órbita** (#8fb2ff): trazo de la órbita en SVG. Nunca texto de interfaz.
 
 ### Neutral
@@ -169,7 +161,7 @@ Una sola familia azul en tres alturas: noche para el suelo oscuro, eléctrico pa
 - **Línea Noche** (#27335f): divisores sobre noche.
 - **Bruma** (#c6d0ec): texto secundario sobre noche.
 - **Blanco Porcelana** (#f4f6fb): fondo claro general.
-- **Blanco** (#ffffff): navegación, celdas de planes, panel de formulario y texto principal sobre noche.
+- **Blanco** (#ffffff): navegación, panel de formulario y texto principal sobre noche.
 - **Tinta** (#0a1330): texto principal sobre claro.
 - **Tinta Media** (#434e6b): texto secundario sobre claro.
 - **Marcador** (#5b6684): solo placeholders de campos.
@@ -190,7 +182,7 @@ Una sola familia azul en tres alturas: noche para el suelo oscuro, eléctrico pa
 ### Hierarchy
 - **Display** (300, clamp(2.5rem, 5.6vw, 5rem), 1.1): solo el título del hero. Equilibrado con `text-wrap: balance`.
 - **Headline** (300, clamp(2.25rem, 4.2vw, 3.5rem), 1.1): títulos de sección, precios y confirmación del formulario.
-- **Title** (400, 1.625rem, 1.2): nombres de módulos, servicios y planes; cierres de sección.
+- **Title** (400, 1.625rem, 1.2): nombres de servicios; cierres de sección.
 - **Lead** (400, 1.25rem, 1.4): descripción del hero, hasta 46ch.
 - **Body** (400, 1.125rem, 1.6): texto corrido, entre 42ch y 56ch.
 - **Body Small** (400, 1rem, 1.5): navegación, pie, listas de características y datos auxiliares.
@@ -207,7 +199,7 @@ Columna central de hasta 80rem con márgenes de 1.5rem, que pasan a 2.5rem desde
 
 El patrón editorial es asimétrico: título a la izquierda y contenido a la derecha en `2fr 3fr`, con separación de 5rem en escritorio. En una sola columna, el título apila sobre su contenido. El bloque "A medida" fija su título con sticky en escritorio mientras la lista avanza.
 
-El hero ocupa la altura completa desde 1024 px, con texto hasta 56% del ancho y el cristal en el 52% derecho, de modo que cristal y título pueden acercarse. Por debajo, el cristal baja a un bloque de 24rem, o 32rem desde 640 px. Los planes pasan de una a dos columnas en 640 px y a cuatro en 1024 px. La navegación completa aparece recién en 1280 px; por debajo se colapsa en menú.
+El hero ocupa la altura completa desde 1024 px, con texto hasta 56% del ancho y el cristal en el 52% derecho, de modo que cristal y título pueden acercarse. Por debajo, el cristal baja a un bloque de 24rem, o 32rem desde 640 px. La navegación completa aparece recién en 1280 px; por debajo se colapsa en menú.
 
 ## Elevation & Depth
 
@@ -232,13 +224,12 @@ Todos los estados interactivos cambian solo de color, en 250ms ease-out. Nada se
 
 ### Buttons
 - **Shape:** cápsula completa (999px), altura mínima de 3.25rem; 2.5rem dentro de la navegación.
-- **Primary:** Azul Eléctrico con texto blanco. Sobre noche y en el plan destacado, blanco con texto Azul Noche.
+- **Primary:** Azul Eléctrico con texto blanco. Sobre noche, blanco con texto Azul Noche.
 - **Hover / Focus:** pasa a Azul Profundo, o a Azul Pálido en la variante blanca. El foco es un anillo de 2 px a 3 px de distancia, que debe contrastar con su superficie: azul sobre claro, blanco sobre noche.
 - **Silencioso:** transparente con línea interna de 1 px; hover a Blanco, o a Noche Elevada sobre noche.
 - **Disabled:** opacidad de 0.6.
 
 ### Cards / Containers
-- **Panel de planes:** un solo panel de 2rem de radio con overflow oculto, dividido en celdas por 1 px de separación que deja ver Línea. No son tarjetas sueltas. Celdas con 1.75rem de padding.
 - **Plan destacado:** celda Azul Eléctrico con texto blanco, botón blanco y etiqueta de texto, sin insignia.
 - **Panel de formulario:** isla blanca de 2rem de radio sobre noche; restaura los colores claros. Padding de 1.5rem, o 2.5rem desde 640 px.
 
@@ -267,7 +258,7 @@ Pieza firma del mundo: cuarzo hexagonal biterminado con facetas duras, material 
 
 ### Do:
 - **Do** alternar bloques noche y claros para crear ritmo y profundidad.
-- **Do** resolver listas con filas y líneas de 1 px, y reservar el panel dividido para comparar planes.
+- **Do** resolver listas con filas y líneas de 1 px.
 - **Do** mantener una acción principal clara por bloque, siguiendo La Regla de la Acción Invertida.
 - **Do** limitar las transiciones al color, en 250ms ease-out.
 - **Do** detener todo movimiento del cristal con `prefers-reduced-motion`.
@@ -275,7 +266,6 @@ Pieza firma del mundo: cuarzo hexagonal biterminado con facetas duras, material 
 - **Do** usar íconos de línea en SVG, a 16 px junto al texto.
 
 ### Don't:
-- **Don't** aplicar este sistema al panel de administración ni llevar sus tokens a `:root`.
 - **Don't** usar neón, resplandores, gradientes decorativos ni texturas en la interfaz; los brillos del cristal son su materia y quedan exentos.
 - **Don't** usar paneles de vidrio ni `backdrop-filter`: el vidrio de esta landing es solo el cristal.
 - **Don't** repetir grillas de tarjetas sueltas.

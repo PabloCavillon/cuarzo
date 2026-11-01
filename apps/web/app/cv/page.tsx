@@ -66,12 +66,6 @@ const PROJECTS: { name: string; description: string; href?: string; tags: string
     description: "Control y conciliación de archivos bancarios, con un modelo MySQL de 57 tablas y un generador de datos de prueba en Python.",
     tags: ["MySQL", "Python"],
   },
-  {
-    name: "Cuarzo",
-    description: "SaaS para negocios con turnos, catálogo, stock, pedidos, caja y facturación electrónica.",
-    href: "/",
-    tags: ["Next.js", "Prisma", "PostgreSQL", "Mercado Pago", "AFIP/ARCA"],
-  },
 ];
 
 const OTHER_PROJECTS = [
