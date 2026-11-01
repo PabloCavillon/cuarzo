@@ -24,7 +24,8 @@ export type T = {
   };
   team: {
     heading: string; description: string;
-    items: { name: string; role: string; bio: string }[];
+    cv: string;
+    items: { name: string; role: string; bio: string; href: string }[];
   };
   contact: {
     heading: string; description: string;
@@ -117,9 +118,10 @@ const es: T = {
   team: {
     heading: "Quiénes somos",
     description: "Dos socios, desarrollo y diseño en el mismo equipo.",
+    cv: "Ver CV",
     items: [
-      { name: "Pablo Cavillon", role: "Desarrollador Full Stack", bio: "Ingeniero en Informática. Desarrolla sistemas web, APIs e integraciones, y se encarga de cada proyecto desde el relevamiento hasta el deploy." },
-      { name: "Laura Coreico", role: "Diseñadora multimedial", bio: "Ilustradora que viene del diseño textil. Trabaja entre lo gráfico, lo digital y lo audiovisual: ilustración, piezas para redes, video y motion." },
+      { name: "Pablo Cavillon", role: "Desarrollador Full Stack", bio: "Ingeniero en Informática. Desarrolla sistemas web, APIs e integraciones, y se encarga de cada proyecto desde el relevamiento hasta el deploy.", href: "/cv" },
+      { name: "Laura Coreico", role: "Diseñadora multimedial", bio: "Ilustradora que viene del diseño textil. Trabaja entre lo gráfico, lo digital y lo audiovisual: ilustración, piezas para redes, video y motion.", href: "/cv/laura" },
     ],
   },
   contact: {
@@ -128,7 +130,7 @@ const es: T = {
       "Contanos qué necesita tu empresa y te armaremos una propuesta a medida. Te respondemos en 24 horas hábiles, sin compromisos.",
     emailLabel: "Email",
     locationLabel: "Ubicación",
-    locationValue: "Buenos Aires, Argentina",
+    locationValue: "Mendoza Capital, Argentina",
     fields: {
       name: "Nombre *",
       email: "Email *",
@@ -163,7 +165,7 @@ const es: T = {
       "CV",
       "Contacto"
     ],
-    location: "Buenos Aires · Argentina",
+    location: "Mendoza · Argentina",
     copyright: (year: number) => `© ${year} Cuarzo. Todos los derechos reservados.`,
   },
   whyCuarzo: {
@@ -274,9 +276,10 @@ const en: T = {
   team: {
     heading: "Who we are",
     description: "Two partners, development and design on the same team.",
+    cv: "View CV",
     items: [
-      { name: "Pablo Cavillon", role: "Full Stack Developer", bio: "Computer engineer. He builds web systems, APIs and integrations, and handles each project from discovery to deployment." },
-      { name: "Laura Coreico", role: "Multimedia designer", bio: "Illustrator with a background in textile design. She works across graphic, digital and audiovisual: illustration, social media pieces, video and motion." },
+      { name: "Pablo Cavillon", role: "Full Stack Developer", bio: "Computer engineer. He builds web systems, APIs and integrations, and handles each project from discovery to deployment.", href: "/cv" },
+      { name: "Laura Coreico", role: "Multimedia designer", bio: "Illustrator with a background in textile design. She works across graphic, digital and audiovisual: illustration, social media pieces, video and motion.", href: "/cv/laura" },
     ],
   },
   contact: {
@@ -285,7 +288,7 @@ const en: T = {
       "Tell us what your company needs and we'll build a tailored proposal. We reply within 24 business hours, no commitment.",
     emailLabel: "Email",
     locationLabel: "Location",
-    locationValue: "Buenos Aires, Argentina",
+    locationValue: "Mendoza City, Argentina",
     fields: {
       name: "Name *",
       email: "Email *",
@@ -320,7 +323,7 @@ const en: T = {
       "CV",
       "Contact"
     ],
-    location: "Buenos Aires · Argentina",
+    location: "Mendoza · Argentina",
     copyright: (year: number) => `© ${year} Cuarzo. All rights reserved.`,
   },
   whyCuarzo: {
@@ -431,9 +434,10 @@ const pt: T = {
   team: {
     heading: "Quem somos",
     description: "Dois sócios, desenvolvimento e design na mesma equipe.",
+    cv: "Ver CV",
     items: [
-      { name: "Pablo Cavillon", role: "Desenvolvedor Full Stack", bio: "Engenheiro de informática. Desenvolve sistemas web, APIs e integrações, e cuida de cada projeto do levantamento ao deploy." },
-      { name: "Laura Coreico", role: "Designer multimídia", bio: "Ilustradora com formação em design têxtil. Trabalha entre o gráfico, o digital e o audiovisual: ilustração, peças para redes, vídeo e motion." },
+      { name: "Pablo Cavillon", role: "Desenvolvedor Full Stack", bio: "Engenheiro de informática. Desenvolve sistemas web, APIs e integrações, e cuida de cada projeto do levantamento ao deploy.", href: "/cv" },
+      { name: "Laura Coreico", role: "Designer multimídia", bio: "Ilustradora com formação em design têxtil. Trabalha entre o gráfico, o digital e o audiovisual: ilustração, peças para redes, vídeo e motion.", href: "/cv/laura" },
     ],
   },
   contact: {
@@ -442,7 +446,7 @@ const pt: T = {
       "Conte-nos o que sua empresa precisa e montaremos uma proposta personalizada. Respondemos em 24 horas úteis, sem compromisso.",
     emailLabel: "E-mail",
     locationLabel: "Localização",
-    locationValue: "Buenos Aires, Argentina",
+    locationValue: "Mendoza Capital, Argentina",
     fields: {
       name: "Nome *",
       email: "E-mail *",
@@ -477,7 +481,7 @@ const pt: T = {
       "CV",
       "Contato"
     ],
-    location: "Buenos Aires · Argentina",
+    location: "Mendoza · Argentina",
     copyright: (year: number) => `© ${year} Cuarzo. Todos os direitos reservados.`,
   },
   whyCuarzo: {

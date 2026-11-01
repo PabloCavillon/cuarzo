@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useT } from "@/lib/i18n/provider";
 
 export default function Team() {
@@ -16,6 +17,9 @@ export default function Team() {
             <h3 className="subtitle">{p.name}</h3>
             <p className="font-semibold text-base mt-1 mb-2">{p.role}</p>
             <p className="ink-2 max-w-[48ch]">{p.bio}</p>
+            <Link href={p.href} aria-label={`${t.team.cv}: ${p.name}`} className="inline-block mt-3 text-base font-semibold text-(--blue) underline underline-offset-4">
+              {t.team.cv}
+            </Link>
           </div>
         ))}
       </div>

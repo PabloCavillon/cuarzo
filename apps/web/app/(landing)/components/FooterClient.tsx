@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { CuarzoIsotype } from "@/app/components/CuarzoLogo";
 import { useT } from "@/lib/i18n/provider";
 
 const COMPANY_HREFS: Record<string, string> = {
-  "CV":        "/cv",
+  "CV":        "#equipo",
   "Sobre nosotros": "#equipo",
   "About us":  "#equipo",
   "Sobre nós": "#equipo",
@@ -44,19 +43,11 @@ export default function FooterClient() {
       <div>
         <h4 className="font-semibold text-base mb-3">{t.footer.companyHeading}</h4>
         <ul className="space-y-2">
-          {t.footer.companyLinks.map((item) => {
-            const href = COMPANY_HREFS[item] ?? "#";
-            const isInternal = href.startsWith("/");
-            return (
-              <li key={item}>
-                {isInternal ? (
-                  <Link href={href} className={linkClass}>{item}</Link>
-                ) : (
-                  <a href={href} className={linkClass}>{item}</a>
-                )}
-              </li>
-            );
-          })}
+          {t.footer.companyLinks.map((item) => (
+            <li key={item}>
+              <a href={COMPANY_HREFS[item] ?? "#"} className={linkClass}>{item}</a>
+            </li>
+          ))}
         </ul>
       </div>
 
